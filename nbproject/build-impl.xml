@@ -795,21 +795,18 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.hibernate-persistence.classpath}" todir="${build.classes.dir}"/>
         <copyfiles files="${reference.ComunServices.dist}" todir="${build.classes.dir}"/>
         <copyfiles files="${reference.UsuariosServices.dist}" todir="${build.classes.dir}"/>
-        <copyfiles files="${libs.eclipselink.classpath}" todir="${build.classes.dir}"/>
     </target>
     <target if="is.server.weblogic" name="-library-inclusion-in-archive-weblogic">
         <basename file="${libs.hibernate-support.classpath}" property="manifest.libs.hibernate-support.classpath"/>
         <basename file="${libs.hibernate-persistence.classpath}" property="manifest.libs.hibernate-persistence.classpath"/>
         <basename file="${reference.ComunServices.dist}" property="manifest.reference.ComunServices.dist"/>
         <basename file="${reference.UsuariosServices.dist}" property="manifest.reference.UsuariosServices.dist"/>
-        <basename file="${libs.eclipselink.classpath}" property="manifest.libs.eclipselink.classpath"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update">
-            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 jar-5 "/>
+            <attribute name="Extension-List" value="jar-1 jar-2 jar-3 jar-4 "/>
             <attribute name="jar-1-Extension-Name" value="${manifest.libs.hibernate-support.classpath}"/>
             <attribute name="jar-2-Extension-Name" value="${manifest.libs.hibernate-persistence.classpath}"/>
             <attribute name="jar-3-Extension-Name" value="${manifest.reference.ComunServices.dist}"/>
             <attribute name="jar-4-Extension-Name" value="${manifest.reference.UsuariosServices.dist}"/>
-            <attribute name="jar-5-Extension-Name" value="${manifest.libs.eclipselink.classpath}"/>
         </manifest>
     </target>
     <target depends="compile" name="library-inclusion-in-manifest">
@@ -817,7 +814,6 @@ exists or setup the property manually. For example like this:
         <copyfiles files="${libs.hibernate-persistence.classpath}" todir="${dist.ear.dir}/lib"/>
         <copyfiles files="${reference.ComunServices.dist}" todir="${dist.ear.dir}"/>
         <copyfiles files="${reference.UsuariosServices.dist}" todir="${dist.ear.dir}"/>
-        <copyfiles files="${libs.eclipselink.classpath}" todir="${dist.ear.dir}/lib"/>
         <manifest file="${build.ear.classes.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target name="-copy-meta-inf">

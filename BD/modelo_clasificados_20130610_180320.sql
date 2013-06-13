@@ -1,4 +1,3 @@
-
 CREATE TABLE aud_clasificado (
 	id bigserial NOT NULL,
 	id_tipo int4 NOT NULL,
@@ -23,6 +22,3 @@ ALTER TABLE aud_clasificado ADD CONSTRAINT clasificado_pk_CLONE PRIMARY KEY(id);
 ALTER TABLE aud_clasificado ADD usuario_bd varchar(1500) NOT NULL;
 ALTER TABLE aud_clasificado ADD fecha_hora timestamp NOT NULL;
 ALTER TABLE aud_clasificado ADD operacion varchar(1500) NOT NULL;
-
-
-ALTER TABLE users ADD nro_usuario varchar(25);

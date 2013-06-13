@@ -1,13 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.vi.clasificados.dominio;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,10 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -29,7 +21,6 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "tipo_clasificado")
-@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TipoClasificado.findAll", query = "SELECT t FROM TipoClasificado t")})
 public class TipoClasificado implements Serializable {
@@ -42,23 +33,14 @@ public class TipoClasificado implements Serializable {
     @Basic(optional = false)
     @Column(name = "dato")
     private String dato;
-    @OneToMany(mappedBy = "idSubtipo5", fetch = FetchType.LAZY)
-    private List<Clasificado> clasificadoList;
-    @OneToMany(mappedBy = "idSubtipo4", fetch = FetchType.LAZY)
-    private List<Clasificado> clasificadoList1;
-    @OneToMany(mappedBy = "idSubtipo3", fetch = FetchType.LAZY)
-    private List<Clasificado> clasificadoList2;
-    @OneToMany(mappedBy = "idSubtipo2", fetch = FetchType.LAZY)
-    private List<Clasificado> clasificadoList3;
-    @OneToMany(mappedBy = "idSubtipo1", fetch = FetchType.LAZY)
-    private List<Clasificado> clasificadoList4;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipo", fetch = FetchType.LAZY)
-    private List<Clasificado> clasificadoList5;
-    @OneToMany(mappedBy = "idPadre", fetch = FetchType.LAZY)
-    private List<TipoClasificado> tipoClasificadoList;
+    @Column(name = "subtipo")
+    private int subtipo;
+    @Column(name = "nombre")
+    private String nombre;
+    
     @JoinColumn(name = "id_padre", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private TipoClasificado idPadre;
+    private TipoClasificado padre;
 
     public TipoClasificado() {
     }
@@ -88,75 +70,12 @@ public class TipoClasificado implements Serializable {
         this.dato = dato;
     }
 
-    @XmlTransient
-    public List<Clasificado> getClasificadoList() {
-        return clasificadoList;
+    public TipoClasificado getPadre() {
+        return padre;
     }
 
-    public void setClasificadoList(List<Clasificado> clasificadoList) {
-        this.clasificadoList = clasificadoList;
-    }
-
-    @XmlTransient
-    public List<Clasificado> getClasificadoList1() {
-        return clasificadoList1;
-    }
-
-    public void setClasificadoList1(List<Clasificado> clasificadoList1) {
-        this.clasificadoList1 = clasificadoList1;
-    }
-
-    @XmlTransient
-    public List<Clasificado> getClasificadoList2() {
-        return clasificadoList2;
-    }
-
-    public void setClasificadoList2(List<Clasificado> clasificadoList2) {
-        this.clasificadoList2 = clasificadoList2;
-    }
-
-    @XmlTransient
-    public List<Clasificado> getClasificadoList3() {
-        return clasificadoList3;
-    }
-
-    public void setClasificadoList3(List<Clasificado> clasificadoList3) {
-        this.clasificadoList3 = clasificadoList3;
-    }
-
-    @XmlTransient
-    public List<Clasificado> getClasificadoList4() {
-        return clasificadoList4;
-    }
-
-    public void setClasificadoList4(List<Clasificado> clasificadoList4) {
-        this.clasificadoList4 = clasificadoList4;
-    }
-
-    @XmlTransient
-    public List<Clasificado> getClasificadoList5() {
-        return clasificadoList5;
-    }
-
-    public void setClasificadoList5(List<Clasificado> clasificadoList5) {
-        this.clasificadoList5 = clasificadoList5;
-    }
-
-    @XmlTransient
-    public List<TipoClasificado> getTipoClasificadoList() {
-        return tipoClasificadoList;
-    }
-
-    public void setTipoClasificadoList(List<TipoClasificado> tipoClasificadoList) {
-        this.tipoClasificadoList = tipoClasificadoList;
-    }
-
-    public TipoClasificado getIdPadre() {
-        return idPadre;
-    }
-
-    public void setIdPadre(TipoClasificado idPadre) {
-        this.idPadre = idPadre;
+    public void setPadre(TipoClasificado idPadre) {
+        this.padre = idPadre;
     }
 
     @Override
@@ -182,6 +101,34 @@ public class TipoClasificado implements Serializable {
     @Override
     public String toString() {
         return "com.vi.clasificados.dominio.TipoClasificado[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the subtipo
+     */
+    public int getSubtipo() {
+        return subtipo;
+    }
+
+    /**
+     * @param subtipo the subtipo to set
+     */
+    public void setSubtipo(int subtipo) {
+        this.subtipo = subtipo;
+    }
+
+    /**
+     * @return the nombre
+     */
+    public String getNombre() {
+        return nombre;
+    }
+
+    /**
+     * @param nombre the nombre to set
+     */
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
     
 }
