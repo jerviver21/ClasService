@@ -22,7 +22,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tipo_clasificado")
 @NamedQueries({
-    @NamedQuery(name = "TipoClasificado.findAll", query = "SELECT t FROM TipoClasificado t")})
+    @NamedQuery(name = "TipoClasificado.findAll", query = "SELECT t FROM TipoClasificado t"),
+    @NamedQuery(name = "TipoClasificado.findTiposBase", query = "SELECT t FROM TipoClasificado t WHERE t.padre IS EMPTY"),
+    @NamedQuery(name = "TipoClasificado.findTiposByPadre", query = "SELECT t FROM TipoClasificado t WHERE t.padre = :padre")
+})
 public class TipoClasificado implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -34,7 +37,7 @@ public class TipoClasificado implements Serializable {
     @Column(name = "dato")
     private String dato;
     @Column(name = "subtipo")
-    private int subtipo;
+    private Integer subtipo;
     @Column(name = "nombre")
     private String nombre;
     
@@ -100,7 +103,7 @@ public class TipoClasificado implements Serializable {
 
     @Override
     public String toString() {
-        return "com.vi.clasificados.dominio.TipoClasificado[ id=" + id + " ]";
+        return dato;
     }
 
     /**
