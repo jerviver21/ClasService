@@ -32,7 +32,6 @@
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="feccfcb4-84e2-485f-aa01-0695a4941d3d" name="id_tipo_publicacion" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="f786c4db-6943-4355-8484-490625141892" name="num_dias" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="322d76d5-3f8b-410c-bca3-f44befcba431" name="num_palabras" nullable="true" scale="10" size=""/>
-            <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="6df2e6fd-9252-44b0-b7c9-383d8691b738" name="salario_oferta" nullable="true" scale="10" size="10"/>
             <Index id="c1a8c652-e408-4a36-960e-a0043baf5595" indextype="PRIMARYKEY" name="clasificado_pk">
                 <Indexattribute attributerefid="635c3f79-fe2c-4245-91a5-bd0f42fc3782" id="72925edc-0729-47db-b999-ddaa51be9656"/>
             </Index>
@@ -59,7 +58,6 @@
             <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="8fee091f-da7b-4d7e-8f91-9d81ad1ebad2" name="subtipo5" nullable="false" scale="10" size=""/>
             <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="d28684dc-7443-457a-b76a-1041f3223032" name="precio" nullable="false" scale="10" size=""/>
             <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="74312ff2-e37a-4760-98a8-14fd954027bc" name="area" nullable="false" scale="10" size=""/>
-            <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="7d896b78-78dc-497b-ac72-309257fb6403" name="salario" nullable="false" scale="10" size=""/>
             <Index id="664caa63-c20e-4f40-9b28-517788508f54" indextype="PRIMARYKEY" name="campos_tipo_pk">
                 <Indexattribute attributerefid="c0a4edff-99d3-4126-9142-8efa5b42f77f" id="214731f6-f270-46cf-8590-4b59c3da7fbb"/>
             </Index>

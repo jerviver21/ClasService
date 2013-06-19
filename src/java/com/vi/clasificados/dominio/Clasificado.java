@@ -3,7 +3,9 @@ package com.vi.clasificados.dominio;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 /**
  *
@@ -28,6 +31,12 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "Clasificado.findAll", query = "SELECT c FROM Clasificado c")})
 public class Clasificado implements Serializable {
+    @Column(name = "area_oferta")
+    private Integer areaOferta;
+    @Column(name = "num_dias")
+    private Integer numDias;
+    @Column(name = "num_palabras")
+    private Integer numPalabras;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,39 +49,25 @@ public class Clasificado implements Serializable {
     @Basic(optional = false)
     @Column(name = "usuario")
     private String usuario;
-    @Column(name = "fecha_ini_impreso")
+    @Column(name = "fecha_ini")
     @Temporal(TemporalType.DATE)
-    private Date fechaIniImpreso;
-    @Column(name = "fecha_fin_impreso")
+    private Date fechaIni;
+    @Column(name = "fecha_fin")
     @Temporal(TemporalType.DATE)
-    private Date fechaFinImpreso;
-    @Column(name = "fecha_ini_web")
-    @Temporal(TemporalType.DATE)
-    private Date fechaIniWeb;
-    @Column(name = "fecha_fin_web")
-    @Temporal(TemporalType.DATE)
-    private Date fechaFinWeb;
+    private Date fechaFin;
     @Column(name = "precio")
     private BigDecimal precio;
+    @Column(name = "salario_oferta")
+    private BigDecimal salarioOferta;
     @Basic(optional = false)
     @Column(name = "id_estado")
     private int estado;
     @Column(name = "cod_pago")
     private String codPago;
-    @Column(name = "precio_impresion")
-    private BigDecimal precioImpresion;
-    @Column(name = "precio_web")
-    private BigDecimal precioWeb;
-    @Column(name = "publicarweb")
-    private Boolean publicarWeb;
-    @Column(name = "publicarimpreso")
-    private Boolean publicarImpreso;
     
     
     @Column(name = "precio_oferta")
     private BigDecimal precioOferta;
-    @Column(name = "area_oferta")
-    private int areaOferta;
     @JoinColumn(name = "id_subtipo5", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoClasificado subtipo5;
@@ -92,9 +87,28 @@ public class Clasificado implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TipoClasificado tipo;
     
+    @JoinColumn(name = "id_tipo_publicacion", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TipoPublicacion tipoPublicacion;
+    
+    
+    @Transient
+    private List<String> opcionesPublicacion;
     
 
     public Clasificado() {
+        tipo = new TipoClasificado();
+        subtipo1 = new TipoClasificado();
+        subtipo2 = new TipoClasificado();
+        subtipo3 = new TipoClasificado();
+        subtipo4 = new TipoClasificado();
+        subtipo5 = new TipoClasificado();
+        tipoPublicacion = new TipoPublicacion();
+        opcionesPublicacion = new ArrayList<String>();
+        areaOferta = 0;
+        numDias = 0;
+        numPalabras = 0;
+        precioOferta = BigDecimal.ZERO;
     }
 
     public Clasificado(Long id) {
@@ -106,6 +120,27 @@ public class Clasificado implements Serializable {
         this.clasificado = clasificado;
         this.usuario = usuario;
         this.estado = idEstado;
+    }
+    
+    public Clasificado(Clasificado clasificado) {
+        this.id = clasificado.getId();
+        this.clasificado = clasificado.getClasificado();
+        this.usuario = clasificado.getUsuario();
+        this.estado = clasificado.getEstado();
+        this.subtipo1 = clasificado.getSubtipo1();
+        this.subtipo2 = clasificado.getSubtipo2();
+        this.subtipo3 = clasificado.getSubtipo3();
+        this.subtipo4 = clasificado.getSubtipo4();
+        this.subtipo5 = clasificado.getSubtipo5();
+        this.tipo = clasificado.getTipo();
+        this.areaOferta = clasificado.getAreaOferta();
+        this.precioOferta = clasificado.getPrecioOferta();
+        this.precio = clasificado.getPrecio();
+        this.fechaIni = clasificado.getFechaIni();
+        this.fechaFin = clasificado.getFechaFin();
+        this.codPago = clasificado.getCodPago();
+        this.numDias = clasificado.getNumDias();
+        this.numPalabras = clasificado.getNumPalabras();
     }
 
     public Long getId() {
@@ -132,38 +167,7 @@ public class Clasificado implements Serializable {
         this.usuario = usuario;
     }
 
-    public Date getFechaIniImpreso() {
-        return fechaIniImpreso;
-    }
-
-    public void setFechaIniImpreso(Date fechaIniImpreso) {
-        this.fechaIniImpreso = fechaIniImpreso;
-    }
-
-    public Date getFechaFinImpreso() {
-        return fechaFinImpreso;
-    }
-
-    public void setFechaFinImpreso(Date fechaFinImpreso) {
-        this.fechaFinImpreso = fechaFinImpreso;
-    }
-
-    public Date getFechaIniWeb() {
-        return fechaIniWeb;
-    }
-
-    public void setFechaIniWeb(Date fechaIniWeb) {
-        this.fechaIniWeb = fechaIniWeb;
-    }
-
-    public Date getFechaFinWeb() {
-        return fechaFinWeb;
-    }
-
-    public void setFechaFinWeb(Date fechaFinWeb) {
-        this.fechaFinWeb = fechaFinWeb;
-    }
-
+    
     public BigDecimal getPrecio() {
         return precio;
     }
@@ -188,21 +192,6 @@ public class Clasificado implements Serializable {
         this.codPago = codPago;
     }
 
-    public BigDecimal getPrecioImpresion() {
-        return precioImpresion;
-    }
-
-    public void setPrecioImpresion(BigDecimal precioImpresion) {
-        this.precioImpresion = precioImpresion;
-    }
-
-    public BigDecimal getPrecioWeb() {
-        return precioWeb;
-    }
-
-    public void setPrecioWeb(BigDecimal precioWeb) {
-        this.precioWeb = precioWeb;
-    }
 
     public TipoClasificado getSubtipo5() {
         return subtipo5;
@@ -274,36 +263,10 @@ public class Clasificado implements Serializable {
 
     @Override
     public String toString() {
-        return "com.vi.clasificados.dominio.Clasificado[ id=" + id + " ]";
+        return clasificado;
     }
 
-    /**
-     * @return the publicarWeb
-     */
-    public Boolean getPublicarWeb() {
-        return publicarWeb;
-    }
 
-    /**
-     * @param publicarWeb the publicarWeb to set
-     */
-    public void setPublicarWeb(Boolean publicarWeb) {
-        this.publicarWeb = publicarWeb;
-    }
-
-    /**
-     * @return the publicarImpreso
-     */
-    public Boolean getPublicarImpreso() {
-        return publicarImpreso;
-    }
-
-    /**
-     * @param publicarImpreso the publicarImpreso to set
-     */
-    public void setPublicarImpreso(Boolean publicarImpreso) {
-        this.publicarImpreso = publicarImpreso;
-    }
 
     /**
      * @return the precioOferta
@@ -331,6 +294,98 @@ public class Clasificado implements Serializable {
      */
     public void setAreaOferta(int areaOferta) {
         this.areaOferta = areaOferta;
+    }
+
+    /**
+     * @return the fechaIni
+     */
+    public Date getFechaIni() {
+        return fechaIni;
+    }
+
+    /**
+     * @param fechaIni the fechaIni to set
+     */
+    public void setFechaIni(Date fechaIni) {
+        this.fechaIni = fechaIni;
+    }
+
+    /**
+     * @return the fechaFin
+     */
+    public Date getFechaFin() {
+        return fechaFin;
+    }
+
+    /**
+     * @param fechaFin the fechaFin to set
+     */
+    public void setFechaFin(Date fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    /**
+     * @return the tipoPublicacion
+     */
+    public TipoPublicacion getTipoPublicacion() {
+        return tipoPublicacion;
+    }
+
+    /**
+     * @param tipoPublicacion the tipoPublicacion to set
+     */
+    public void setTipoPublicacion(TipoPublicacion tipoPublicacion) {
+        this.tipoPublicacion = tipoPublicacion;
+    }
+
+
+
+    public void setAreaOferta(Integer areaOferta) {
+        this.areaOferta = areaOferta;
+    }
+
+    public Integer getNumDias() {
+        return numDias;
+    }
+
+    public void setNumDias(Integer numDias) {
+        this.numDias = numDias;
+    }
+
+    public Integer getNumPalabras() {
+        return numPalabras;
+    }
+
+    public void setNumPalabras(Integer numPalabras) {
+        this.numPalabras = numPalabras;
+    }
+
+    /**
+     * @return the opcionesPublicacion
+     */
+    public List<String> getOpcionesPublicacion() {
+        return opcionesPublicacion;
+    }
+
+    /**
+     * @param opcionesPublicacion the opcionesPublicacion to set
+     */
+    public void setOpcionesPublicacion(List<String> opcionesPublicacion) {
+        this.opcionesPublicacion = opcionesPublicacion;
+    }
+
+    /**
+     * @return the salarioOferta
+     */
+    public BigDecimal getSalarioOferta() {
+        return salarioOferta;
+    }
+
+    /**
+     * @param salarioOferta the salarioOferta to set
+     */
+    public void setSalarioOferta(BigDecimal salarioOferta) {
+        this.salarioOferta = salarioOferta;
     }
     
 }

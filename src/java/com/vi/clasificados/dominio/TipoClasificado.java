@@ -2,7 +2,9 @@
 package com.vi.clasificados.dominio;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +15,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -27,6 +31,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "TipoClasificado.findTiposByPadre", query = "SELECT t FROM TipoClasificado t WHERE t.padre = :padre")
 })
 public class TipoClasificado implements Serializable {
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +49,9 @@ public class TipoClasificado implements Serializable {
     @JoinColumn(name = "id_padre", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
     private TipoClasificado padre;
+    
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "tipoClasificado", fetch = FetchType.EAGER)
+    private CamposTipo campos;
 
     public TipoClasificado() {
     }
@@ -133,5 +141,15 @@ public class TipoClasificado implements Serializable {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public CamposTipo getCampos() {
+        return campos;
+    }
+
+    public void setCampos(CamposTipo campos) {
+        this.campos = campos;
+    }
+
+   
     
 }

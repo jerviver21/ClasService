@@ -20,9 +20,13 @@ public class TipoClasificadoService {
     @PersistenceContext(unitName = "ClasificadosPU")
     private EntityManager em;
     
-    public List<TipoClasificado> getTiposBase(){
+    public Map<Integer, TipoClasificado> getTiposBase(){
+        Map<Integer, TipoClasificado> mapa = new LinkedHashMap<Integer, TipoClasificado>();
         List<TipoClasificado> tipos = em.createNamedQuery("TipoClasificado.findTiposBase").getResultList();
-        return tipos;
+        for(TipoClasificado tipo : tipos){
+            mapa.put(tipo.getId(), tipo);
+        }
+        return mapa;
     }
     
     public List<TipoClasificado> getTiposByPadre(TipoClasificado padre){

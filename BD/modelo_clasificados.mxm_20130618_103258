@@ -32,7 +32,6 @@
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="feccfcb4-84e2-485f-aa01-0695a4941d3d" name="id_tipo_publicacion" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="f786c4db-6943-4355-8484-490625141892" name="num_dias" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="322d76d5-3f8b-410c-bca3-f44befcba431" name="num_palabras" nullable="true" scale="10" size=""/>
-            <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="6df2e6fd-9252-44b0-b7c9-383d8691b738" name="salario_oferta" nullable="true" scale="10" size="10"/>
             <Index id="c1a8c652-e408-4a36-960e-a0043baf5595" indextype="PRIMARYKEY" name="clasificado_pk">
                 <Indexattribute attributerefid="635c3f79-fe2c-4245-91a5-bd0f42fc3782" id="72925edc-0729-47db-b999-ddaa51be9656"/>
             </Index>
@@ -59,7 +58,6 @@
             <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="8fee091f-da7b-4d7e-8f91-9d81ad1ebad2" name="subtipo5" nullable="false" scale="10" size=""/>
             <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="d28684dc-7443-457a-b76a-1041f3223032" name="precio" nullable="false" scale="10" size=""/>
             <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="74312ff2-e37a-4760-98a8-14fd954027bc" name="area" nullable="false" scale="10" size=""/>
-            <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="7d896b78-78dc-497b-ac72-309257fb6403" name="salario" nullable="false" scale="10" size=""/>
             <Index id="664caa63-c20e-4f40-9b28-517788508f54" indextype="PRIMARYKEY" name="campos_tipo_pk">
                 <Indexattribute attributerefid="c0a4edff-99d3-4126-9142-8efa5b42f77f" id="214731f6-f270-46cf-8590-4b59c3da7fbb"/>
             </Index>
@@ -91,22 +89,22 @@
             </Index>
         </Table>
         <Table id="cb0abf9f-30f4-46cf-9b0b-ac48803f8bd3" name="dias_precios" schema="">
-            <Property name="LOCATION" value="684:426"/>
+            <Property name="LOCATION" value="671:439"/>
             <Attribute datatype="serial" defaultvalue="" extra="" fraction="null" id="b43ee08f-7d8d-4ace-9c17-ece533281bd1" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="8529873e-19c4-4ffe-ac5e-b24a2b24a7be" name="id_tipo_publicacion" nullable="false" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="52528da8-7467-4b28-817a-e0291e3d79d9" name="iddia" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="9b365b2a-f688-4b31-912b-8901af483bd4" name="nombre_dia" nullable="false" scale="10" size="250"/>
-            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="2487394c-2713-4a24-910c-306050825947" name="id_precio" nullable="false" scale="10" size=""/>
+            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="2487394c-2713-4a24-910c-306050825947" name="id_tipo_precio" nullable="false" scale="10" size=""/>
+            <Attribute datatype="boolean" defaultvalue="true" extra="" fraction="null" id="3c185534-e0ad-428b-b93d-f174a391eceb" name="procesar_x_palabra" nullable="false" scale="10" size=""/>
             <Index id="aff99760-cc38-4d0d-8799-ab9e0c3ca3cb" indextype="PRIMARYKEY" name="precios_clasificados_pk">
                 <Indexattribute attributerefid="b43ee08f-7d8d-4ace-9c17-ece533281bd1" id="0bcc6df8-1033-4347-8423-d2cb10dd69ec"/>
             </Index>
         </Table>
         <Table id="8e53d575-a9bc-41ff-8885-744f27e0dae7" name="precios" schema="">
-            <Property name="LOCATION" value="671:218"/>
+            <Property name="LOCATION" value="682:228"/>
             <Attribute datatype="serial" defaultvalue="" extra="" fraction="null" id="6e9532de-cd0a-4432-8c85-1cfa937fa0a1" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="c58b8441-f065-4d5f-b2a1-0aea1147287c" name="descripcion" nullable="false" scale="10" size="250"/>
             <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="84872285-48e4-49b0-a6bd-437c4c9ccfc0" name="precio" nullable="true" scale="10" size="10"/>
-            <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="0de661a5-52cd-4293-a80a-d3d3a427d5ef" name="procesar_x_palabra" nullable="true" scale="10" size=""/>
             <Index id="26400b55-e6a1-4c71-8c67-6014dd27698f" indextype="PRIMARYKEY" name="tipo_precio_pk">
                 <Indexattribute attributerefid="6e9532de-cd0a-4432-8c85-1cfa937fa0a1" id="f6ad9224-6585-42e3-ba3d-77df6cf9ab72"/>
             </Index>
