@@ -98,6 +98,9 @@ public class Clasificado implements Serializable {
     @Transient
     private String clasificadoFrac;
     
+    @Transient
+    private List<DetallePrecioClasificado> detallePrecio;
+    
 
     public Clasificado() {
         tipo = new TipoClasificado();
@@ -108,10 +111,12 @@ public class Clasificado implements Serializable {
         subtipo5 = new TipoClasificado();
         tipoPublicacion = new TipoPublicacion();
         opcionesPublicacion = new ArrayList<String>();
+        detallePrecio = new ArrayList<DetallePrecioClasificado>();
         areaOferta = 0;
         numDias = 0;
         numPalabras = 0;
         precioOferta = BigDecimal.ZERO;
+        precio = BigDecimal.ZERO;
     }
 
     public Clasificado(Long id) {
@@ -144,6 +149,7 @@ public class Clasificado implements Serializable {
         this.codPago = clasificado.getCodPago();
         this.numDias = clasificado.getNumDias();
         this.numPalabras = clasificado.getNumPalabras();
+        detallePrecio = new ArrayList<DetallePrecioClasificado>();
     }
 
     public Long getId() {
@@ -397,6 +403,20 @@ public class Clasificado implements Serializable {
     public String getClasificadoFrac() {
         clasificadoFrac = clasificado.length() > 50 ? clasificado.substring(0, 49)+"..." : clasificado;
         return clasificadoFrac;
+    }
+
+    /**
+     * @return the detallePrecio
+     */
+    public List<DetallePrecioClasificado> getDetallePrecio() {
+        return detallePrecio;
+    }
+
+    /**
+     * @param detallePrecio the detallePrecio to set
+     */
+    public void setDetallePrecio(List<DetallePrecioClasificado> detallePrecio) {
+        this.detallePrecio = detallePrecio;
     }
 
 
