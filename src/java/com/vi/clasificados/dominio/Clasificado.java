@@ -95,6 +95,9 @@ public class Clasificado implements Serializable {
     @Transient
     private List<String> opcionesPublicacion;
     
+    @Transient
+    private String clasificadoFrac;
+    
 
     public Clasificado() {
         tipo = new TipoClasificado();
@@ -387,5 +390,15 @@ public class Clasificado implements Serializable {
     public void setSalarioOferta(BigDecimal salarioOferta) {
         this.salarioOferta = salarioOferta;
     }
+
+    /**
+     * @return the clasificadoFrac
+     */
+    public String getClasificadoFrac() {
+        clasificadoFrac = clasificado.length() > 50 ? clasificado.substring(0, 49)+"..." : clasificado;
+        return clasificadoFrac;
+    }
+
+
     
 }

@@ -50,5 +50,12 @@ INSERT INTO dias_precios (id_tipo_publicacion, iddia, nombre_dia, id_precio) val
 INSERT INTO dias_precios (id_tipo_publicacion, iddia, nombre_dia, id_precio) values (4, 5, 'JUEVES', 10);
 INSERT INTO dias_precios (id_tipo_publicacion, iddia, nombre_dia, id_precio) values (4, 6, 'VIERNES', 10);
 INSERT INTO dias_precios (id_tipo_publicacion, iddia, nombre_dia, id_precio) values (4, 7, 'SABADO', 10);
+INSERT INTO dias_precios (id_tipo_publicacion, iddia, nombre_dia, id_precio) values (4, 100, 'FESTIVO', 10);
+
+INSERT INTO dias_precios (id_tipo_publicacion, iddia, nombre_dia, id_precio) values (1, 100, 'FESTIVO', 3);
+INSERT INTO dias_precios (id_tipo_publicacion, iddia, nombre_dia, id_precio) values (2, 100, 'FESTIVO', 6);
+INSERT INTO dias_precios (id_tipo_publicacion, iddia, nombre_dia, id_precio) values (3, 100, 'FESTIVO', 9);
+
+
 
 

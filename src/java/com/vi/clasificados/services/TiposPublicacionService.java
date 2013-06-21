@@ -1,7 +1,9 @@
 package com.vi.clasificados.services;
 
+import com.vi.clasificados.dominio.Precios;
 import com.vi.clasificados.dominio.TipoPublicacion;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,5 +43,7 @@ public class TiposPublicacionService {
         }
         return nombresTipos;
     }
+
+
 
 }
