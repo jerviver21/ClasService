@@ -12,7 +12,7 @@
     <Domains/>
     <Tables>
         <Table id="7cd159ca-e556-4d6d-befd-d5b753ea4460" name="clasificado" schema="">
-            <Property name="LOCATION" value="741:77"/>
+            <Property name="LOCATION" value="742:47"/>
             <Attribute datatype="bigserial" defaultvalue="" extra="" fraction="null" id="635c3f79-fe2c-4245-91a5-bd0f42fc3782" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="5a1a9335-fb64-4b5a-bbe3-bc39539f3393" name="id_tipo" nullable="false" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="8ea9e578-32f7-44a7-b5b7-c0c2bce3d474" name="id_subtipo1" nullable="true" scale="10" size=""/>
@@ -31,13 +31,12 @@
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="322d76d5-3f8b-410c-bca3-f44befcba431" name="num_palabras" nullable="true" scale="10" size=""/>
             <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="6df2e6fd-9252-44b0-b7c9-383d8691b738" name="salario_oferta" nullable="true" scale="10" size="10"/>
             <Attribute datatype="bigint" defaultvalue="" extra="" fraction="null" id="6c502359-beb6-44c6-a7cb-a2dca23fd135" name="id_pedido" nullable="false" scale="10" size=""/>
-            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="aa6d85d7-96a8-4db8-8b20-d24395b2d8ea" name="id_estado" nullable="true" scale="10" size=""/>
             <Index id="c1a8c652-e408-4a36-960e-a0043baf5595" indextype="PRIMARYKEY" name="clasificado_pk">
                 <Indexattribute attributerefid="635c3f79-fe2c-4245-91a5-bd0f42fc3782" id="72925edc-0729-47db-b999-ddaa51be9656"/>
             </Index>
         </Table>
         <Table id="147a6955-320e-4342-b1a5-66f1d42f7b01" name="tipo_clasificado" schema="">
-            <Property name="LOCATION" value="1403:176"/>
+            <Property name="LOCATION" value="1403:141"/>
             <Attribute datatype="serial" defaultvalue="" extra="" fraction="null" id="419e7398-7e69-46cc-bafa-df2e3c8ca54b" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="ab2189d6-d066-4d71-add3-904436442c16" name="id_padre" nullable="true" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="33f2a435-1115-4026-92b4-2d8396a4b9fc" name="dato" nullable="false" scale="10" size="500"/>
@@ -101,7 +100,7 @@
             </Index>
         </Table>
         <Table id="8e53d575-a9bc-41ff-8885-744f27e0dae7" name="precios" schema="">
-            <Property name="LOCATION" value="1068:295"/>
+            <Property name="LOCATION" value="1059:233"/>
             <Attribute datatype="serial" defaultvalue="" extra="" fraction="null" id="6e9532de-cd0a-4432-8c85-1cfa937fa0a1" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="c58b8441-f065-4d5f-b2a1-0aea1147287c" name="descripcion" nullable="false" scale="10" size="250"/>
             <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="84872285-48e4-49b0-a6bd-437c4c9ccfc0" name="precio" nullable="true" scale="10" size="10"/>
@@ -118,7 +117,7 @@
             </Index>
         </Table>
         <Table id="1dafb247-360e-4607-825f-7a63846eb96f" name="pedido" schema="">
-            <Property name="LOCATION" value="274:172"/>
+            <Property name="LOCATION" value="289:119"/>
             <Attribute datatype="bigserial" defaultvalue="" extra="" fraction="null" id="eecd05aa-e248-4ab4-a400-f9bccadd4750" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="8517b116-6233-46c3-926a-fc33a8adc742" name="usuario" nullable="false" scale="10" size="500"/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="34b92fb5-0c3a-4026-8fa7-ad47b2c2b5f1" name="cod_pago" nullable="true" scale="10" size="25"/>
@@ -127,38 +126,16 @@
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="38225f07-dea4-46d6-9914-c71d5d9be8a5" name="id_estado" nullable="false" scale="10" size=""/>
             <Attribute datatype="date" defaultvalue="" extra="" fraction="null" id="be28d2a3-1b2d-47a9-8875-c1c9927b78ff" name="fecha_hora_pago" nullable="true" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="e0ab9997-eacd-4c54-9f2a-af48a560375c" name="cod_confirmacion" nullable="true" scale="10" size="25"/>
-            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="9fb35c6b-6a09-42e1-acbb-e5a9aacc44a1" name="id_entidad_pago" nullable="true" scale="10" size=""/>
             <Index id="c92c32b5-275c-405f-a368-661f6c5fbb46" indextype="PRIMARYKEY" name="pedido_pk">
                 <Indexattribute attributerefid="eecd05aa-e248-4ab4-a400-f9bccadd4750" id="70d3d24a-2cb3-4db2-8354-c4fdb85dc1a0"/>
             </Index>
         </Table>
         <Table id="55d0853a-219f-4bb5-8fa6-cff8c99ad139" name="estados_pedido" schema="">
-            <Property name="LOCATION" value="306:381"/>
+            <Property name="LOCATION" value="323:370"/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="05e08f5f-6d7c-4863-85a4-cfc4d83cc318" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="ee657442-ade0-4939-ace8-7bad07af6678" name="nombre" nullable="false" scale="10" size="25"/>
             <Index id="6ab5c8c7-6333-442d-820d-87d00a7cac0e" indextype="PRIMARYKEY" name="estados_pedido_pk">
                 <Indexattribute attributerefid="05e08f5f-6d7c-4863-85a4-cfc4d83cc318" id="682950e5-e52d-409f-8476-4a3b368ca2d6"/>
-            </Index>
-        </Table>
-        <Table id="306ca1cc-3046-4ba4-89dd-453d01d4f386" name="estados_clasificado" schema="">
-            <Property name="LOCATION" value="471:491"/>
-            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="4bc83cc8-ab12-4c0e-8c07-896761ef5943" name="id" nullable="false" scale="10" size=""/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="b1d40b8a-75c0-4490-ae28-dc63651c9079" name="nombre" nullable="false" scale="10" size="25"/>
-            <Index id="80e38e99-be0d-4d9e-b4fe-b790e3f99d9d" indextype="PRIMARYKEY" name="estados_clasificado_pk">
-                <Indexattribute attributerefid="4bc83cc8-ab12-4c0e-8c07-896761ef5943" id="446d936b-2413-4ecb-b762-4aee0cde6594"/>
-            </Index>
-        </Table>
-        <Table id="ec25453b-0c24-42ec-a3ad-da72395e48cc" name="entidades_pago" schema="">
-            <Property name="LOCATION" value="274:10"/>
-            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="832d7416-28ab-4819-abf1-bb3ff7a5eb7c" name="id" nullable="false" scale="10" size=""/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="9f8545ef-8f63-4a2d-b8ad-2500e9979775" name="nombre" nullable="false" scale="10" size="255"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="0bdbc5b4-f0a0-4b2d-a2a9-299af2aabf2f" name="num_cuenta_recaudo" nullable="true" scale="10" size="500"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="40e4dd53-aeb6-479e-a1b1-1837e5a99eb9" name="clave" nullable="true" scale="10" size="500"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="ceb133f5-49f7-4ef0-a290-3dcb8c383a33" name="direccion_ip" nullable="true" scale="10" size="500"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="2a7bf1ff-302a-4998-a8a3-39687e476629" name="nombre_usuario" nullable="true" scale="10" size="500"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="af6f699b-63c4-416f-b983-5db86d20e053" name="mensaje_pago" nullable="true" scale="10" size="2000"/>
-            <Index id="25c35288-d292-4b5c-9f11-258a30a07a22" indextype="PRIMARYKEY" name="entidades_pago_pk">
-                <Indexattribute attributerefid="832d7416-28ab-4819-abf1-bb3ff7a5eb7c" id="ef06ad35-ea87-4aac-a916-e4713b742eb8"/>
             </Index>
         </Table>
     </Tables>
@@ -223,12 +200,6 @@
         </Relation>
         <Relation exportingtablerefid="55d0853a-219f-4bb5-8fa6-cff8c99ad139" id="dd1b32b7-89c1-455f-87b9-82c14a77a076" importingtablerefid="1dafb247-360e-4607-825f-7a63846eb96f" name="pedido_estado_fk" ondelete="NOTHING" onupdate="NOTHING">
             <Mapping exportingexpressionrefid="682950e5-e52d-409f-8476-4a3b368ca2d6" importingattributerefid="38225f07-dea4-46d6-9914-c71d5d9be8a5"/>
-        </Relation>
-        <Relation exportingtablerefid="306ca1cc-3046-4ba4-89dd-453d01d4f386" id="a3743c2d-0fa5-4f5e-b3bf-13d6da6054e2" importingtablerefid="7cd159ca-e556-4d6d-befd-d5b753ea4460" name="estado_clasificado_fk" ondelete="NOTHING" onupdate="NOTHING">
-            <Mapping exportingexpressionrefid="446d936b-2413-4ecb-b762-4aee0cde6594" importingattributerefid="aa6d85d7-96a8-4db8-8b20-d24395b2d8ea"/>
-        </Relation>
-        <Relation exportingtablerefid="ec25453b-0c24-42ec-a3ad-da72395e48cc" id="b6b06595-c936-4b23-9d7e-961e0e03b4bd" importingtablerefid="1dafb247-360e-4607-825f-7a63846eb96f" name="entidad_pago_fk" ondelete="NOTHING" onupdate="NOTHING">
-            <Mapping exportingexpressionrefid="ef06ad35-ea87-4aac-a916-e4713b742eb8" importingattributerefid="9fb35c6b-6a09-42e1-acbb-e5a9aacc44a1"/>
         </Relation>
     </Relations>
     <Views/>

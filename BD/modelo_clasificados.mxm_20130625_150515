@@ -149,14 +149,13 @@
             </Index>
         </Table>
         <Table id="ec25453b-0c24-42ec-a3ad-da72395e48cc" name="entidades_pago" schema="">
-            <Property name="LOCATION" value="274:10"/>
+            <Property name="LOCATION" value="274:25"/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="832d7416-28ab-4819-abf1-bb3ff7a5eb7c" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="9f8545ef-8f63-4a2d-b8ad-2500e9979775" name="nombre" nullable="false" scale="10" size="255"/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="0bdbc5b4-f0a0-4b2d-a2a9-299af2aabf2f" name="num_cuenta_recaudo" nullable="true" scale="10" size="500"/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="40e4dd53-aeb6-479e-a1b1-1837e5a99eb9" name="clave" nullable="true" scale="10" size="500"/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="ceb133f5-49f7-4ef0-a290-3dcb8c383a33" name="direccion_ip" nullable="true" scale="10" size="500"/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="2a7bf1ff-302a-4998-a8a3-39687e476629" name="nombre_usuario" nullable="true" scale="10" size="500"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="af6f699b-63c4-416f-b983-5db86d20e053" name="mensaje_pago" nullable="true" scale="10" size="2000"/>
             <Index id="25c35288-d292-4b5c-9f11-258a30a07a22" indextype="PRIMARYKEY" name="entidades_pago_pk">
                 <Indexattribute attributerefid="832d7416-28ab-4819-abf1-bb3ff7a5eb7c" id="ef06ad35-ea87-4aac-a916-e4713b742eb8"/>
             </Index>

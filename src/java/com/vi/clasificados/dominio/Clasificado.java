@@ -1,6 +1,7 @@
 
 package com.vi.clasificados.dominio;
 
+import com.vi.clasificados.utils.ClasificadoEstados;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -46,9 +47,6 @@ public class Clasificado implements Serializable {
     @Basic(optional = false)
     @Column(name = "clasificado")
     private String clasificado;
-    @Basic(optional = false)
-    @Column(name = "usuario")
-    private String usuario;
     @Column(name = "fecha_ini")
     @Temporal(TemporalType.DATE)
     private Date fechaIni;
@@ -60,36 +58,41 @@ public class Clasificado implements Serializable {
     @Column(name = "salario_oferta")
     private BigDecimal salarioOferta;
     @Basic(optional = false)
-    @Column(name = "id_estado")
-    private int estado;
-    @Column(name = "cod_pago")
-    private String codPago;
+
     
     
     @Column(name = "precio_oferta")
     private BigDecimal precioOferta;
     @JoinColumn(name = "id_subtipo5", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TipoClasificado subtipo5;
     @JoinColumn(name = "id_subtipo4", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TipoClasificado subtipo4;
     @JoinColumn(name = "id_subtipo3", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TipoClasificado subtipo3;
     @JoinColumn(name = "id_subtipo2", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TipoClasificado subtipo2;
     @JoinColumn(name = "id_subtipo1", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TipoClasificado subtipo1;
     @JoinColumn(name = "id_tipo", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private TipoClasificado tipo;
     
     @JoinColumn(name = "id_tipo_publicacion", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private TipoPublicacion tipoPublicacion;
+    
+    @JoinColumn(name = "id_pedido", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Pedido pedido;
+    
+    @JoinColumn(name = "id_estado", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private EstadosClasificado estado;
     
     
     @Transient
@@ -104,11 +107,11 @@ public class Clasificado implements Serializable {
 
     public Clasificado() {
         tipo = new TipoClasificado();
-        subtipo1 = new TipoClasificado();
-        subtipo2 = new TipoClasificado();
-        subtipo3 = new TipoClasificado();
-        subtipo4 = new TipoClasificado();
-        subtipo5 = new TipoClasificado();
+        subtipo1 = null;
+        subtipo2 = null;
+        subtipo3 = null;
+        subtipo4 = null;
+        subtipo5 = null;
         tipoPublicacion = new TipoPublicacion();
         opcionesPublicacion = new ArrayList<String>();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
@@ -117,24 +120,21 @@ public class Clasificado implements Serializable {
         numPalabras = 0;
         precioOferta = BigDecimal.ZERO;
         precio = BigDecimal.ZERO;
+        estado = ClasificadoEstados.ACTIVO;
     }
 
     public Clasificado(Long id) {
         this.id = id;
     }
 
-    public Clasificado(Long id, String clasificado, String usuario, int idEstado) {
+    public Clasificado(Long id, String clasificado) {
         this.id = id;
         this.clasificado = clasificado;
-        this.usuario = usuario;
-        this.estado = idEstado;
     }
     
     public Clasificado(Clasificado clasificado) {
         this.id = clasificado.getId();
         this.clasificado = clasificado.getClasificado();
-        this.usuario = clasificado.getUsuario();
-        this.estado = clasificado.getEstado();
         this.subtipo1 = clasificado.getSubtipo1();
         this.subtipo2 = clasificado.getSubtipo2();
         this.subtipo3 = clasificado.getSubtipo3();
@@ -146,9 +146,9 @@ public class Clasificado implements Serializable {
         this.precio = clasificado.getPrecio();
         this.fechaIni = clasificado.getFechaIni();
         this.fechaFin = clasificado.getFechaFin();
-        this.codPago = clasificado.getCodPago();
         this.numDias = clasificado.getNumDias();
         this.numPalabras = clasificado.getNumPalabras();
+        this.estado = clasificado.getEstado();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
     }
 
@@ -168,13 +168,6 @@ public class Clasificado implements Serializable {
         this.clasificado = clasificado;
     }
 
-    public String getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(String usuario) {
-        this.usuario = usuario;
-    }
 
     
     public BigDecimal getPrecio() {
@@ -185,21 +178,6 @@ public class Clasificado implements Serializable {
         this.precio = precio;
     }
 
-    public int getEstado() {
-        return estado;
-    }
-
-    public void setEstado(int idEstado) {
-        this.estado = idEstado;
-    }
-
-    public String getCodPago() {
-        return codPago;
-    }
-
-    public void setCodPago(String codPago) {
-        this.codPago = codPago;
-    }
 
 
     public TipoClasificado getSubtipo5() {
@@ -417,6 +395,42 @@ public class Clasificado implements Serializable {
      */
     public void setDetallePrecio(List<DetallePrecioClasificado> detallePrecio) {
         this.detallePrecio = detallePrecio;
+    }
+
+    /**
+     * @return the pedido
+     */
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    /**
+     * @param pedido the pedido to set
+     */
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
+    }
+
+    /**
+     * @return the estado
+     */
+    public EstadosClasificado getEstado() {
+        return estado;
+    }
+
+    /**
+     * @param estado the estado to set
+     */
+    public void setEstado(EstadosClasificado estado) {
+        this.estado = estado;
+    }
+
+    public void resetSubtipos() {
+        subtipo1 = null;
+        subtipo2 = null;
+        subtipo3 = null;
+        subtipo4 = null;
+        subtipo5 = null;
     }
 
 
