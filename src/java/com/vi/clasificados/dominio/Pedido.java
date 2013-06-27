@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.vi.clasificados.dominio;
 
 import com.vi.clasificados.utils.PedidoEstados;
@@ -35,7 +32,9 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "pedido")
 @NamedQueries({
-    @NamedQuery(name = "Pedido.findAll", query = "SELECT p FROM Pedido p")})
+    @NamedQuery(name = "Pedido.findAll", query = "SELECT p FROM Pedido p"),
+    @NamedQuery(name = "Pedido.findByUsrAndEstado", query = "SELECT p FROM Pedido p WHERE p.usuario = :usr AND p.estado <> :estado ORDER BY p.fechaVencimiento")
+})
 public class Pedido implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -62,10 +61,10 @@ public class Pedido implements Serializable {
     @Column(name = "cod_confirmacion")
     private String codConfirmacion;
     @JoinColumn(name = "id_estado", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosPedido estado;
     @JoinColumn(name = "id_entidad_pago", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EntidadesPago entidad;
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pedido", fetch = FetchType.LAZY)

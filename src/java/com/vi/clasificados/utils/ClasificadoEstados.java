@@ -12,7 +12,12 @@ import com.vi.clasificados.dominio.EstadosClasificado;
  */
 public class ClasificadoEstados {
     
-    public static EstadosClasificado ACTIVO = new EstadosClasificado(1);
-    public static EstadosClasificado CANCELADO = new EstadosClasificado(2);
+    public static EstadosClasificado PEDIDOXPAGAR = new EstadosClasificado(1);
+    public static EstadosClasificado PUBLICADO = new EstadosClasificado(2);
+    public static EstadosClasificado CANCELADO = new EstadosClasificado(3);
+    public static EstadosClasificado PEDIDOVENCIDO = new EstadosClasificado(4);
+    public static EstadosClasificado VENDIDO = new EstadosClasificado(5);
+    public static EstadosClasificado EXPIRADO = new EstadosClasificado(6);
+    
     
 }

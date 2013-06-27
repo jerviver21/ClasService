@@ -4,6 +4,7 @@ package com.vi.clasificados.services;
 import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.DetallePrecioClasificado;
 import com.vi.clasificados.dominio.DiasPrecios;
+import com.vi.clasificados.dominio.EstadosClasificado;
 import com.vi.clasificados.dominio.TipoPublicacion;
 import com.vi.comun.locator.ParameterLocator;
 import com.vi.comun.util.FechaUtils;
@@ -116,6 +117,22 @@ public class ClasificadosServices {
             total = total.add(clasificado.getPrecio());
         }
         return total;
+    }
+
+    public List<Clasificado> getClasificados(String usr, EstadosClasificado estado) {
+        List<Clasificado> clasificados;
+        if(estado == null){
+            clasificados = em.createNamedQuery("Clasificado.findByUsr").setParameter("usr", usr).getResultList();
+        }else{
+            clasificados = em.createNamedQuery("Clasificado.findByUsrEstado")
+                    .setParameter("usr", usr).setParameter("estado", estado).getResultList();
+        }
+        return clasificados;
+    }
+    
+    public List<EstadosClasificado> getEstados() {
+        List<EstadosClasificado> estados = em.createNamedQuery("EstadosClasificado.findAll").getResultList();
+        return estados;
     }
     
     

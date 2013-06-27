@@ -6,7 +6,9 @@ package com.vi.clasificados.services;
 
 import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.Pedido;
+import com.vi.clasificados.utils.PedidoEstados;
 import java.util.Date;
+import java.util.List;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -43,5 +45,14 @@ public class PedidoService {
         pedido.setMensajePago(pedido.getEntidad().getMensajePago().replace("COD_PAGO", pedido.getCodPago()));
         return pedido;
     }
+
+    public List<Pedido> getPedidosActivos(String usr) {
+        List<Pedido> pedidos = em.createNamedQuery("Pedido.findByUsrAndEstado")
+                .setParameter("usr", usr)
+                .setParameter("estado", PedidoEstados.VENCIDO).getResultList();
+        return pedidos;
+    }
+    
+    
 
 }

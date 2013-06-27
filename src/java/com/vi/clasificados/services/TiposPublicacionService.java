@@ -35,7 +35,7 @@ public class TiposPublicacionService {
         return mapa;
     }
 
-    public List<String> findAllNombresTipos(){
+    public List<String> findAll(){
         List<TipoPublicacion> tipos = em.createNamedQuery("TipoPublicacion.findAll").getResultList();
         List<String> nombresTipos = new ArrayList<String>();
         for(TipoPublicacion tipo : tipos){

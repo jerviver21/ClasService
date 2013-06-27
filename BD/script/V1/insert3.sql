@@ -1,7 +1,7 @@
 INSERT INTO tipo_publicacion values (1, 'NORMAL');
 INSERT INTO tipo_publicacion values (2, 'ECONOMICOS');
 INSERT INTO tipo_publicacion values (3, 'SUPERECONOMICOS');
-INSERT INTO tipo_publicacion values (4, 'WEB');
+INSERT INTO tipo_publicacion values (4, 'INTERNET');
 
 
 INSERT INTO precios values (1,'NORMAL SEMANAL', 0.10, true);

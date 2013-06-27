@@ -30,7 +30,10 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "clasificado")
 @NamedQueries({
-    @NamedQuery(name = "Clasificado.findAll", query = "SELECT c FROM Clasificado c")})
+    @NamedQuery(name = "Clasificado.findAll", query = "SELECT c FROM Clasificado c"),
+    @NamedQuery(name = "Clasificado.findByUsr", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr"),
+    @NamedQuery(name = "Clasificado.findByUsrEstado", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr AND c.estado =:estado")
+})
 public class Clasificado implements Serializable {
     @Column(name = "area_oferta")
     private Integer areaOferta;
@@ -120,7 +123,7 @@ public class Clasificado implements Serializable {
         numPalabras = 0;
         precioOferta = BigDecimal.ZERO;
         precio = BigDecimal.ZERO;
-        estado = ClasificadoEstados.ACTIVO;
+        estado = ClasificadoEstados.PEDIDOXPAGAR;
     }
 
     public Clasificado(Long id) {
