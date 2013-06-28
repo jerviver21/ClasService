@@ -2,6 +2,7 @@
 package com.vi.clasificados.dominio;
 
 import com.vi.clasificados.utils.ClasificadoEstados;
+import com.vi.clasificados.utils.PublicacioneTipos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -106,6 +107,12 @@ public class Clasificado implements Serializable {
     
     @Transient
     private List<DetallePrecioClasificado> detallePrecio;
+    
+    @Transient
+    private boolean editarEstado;
+    
+    @Transient
+    private boolean agregarAPedido;
     
 
     public Clasificado() {
@@ -434,6 +441,22 @@ public class Clasificado implements Serializable {
         subtipo3 = null;
         subtipo4 = null;
         subtipo5 = null;
+    }
+
+    /**
+     * @return the editarEstado
+     */
+    public boolean isEditarEstado() {
+        editarEstado = tipoPublicacion.equals(PublicacioneTipos.INTERNET) && (estado.equals(ClasificadoEstados.PUBLICADO) || estado.equals(ClasificadoEstados.CANCELADO) || estado.equals(ClasificadoEstados.VENDIDO));
+        return editarEstado;
+    }
+
+    /**
+     * @return the agregarAPedido
+     */
+    public boolean isAgregarAPedido() {
+        agregarAPedido = estado.equals(ClasificadoEstados.PEDIDOVENCIDO);
+        return agregarAPedido;
     }
 
 

@@ -6,6 +6,7 @@ import com.vi.clasificados.dominio.DetallePrecioClasificado;
 import com.vi.clasificados.dominio.DiasPrecios;
 import com.vi.clasificados.dominio.EstadosClasificado;
 import com.vi.clasificados.dominio.TipoPublicacion;
+import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.comun.locator.ParameterLocator;
 import com.vi.comun.util.FechaUtils;
 import java.math.BigDecimal;
@@ -133,6 +134,19 @@ public class ClasificadosServices {
     public List<EstadosClasificado> getEstados() {
         List<EstadosClasificado> estados = em.createNamedQuery("EstadosClasificado.findAll").getResultList();
         return estados;
+    }
+    
+    public List<EstadosClasificado> getEstadosEditables() {
+        List<EstadosClasificado> estados = em.createQuery("SELECT e  "
+                + "FROM EstadosClasificado e "
+                + "WHERE e.id ="+ClasificadoEstados.CANCELADO.getId()+" "
+                + "OR e.id = "+ClasificadoEstados.PUBLICADO.getId()+" "
+                + "OR e.id = "+ClasificadoEstados.VENDIDO.getId()+" ").getResultList();
+        return estados;
+    }
+
+    public void edit(Clasificado clasificado) {
+        em.merge(clasificado);
     }
     
     
