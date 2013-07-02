@@ -2,7 +2,7 @@
 package com.vi.clasificados.dominio;
 
 import com.vi.clasificados.utils.ClasificadoEstados;
-import com.vi.clasificados.utils.PublicacioneTipos;
+import com.vi.clasificados.utils.PublicacionesTipos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -33,11 +33,11 @@ import javax.persistence.Transient;
 @NamedQueries({
     @NamedQuery(name = "Clasificado.findAll", query = "SELECT c FROM Clasificado c"),
     @NamedQuery(name = "Clasificado.findByUsr", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr"),
-    @NamedQuery(name = "Clasificado.findByUsrEstado", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr AND c.estado =:estado")
+    @NamedQuery(name = "Clasificado.findByUsrEstado", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr AND c.estado =:estado"),
+    @NamedQuery(name = "Clasificado.findForFiltro", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo =:tipo")
 })
 public class Clasificado implements Serializable {
-    @Column(name = "area_oferta")
-    private Integer areaOferta;
+
     @Column(name = "num_dias")
     private Integer numDias;
     @Column(name = "num_palabras")
@@ -59,14 +59,8 @@ public class Clasificado implements Serializable {
     private Date fechaFin;
     @Column(name = "precio")
     private BigDecimal precio;
-    @Column(name = "salario_oferta")
-    private BigDecimal salarioOferta;
-    @Basic(optional = false)
 
-    
-    
-    @Column(name = "precio_oferta")
-    private BigDecimal precioOferta;
+
     @JoinColumn(name = "id_subtipo5", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.EAGER)
     private TipoClasificado subtipo5;
@@ -125,10 +119,8 @@ public class Clasificado implements Serializable {
         tipoPublicacion = new TipoPublicacion();
         opcionesPublicacion = new ArrayList<String>();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
-        areaOferta = 0;
         numDias = 0;
         numPalabras = 0;
-        precioOferta = BigDecimal.ZERO;
         precio = BigDecimal.ZERO;
         estado = ClasificadoEstados.PEDIDOXPAGAR;
     }
@@ -151,8 +143,6 @@ public class Clasificado implements Serializable {
         this.subtipo4 = clasificado.getSubtipo4();
         this.subtipo5 = clasificado.getSubtipo5();
         this.tipo = clasificado.getTipo();
-        this.areaOferta = clasificado.getAreaOferta();
-        this.precioOferta = clasificado.getPrecioOferta();
         this.precio = clasificado.getPrecio();
         this.fechaIni = clasificado.getFechaIni();
         this.fechaFin = clasificado.getFechaFin();
@@ -265,33 +255,7 @@ public class Clasificado implements Serializable {
 
 
 
-    /**
-     * @return the precioOferta
-     */
-    public BigDecimal getPrecioOferta() {
-        return precioOferta;
-    }
-
-    /**
-     * @param precioOferta the precioOferta to set
-     */
-    public void setPrecioOferta(BigDecimal precioOferta) {
-        this.precioOferta = precioOferta;
-    }
-
-    /**
-     * @return the areaOferta
-     */
-    public int getAreaOferta() {
-        return areaOferta;
-    }
-
-    /**
-     * @param areaOferta the areaOferta to set
-     */
-    public void setAreaOferta(int areaOferta) {
-        this.areaOferta = areaOferta;
-    }
+    
 
     /**
      * @return the fechaIni
@@ -336,11 +300,6 @@ public class Clasificado implements Serializable {
     }
 
 
-
-    public void setAreaOferta(Integer areaOferta) {
-        this.areaOferta = areaOferta;
-    }
-
     public Integer getNumDias() {
         return numDias;
     }
@@ -371,19 +330,7 @@ public class Clasificado implements Serializable {
         this.opcionesPublicacion = opcionesPublicacion;
     }
 
-    /**
-     * @return the salarioOferta
-     */
-    public BigDecimal getSalarioOferta() {
-        return salarioOferta;
-    }
 
-    /**
-     * @param salarioOferta the salarioOferta to set
-     */
-    public void setSalarioOferta(BigDecimal salarioOferta) {
-        this.salarioOferta = salarioOferta;
-    }
 
     /**
      * @return the clasificadoFrac
@@ -447,7 +394,7 @@ public class Clasificado implements Serializable {
      * @return the editarEstado
      */
     public boolean isEditarEstado() {
-        editarEstado = tipoPublicacion.equals(PublicacioneTipos.INTERNET) && (estado.equals(ClasificadoEstados.PUBLICADO) || estado.equals(ClasificadoEstados.CANCELADO) || estado.equals(ClasificadoEstados.VENDIDO));
+        editarEstado = tipoPublicacion.equals(PublicacionesTipos.INTERNET) && (estado.equals(ClasificadoEstados.PUBLICADO) || estado.equals(ClasificadoEstados.CANCELADO) || estado.equals(ClasificadoEstados.VENDIDO));
         return editarEstado;
     }
 

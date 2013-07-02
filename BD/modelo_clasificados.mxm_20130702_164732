@@ -24,9 +24,12 @@
             <Attribute datatype="date" defaultvalue="" extra="" fraction="null" id="7c96c98c-1a08-4e1e-a482-150b533228b9" name="fecha_fin" nullable="true" scale="10" size=""/>
             <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="291922b2-253d-432a-8e18-30c84191f5a9" name="precio" nullable="true" scale="10" size="10"/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="a6c77b2f-ba6b-4a88-a0c1-5f9b1ab90d5e" name="id_subtipo3" nullable="true" scale="10" size=""/>
+            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="aaa2bd25-9b8e-46bc-a698-530c0621f2da" name="area_oferta" nullable="true" scale="10" size=""/>
+            <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="dd6f5926-522f-4190-9f88-5c51bf3daa9d" name="precio_oferta" nullable="true" scale="10" size="10"/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="feccfcb4-84e2-485f-aa01-0695a4941d3d" name="id_tipo_publicacion" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="f786c4db-6943-4355-8484-490625141892" name="num_dias" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="322d76d5-3f8b-410c-bca3-f44befcba431" name="num_palabras" nullable="true" scale="10" size=""/>
+            <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="6df2e6fd-9252-44b0-b7c9-383d8691b738" name="salario_oferta" nullable="true" scale="10" size="10"/>
             <Attribute datatype="bigint" defaultvalue="" extra="" fraction="null" id="6c502359-beb6-44c6-a7cb-a2dca23fd135" name="id_pedido" nullable="false" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="aa6d85d7-96a8-4db8-8b20-d24395b2d8ea" name="id_estado" nullable="true" scale="10" size=""/>
             <Index id="c1a8c652-e408-4a36-960e-a0043baf5595" indextype="PRIMARYKEY" name="clasificado_pk">

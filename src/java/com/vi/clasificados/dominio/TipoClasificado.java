@@ -26,7 +26,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tipo_clasificado")
 @NamedQueries({
-    @NamedQuery(name = "TipoClasificado.findAll", query = "SELECT t FROM TipoClasificado t"),
+    @NamedQuery(name = "TipoClasificado.findAll", query = "SELECT t FROM TipoClasificado t ORDER BY t.id"),
     @NamedQuery(name = "TipoClasificado.findTiposBase", query = "SELECT t FROM TipoClasificado t WHERE t.padre IS EMPTY"),
     @NamedQuery(name = "TipoClasificado.findTiposByPadre", query = "SELECT t FROM TipoClasificado t WHERE t.padre = :padre")
 })

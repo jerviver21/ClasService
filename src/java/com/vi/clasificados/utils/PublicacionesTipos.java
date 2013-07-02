@@ -10,7 +10,7 @@ import com.vi.clasificados.dominio.TipoPublicacion;
  *
  * @author jerviver21
  */
-public class PublicacioneTipos {
+public class PublicacionesTipos {
     public static TipoPublicacion NORMAL = new TipoPublicacion(1);
     public static TipoPublicacion ECONOMICO = new TipoPublicacion(2);
     public static TipoPublicacion SUPERECONOMICO = new TipoPublicacion(3);

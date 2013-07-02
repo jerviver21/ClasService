@@ -117,9 +117,15 @@ INSERT INTO tipo_clasificado values (105, 4, 'SOLO PARA ADULTOS', 1, 'TIPO');
 INSERT INTO tipo_clasificado values (106, 4, 'TECNOLOGÍA', 1, 'TIPO');
 INSERT INTO tipo_clasificado values (107, 4, 'OTROS', 1, 'TIPO');
 
+INSERT INTO tipo_clasificado values (109, 2, 'SIN INFORMACIÓN', 3, 'RANGO SALARIAL');
+INSERT INTO tipo_clasificado values (110, 2, 'HASTA 1000 ./s', 3, 'RANGO SALARIAL');
+INSERT INTO tipo_clasificado values (111, 2, 'ENTRE 1000 ./s y 2000 ./s', 3, 'RANGO SALARIAL');
+INSERT INTO tipo_clasificado values (112, 2, 'ENTRE 2000 ./s y 3000 ./s', 3, 'RANGO SALARIAL');
+INSERT INTO tipo_clasificado values (113, 2, 'ENTRE 3000 ./s y 4000 ./s', 3, 'RANGO SALARIAL');
+INSERT INTO tipo_clasificado values (114, 2, 'ENTRE 4000 ./s y 5000 ./s', 3, 'RANGO SALARIAL');
+INSERT INTO tipo_clasificado values (115, 2, 'MÁS DE 5000 ./s', 3, 'RANGO SALARIAL');
 
-
-SELECT pg_catalog.setval('tipo_clasificado_id_seq', 109, true);
+SELECT pg_catalog.setval('tipo_clasificado_id_seq', 116, true);
 
 
 
