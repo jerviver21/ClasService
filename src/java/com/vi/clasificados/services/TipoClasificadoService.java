@@ -40,24 +40,25 @@ public class TipoClasificadoService {
         return tipos;
     }
     
-    public  Map<Integer, Map<String, List<TipoClasificado>>> getEstructuraConsulta(){
-        Map<Integer, Map<String, List<TipoClasificado>>> tiposEstructura = new HashMap<Integer, Map<String, List<TipoClasificado>>>();
+    public  Map<Integer, Map<Integer, List<TipoClasificado>>> getEstructuraConsulta(){
+        Map<Integer, Map<Integer, List<TipoClasificado>>> tiposEstructura = new HashMap<Integer, Map<Integer, List<TipoClasificado>>>();
         List<TipoClasificado> tipos = em.createNamedQuery("TipoClasificado.findAll").getResultList();
         
         for(TipoClasificado tipo : tipos){
             if(tipo.getPadre() == null){
-                Map<String, List<TipoClasificado>> subtiposEstructura = new LinkedHashMap<String, List<TipoClasificado>>();
+                Map<Integer, List<TipoClasificado>> subtiposEstructura = new LinkedHashMap<Integer, List<TipoClasificado>>();
                 tiposEstructura.put(tipo.getId(), subtiposEstructura);
             }else{
-                Map<String, List<TipoClasificado>> subtiposEstructura = tiposEstructura.get(tipo.getPadre().getId());
-                List<TipoClasificado> subtipos = subtiposEstructura.get(tipo.getNombre());
+                Map<Integer, List<TipoClasificado>> subtiposEstructura = tiposEstructura.get(tipo.getPadre().getId());
+                List<TipoClasificado> subtipos = subtiposEstructura.get(tipo.getSubtipo());
                 if(subtipos == null){
                     subtipos = new ArrayList<TipoClasificado>();
-                    subtiposEstructura.put(tipo.getNombre(), subtipos);
+                    subtiposEstructura.put(tipo.getSubtipo(), subtipos);
                 }
                 subtipos.add(tipo);
             }
         }
+        System.out.println(tiposEstructura);
         return tiposEstructura;
     }
 

@@ -11,9 +11,9 @@ import com.vi.clasificados.dominio.TipoClasificado;
  * @author jerviver21
  */
 public class ClasificadosTipo {
-    public static TipoClasificado INMOBILIARIO = new TipoClasificado(1);
-    public static TipoClasificado EMPLEO = new TipoClasificado(2);
-    public static TipoClasificado VEHICULO = new TipoClasificado(3);
-    public static TipoClasificado VARIOS = new TipoClasificado(4);
+    public final static TipoClasificado INMOBILIARIO = new TipoClasificado(1);
+    public final static TipoClasificado EMPLEO = new TipoClasificado(2);
+    public final static TipoClasificado VEHICULO = new TipoClasificado(3);
+    public final static TipoClasificado VARIOS = new TipoClasificado(4);
     
 }

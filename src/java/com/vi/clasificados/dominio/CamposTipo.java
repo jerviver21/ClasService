@@ -49,14 +49,8 @@ public class CamposTipo implements Serializable {
     @Column(name = "subtipo5")
     private boolean subtipo5;
     @Basic(optional = false)
-    @Column(name = "precio")
-    private boolean precio;
-    @Basic(optional = false)
-    @Column(name = "area")
-    private boolean area;
-    @Basic(optional = false)
-    @Column(name = "salario")
-    private boolean salario;
+    @Column(name = "valor")
+    private boolean valor;
     @JoinColumn(name = "id_tipoclasificado", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TipoClasificado tipoClasificado;
@@ -75,8 +69,7 @@ public class CamposTipo implements Serializable {
         this.subtipo3 = subtipo3;
         this.subtipo4 = subtipo4;
         this.subtipo5 = subtipo5;
-        this.precio = precio;
-        this.area = area;
+        this.valor = precio;
     }
 
     public Long getId() {
@@ -127,21 +120,7 @@ public class CamposTipo implements Serializable {
         this.subtipo5 = subtipo5;
     }
 
-    public boolean getPrecio() {
-        return precio;
-    }
-
-    public void setPrecio(boolean precio) {
-        this.precio = precio;
-    }
-
-    public boolean getArea() {
-        return area;
-    }
-
-    public void setArea(boolean area) {
-        this.area = area;
-    }
+    
 
     public TipoClasificado getTipoclasificado() {
         return tipoClasificado;
@@ -176,18 +155,20 @@ public class CamposTipo implements Serializable {
         return "com.vi.clasificados.dominio.CamposTipo[ id=" + id + " ]";
     }
 
+
+
     /**
-     * @return the salario
+     * @return the valor
      */
-    public boolean isSalario() {
-        return salario;
+    public boolean isValor() {
+        return valor;
     }
 
     /**
-     * @param salario the salario to set
+     * @param valor the valor to set
      */
-    public void setSalario(boolean salario) {
-        this.salario = salario;
+    public void setValor(boolean valor) {
+        this.valor = valor;
     }
     
 }

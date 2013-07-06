@@ -29,7 +29,6 @@
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="322d76d5-3f8b-410c-bca3-f44befcba431" name="num_palabras" nullable="true" scale="10" size=""/>
             <Attribute datatype="bigint" defaultvalue="" extra="" fraction="null" id="6c502359-beb6-44c6-a7cb-a2dca23fd135" name="id_pedido" nullable="false" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="aa6d85d7-96a8-4db8-8b20-d24395b2d8ea" name="id_estado" nullable="true" scale="10" size=""/>
-            <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="2866ee24-c987-43db-8477-d88563c5c9d4" name="valor_oferta" nullable="true" scale="10" size="10"/>
             <Index id="c1a8c652-e408-4a36-960e-a0043baf5595" indextype="PRIMARYKEY" name="clasificado_pk">
                 <Indexattribute attributerefid="635c3f79-fe2c-4245-91a5-bd0f42fc3782" id="72925edc-0729-47db-b999-ddaa51be9656"/>
             </Index>

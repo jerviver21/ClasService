@@ -34,7 +34,7 @@ import javax.persistence.Transient;
     @NamedQuery(name = "Clasificado.findAll", query = "SELECT c FROM Clasificado c"),
     @NamedQuery(name = "Clasificado.findByUsr", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr"),
     @NamedQuery(name = "Clasificado.findByUsrEstado", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr AND c.estado =:estado"),
-    @NamedQuery(name = "Clasificado.findForFiltro", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo =:tipo")
+    @NamedQuery(name = "Clasificado.findForFiltro", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop")
 })
 public class Clasificado implements Serializable {
 
@@ -59,6 +59,8 @@ public class Clasificado implements Serializable {
     private Date fechaFin;
     @Column(name = "precio")
     private BigDecimal precio;
+    @Column(name = "valor_oferta")
+    private BigDecimal valorOferta;
 
 
     @JoinColumn(name = "id_subtipo5", referencedColumnName = "id")
@@ -110,7 +112,7 @@ public class Clasificado implements Serializable {
     
 
     public Clasificado() {
-        tipo = new TipoClasificado();
+        tipo = new TipoClasificado(1);// 1 - Es el tipo: FINCA RAIZ 
         subtipo1 = null;
         subtipo2 = null;
         subtipo3 = null;
@@ -123,6 +125,7 @@ public class Clasificado implements Serializable {
         numPalabras = 0;
         precio = BigDecimal.ZERO;
         estado = ClasificadoEstados.PEDIDOXPAGAR;
+        valorOferta = BigDecimal.ZERO;
     }
 
     public Clasificado(Long id) {
@@ -149,6 +152,7 @@ public class Clasificado implements Serializable {
         this.numDias = clasificado.getNumDias();
         this.numPalabras = clasificado.getNumPalabras();
         this.estado = clasificado.getEstado();
+        this.valorOferta = clasificado.getValorOferta();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
     }
 
@@ -404,6 +408,20 @@ public class Clasificado implements Serializable {
     public boolean isAgregarAPedido() {
         agregarAPedido = estado.equals(ClasificadoEstados.PEDIDOVENCIDO);
         return agregarAPedido;
+    }
+
+    /**
+     * @return the valorOferta
+     */
+    public BigDecimal getValorOferta() {
+        return valorOferta;
+    }
+
+    /**
+     * @param valorOferta the valorOferta to set
+     */
+    public void setValorOferta(BigDecimal valorOferta) {
+        this.valorOferta = valorOferta;
     }
 
 
