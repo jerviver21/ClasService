@@ -1,5 +1,5 @@
 
-package com.vi.clasificados.caching;
+package com.vi.clasificados.locator;
 
 import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.utils.ClasificadosTipo;
@@ -15,7 +15,7 @@ import java.util.Set;
  * @author Jerson Viveros Aguirre
  * 
  */
-public class ConsultasCache {
+public class ClasificadosCachingLocator {
     private final static Integer objectId = 1000000;
     
     public final static int INMOBILIARIO = 1;
@@ -23,307 +23,255 @@ public class ConsultasCache {
     public final static int VEHICULOS = 3;
     public final static int VARIOS = 4;
     
-    private ConsultasCache instance;
+    private static ClasificadosCachingLocator instance;
     
     private Map cache;
     
-    private ConsultasCache(){
+    private ClasificadosCachingLocator(){
+        
     }
     
-    public static ConsultasCache getInstance(){
-        ConsultasCache cc = new ConsultasCache();
-        if(cc.instance == null){
+    public static ClasificadosCachingLocator getInstance(List<Clasificado> clasificados){
+        if(instance == null){
             try {
-                cc.instance = new ConsultasCache();
+                instance = new ClasificadosCachingLocator();
             } catch (Exception e) {
                 System.err.println(e);
                 e.printStackTrace(System.err);
             }
         }
-        return cc.instance;
+        if(instance.cache == null){
+            instance.setCacheClasificados(clasificados);
+        }
+        return instance;
     }
     
-    public List<Clasificado> getFiltro(int TIPO, int... parametros){
-        if(cache == null){
-            return null;
-        }
+    
+    //Cache para los clasificados que se han publicado para Intenet, todos los días se actualiza   
+    public List<Clasificado> getEmpleoFiltro(int tipo, int area, int rango) {
         List<Clasificado> clasificados = new ArrayList<Clasificado>();
-        switch(TIPO){
-            case INMOBILIARIO:
-                clasificados = getInmobiliarioFiltro(parametros[0], parametros[1], parametros[2], parametros[3], parametros[4]);
-                break;
-            case EMPLEO:
-                clasificados = getEmpleoFiltro(parametros[0], parametros[1], parametros[2]);
-                break;
-            case VEHICULOS:
-                clasificados = getVehiculosFiltro(parametros[0], parametros[1], parametros[2]);
-                break;
-            case VARIOS:
-                clasificados = getVariosFiltro(parametros[0]);
-                break;
-        }
-        return clasificados;
-    }
-    
-    private List<Clasificado> getEmpleoFiltro(int tipo, int area, int rango) {
         Object estructura = cache.get(EMPLEO);
         if(estructura == null){
             return new ArrayList<Clasificado>();
         }
         Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>> mapaClasificados = (Map)cache.get(EMPLEO);
         
-        List<Clasificado> clasificados = new ArrayList<Clasificado>();
-        Set<Map<Integer, Map<Integer, List<Clasificado>>>> escaneo1nivel = new HashSet<Map<Integer, Map<Integer, List<Clasificado>>>>();
-        Set<Map<Integer, List<Clasificado>>> escaneo2nivel = new HashSet< Map<Integer, List<Clasificado>>>();
-        Set<List<Clasificado>> escaneo3nivel = new HashSet<List<Clasificado>>();
+        Set<Map<Integer, List<Clasificado>>> listaAreas = new HashSet< Map<Integer, List<Clasificado>>>();
+        Set<List<Clasificado>> listaPrecios = new HashSet<List<Clasificado>>();
         
-        if(tipo == 0){
-            Set<Integer> subs = mapaClasificados.keySet();
-            for(Integer sub:subs){
-                escaneo1nivel.add(mapaClasificados.get(sub));
-            }
-        }else{
-            Map<Integer, Map<Integer, List<Clasificado>>> mapa1 = mapaClasificados.get(tipo);
-            if(mapa1 != null){
-                escaneo1nivel.add(mapa1);
-            }
+        //Primer Filtro Tipo: (No permite seleccionar todos los tipos)
+        Map<Integer, Map<Integer, List<Clasificado>>> mapa1 = mapaClasificados.get(tipo);
+        if(mapa1 == null){
+            return clasificados;
         }
         
+        //Segundo Filtro Area: (0 - selecciona todas las áreas)
         if(area == 0){
-            for(Map<Integer, Map<Integer, List<Clasificado>>> lista:escaneo1nivel){
-                Set<Integer> subs = lista.keySet();
-                for(Integer sub:subs){
-                    escaneo2nivel.add(lista.get(sub));
-                }
+            Set<Integer> subs = mapa1.keySet();
+            for(Integer sub:subs){
+                listaAreas.add(mapa1.get(sub));
             }
         }else{
-            for(Map<Integer, Map<Integer, List<Clasificado>>> lista:escaneo1nivel){
-                Map<Integer, List<Clasificado>> mapa2 = lista.get(area);
-                if(mapa2 != null){
-                    escaneo2nivel.add(mapa2);
-                }
+            Map<Integer, List<Clasificado>> mapa2 = mapa1.get(area);
+            if(mapa2 != null){
+                listaAreas.add(mapa2);
             }
         }
         
+        //Tercer Filtro Precios: (0 - selecciona todas los precios)
         if(rango == 0){
-            for(Map<Integer, List<Clasificado>> lista:escaneo2nivel){
+            for(Map<Integer, List<Clasificado>> lista:listaAreas){
                 Set<Integer> subs = lista.keySet();
                 for(Integer sub:subs){
-                    escaneo3nivel.add(lista.get(sub));
+                    listaPrecios.add(lista.get(sub));
                 }
             }
         }else{
-            for(Map<Integer, List<Clasificado>> lista:escaneo2nivel){
+            for(Map<Integer, List<Clasificado>> lista:listaAreas){
                 List<Clasificado> conjunto = lista.get(rango);
                 if(conjunto != null){
-                    escaneo3nivel.add(conjunto);
+                    listaPrecios.add(conjunto);
                 }
             }
         }
         
-        for(List<Clasificado> conjunto:escaneo3nivel){
+        //Agrega todas las listas al resultado
+        for(List<Clasificado> conjunto:listaPrecios){
             clasificados.addAll(conjunto);
         }
         
         return clasificados;
     }
     
-    private List<Clasificado> getVehiculosFiltro(int tipo, int marca, int rango) {
+    public List<Clasificado> getVehiculosFiltro(int tipo, int marca, int rango) {
+        List<Clasificado> clasificados = new ArrayList<Clasificado>();
         Object estructura = cache.get(VEHICULOS);
         if(estructura == null){
             return new ArrayList<Clasificado>();
         }
         Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>> mapaClasificados = (Map)cache.get(VEHICULOS);
         
-        List<Clasificado> clasificados = new ArrayList<Clasificado>();
-        Set<Map<Integer, Map<Integer, List<Clasificado>>>> escaneo1nivel = new HashSet<Map<Integer, Map<Integer, List<Clasificado>>>>();
-        Set<Map<Integer, List<Clasificado>>> escaneo2nivel = new HashSet< Map<Integer, List<Clasificado>>>();
-        Set<List<Clasificado>> escaneo3nivel = new HashSet<List<Clasificado>>();
+        Set<Map<Integer, List<Clasificado>>> listaMarcas = new HashSet< Map<Integer, List<Clasificado>>>();
+        Set<List<Clasificado>> listaPrecios = new HashSet<List<Clasificado>>();
         
-        if(tipo == 0){
-            Set<Integer> subs = mapaClasificados.keySet();
-            for(Integer sub:subs){
-                escaneo1nivel.add(mapaClasificados.get(sub));
-            }
-        }else{
-            Map<Integer, Map<Integer, List<Clasificado>>> mapa1 = mapaClasificados.get(tipo);
-            if(mapa1 != null){
-                escaneo1nivel.add(mapa1);
-            }
+        //Primer Filtro Tipo: (No permite seleccionar todos los tipos)
+        Map<Integer, Map<Integer, List<Clasificado>>> mapa1 = mapaClasificados.get(tipo);
+        if(mapa1 == null){
+            return clasificados;
         }
         
+        //Segundo Filtro Marca: (0 - selecciona todas las áreas)
         if(marca == 0){
-            for(Map<Integer, Map<Integer, List<Clasificado>>> lista:escaneo1nivel){
-                Set<Integer> subs = lista.keySet();
-                for(Integer sub:subs){
-                    escaneo2nivel.add(lista.get(sub));
-                }
+            Set<Integer> subs = mapa1.keySet();
+            for(Integer sub:subs){
+                listaMarcas.add(mapa1.get(sub));
             }
         }else{
-            for(Map<Integer, Map<Integer, List<Clasificado>>> lista:escaneo1nivel){
-                Map<Integer, List<Clasificado>> mapa2 = lista.get(marca);
-                if(mapa2 != null){
-                    escaneo2nivel.add(mapa2);
-                }
+            Map<Integer, List<Clasificado>> mapa2 = mapa1.get(marca);
+            if(mapa2 != null){
+                listaMarcas.add(mapa2);
             }
         }
         
+        //Tercer Filtro Precios: (0 - selecciona todas los precios)
         if(rango == 0){
-            for(Map<Integer, List<Clasificado>> lista:escaneo2nivel){
+            for(Map<Integer, List<Clasificado>> lista:listaMarcas){
                 Set<Integer> subs = lista.keySet();
                 for(Integer sub:subs){
-                    escaneo3nivel.add(lista.get(sub));
+                    listaPrecios.add(lista.get(sub));
                 }
             }
         }else{
-            for(Map<Integer, List<Clasificado>> lista:escaneo2nivel){
+            for(Map<Integer, List<Clasificado>> lista:listaMarcas){
                 List<Clasificado> conjunto = lista.get(rango);
                 if(conjunto != null){
-                    escaneo3nivel.add(conjunto);
+                    listaPrecios.add(conjunto);
                 }
             }
         }
         
-        for(List<Clasificado> conjunto:escaneo3nivel){
+        //Agrega todas las listas al resultado
+        for(List<Clasificado> conjunto:listaPrecios){
             clasificados.addAll(conjunto);
         }
         
         return clasificados;
     }
     
-    private List<Clasificado> getVariosFiltro(int tipoClasificado) {
+    public List<Clasificado> getVariosFiltro(int tipoClasificado) {
         Object estructura = cache.get(VARIOS);
         if(estructura == null){
             return new ArrayList<Clasificado>();
         }
         Map<Integer, List<Clasificado>> mapaClasificados = (Map)cache.get(VARIOS);
         List<Clasificado> clasificados = new ArrayList<Clasificado>();
-        Set<List<Clasificado>> escaneo1nivel = new HashSet<List<Clasificado>>();
+        Set<List<Clasificado>> listaTipos = new HashSet<List<Clasificado>>();
         
+        //Filtro Tipo: (0 - Incluye todos los tipos)
         if(tipoClasificado == 0){
             Set<Integer> subs = mapaClasificados.keySet();
             for(Integer sub:subs){
-                escaneo1nivel.add(mapaClasificados.get(sub));
+                listaTipos.add(mapaClasificados.get(sub));
             }
         }else{
             List<Clasificado> conjunto = mapaClasificados.get(tipoClasificado);
             if(conjunto != null){
-                escaneo1nivel.add(conjunto);
+                listaTipos.add(conjunto);
             }
         }
 
-        
-        for(List<Clasificado> conjunto:escaneo1nivel){
+        //Se agregan todas las listas seleccionadas del filtro al resultado
+        for(List<Clasificado> conjunto:listaTipos){
             clasificados.addAll(conjunto);
         }
         
         return clasificados;
     }
     
-    private List<Clasificado> getInmobiliarioFiltro(int tipoOferta, int tipoInmueble, int ubicacion, int area, int rangoPrecio) {
+    public List<Clasificado> getInmobiliarioFiltro(int tipoOferta, int tipoInmueble, int ubicacion, int area, int rangoPrecio) {
+        List<Clasificado> clasificados = new ArrayList<Clasificado>();
         Object estructura = cache.get(INMOBILIARIO);
         if(estructura == null){
+            return clasificados;
+        }
+        
+        Map<Integer, Map<Integer, Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>>>> mapaClasificados = (Map)cache.get(INMOBILIARIO);
+        
+        //Estos sets permiten tener en cuenta cuando el usuario selecciona todas las ubicaciones, todas las áreas o todos los precios
+        Set<Map<Integer, Map<Integer, List<Clasificado>>>> ubicaciones = new HashSet<Map<Integer, Map<Integer, List<Clasificado>>>>();
+        Set<Map<Integer, List<Clasificado>>> areas = new HashSet< Map<Integer, List<Clasificado>>>();
+        Set<List<Clasificado>> precios = new HashSet<List<Clasificado>>();
+        
+        //Primer filtro Tipo de Oferta: 1-Venta, 2-Alquiler (No tiene la opción de todos)
+        Map<Integer, Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>>> mapa1 = mapaClasificados.get(tipoOferta);
+        if(mapa1 == null){
+            return clasificados;
+        }
+
+        //Segundo filtro Tipo de Inmueble: (No tiene la opción de todos)
+        Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>> mapa2 = mapa1.get(tipoInmueble);
+        if(mapa2 == null){
             return new ArrayList<Clasificado>();
         }
-        Map<Integer, Map<Integer, Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>>>> mapaClasificados = (Map)cache.get(INMOBILIARIO);
-        List<Clasificado> clasificados = new ArrayList<Clasificado>();
-        Set<Map<Integer, Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>>>> escaneo1nivel = new HashSet<Map<Integer, Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>>>>();
-        Set<Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>>> escaneo2nivel = new HashSet< Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>>>();
-        Set<Map<Integer, Map<Integer, List<Clasificado>>>> escaneo3nivel = new HashSet<Map<Integer, Map<Integer, List<Clasificado>>>>();
-        Set<Map<Integer, List<Clasificado>>> escaneo4nivel = new HashSet< Map<Integer, List<Clasificado>>>();
-        Set<List<Clasificado>> escaneo5nivel = new HashSet<List<Clasificado>>();
         
-        if(tipoOferta == 0){
-            Set<Integer> subs = mapaClasificados.keySet();
-            for(Integer sub:subs){
-                escaneo1nivel.add(mapaClasificados.get(sub));
-            }
-        }else{
-            Map<Integer, Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>>> mapa1 = mapaClasificados.get(tipoOferta);
-            if(mapa1 != null){
-                escaneo1nivel.add(mapa1);
-            }
-        }
-        
-        if(tipoInmueble == 0){
-            for(Map<Integer, Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>>> lista:escaneo1nivel){
-                Set<Integer> subs = lista.keySet();
-                for(Integer sub:subs){
-                    escaneo2nivel.add(lista.get(sub));
-                }
-            }
-        }else{
-            for(Map<Integer, Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>>> lista:escaneo1nivel){
-                Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>> mapa2 = lista.get(tipoInmueble);
-                if(mapa2 != null){
-                    escaneo2nivel.add(mapa2);
-                }
-            }
-        }
-        
+        //Tercer Filtros - Ubicación: Si es 0, debe incluir todas las ubicaciones
         if(ubicacion == 0){
-            for(Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>> lista:escaneo2nivel){
-                Set<Integer> subs = lista.keySet();
-                for(Integer sub:subs){
-                    escaneo3nivel.add(lista.get(sub));
-                }
+            Set<Integer> subs = mapa2.keySet();
+            for(Integer sub:subs){
+                ubicaciones.add(mapa2.get(sub));
             }
         }else{
-            for(Map<Integer, Map<Integer, Map<Integer, List<Clasificado>>>> lista:escaneo2nivel){
-                Map<Integer, Map<Integer, List<Clasificado>>> mapa2 = lista.get(ubicacion);
-                if(mapa2 != null){
-                    escaneo3nivel.add(mapa2);
-                }
+            Map<Integer, Map<Integer, List<Clasificado>>> mapa3 = mapa2.get(ubicacion);
+            if(mapa2 != null){
+                ubicaciones.add(mapa3);
             }
         }
         
+        //Cuarto Filtro - área: Si es 0 incluye todas las áreas
         if(area == 0){
-            for(Map<Integer, Map<Integer, List<Clasificado>>> lista:escaneo3nivel){
+            for(Map<Integer, Map<Integer, List<Clasificado>>> lista:ubicaciones){
                 Set<Integer> subs = lista.keySet();
                 for(Integer sub:subs){
-                    escaneo4nivel.add(lista.get(sub));
+                    areas.add(lista.get(sub));
                 }
             }
         }else{
-            for(Map<Integer, Map<Integer, List<Clasificado>>> lista:escaneo3nivel){
-                Map<Integer, List<Clasificado>> mapa2 = lista.get(area);
-                if(mapa2 != null){
-                    escaneo4nivel.add(mapa2);
+            for(Map<Integer, Map<Integer, List<Clasificado>>> lista:ubicaciones){
+                Map<Integer, List<Clasificado>> mapa = lista.get(area);
+                if(mapa != null){
+                    areas.add(mapa);
                 }
             }
         }
         
+        //Quinto Filtro - rango de precios: Si es 0 incluye todas los precios
         if(rangoPrecio == 0){
-            for(Map<Integer, List<Clasificado>> lista:escaneo4nivel){
+            for(Map<Integer, List<Clasificado>> lista:areas){
                 Set<Integer> subs = lista.keySet();
                 for(Integer sub:subs){
-                    escaneo5nivel.add(lista.get(sub));
+                    precios.add(lista.get(sub));
                 }
             }
         }else{
-            for(Map<Integer, List<Clasificado>> lista:escaneo4nivel){
+            for(Map<Integer, List<Clasificado>> lista:areas){
                 List<Clasificado> conjunto = lista.get(rangoPrecio);
                 if(conjunto != null){
-                    escaneo5nivel.add(conjunto);
+                    precios.add(conjunto);
                 }
             }
         }
         
-        for(List<Clasificado> conjunto:escaneo5nivel){
+        //Todas las listas seleccionadas según los filtros se agregan a los clasificados de la lista de salida
+        for(List<Clasificado> conjunto:precios){
             clasificados.addAll(conjunto);
         }
         
         return clasificados;
-        
     }
     
-    public void setCache(List<Clasificado> clasificados){
+    public void setCacheClasificados(List<Clasificado> clasificados){
         synchronized(objectId){
-            if(cache != null){
-                return;
-            }else{
-                cache = Collections.synchronizedMap(new HashMap());
-            }
+            cache = Collections.synchronizedMap(new HashMap());
             for(Clasificado clasificado : clasificados){
                 if(clasificado.getTipo().equals(ClasificadosTipo.INMOBILIARIO)){
                     setInmobiliario(clasificado);
@@ -390,10 +338,11 @@ public class ConsultasCache {
             mapa4 = new HashMap<Integer, List<Clasificado>>();
             mapa3.put(inmueble.getSubtipo4().getId(), mapa4);
         }
-        List<Clasificado> conjunto = mapa4.get(inmueble.getSubtipo5().getId());
+        int tipo = inmueble.getSubtipo5() == null?inmueble.getSubtipo6().getId():inmueble.getSubtipo5().getId();
+        List<Clasificado> conjunto = mapa4.get(tipo);
         if(conjunto == null){
             conjunto = new ArrayList<Clasificado>();
-            mapa4.put(inmueble.getSubtipo5().getId(), conjunto);
+            mapa4.put(tipo, conjunto);
         }
         conjunto.add(inmueble);
     }

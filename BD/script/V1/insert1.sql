@@ -7,7 +7,7 @@ INSERT INTO tipo_clasificado values (5, 1, 'VENTA', 1, 'TIPO DE OFERTA');
 INSERT INTO tipo_clasificado values (6, 1, 'ALQUILER', 1, 'TIPO DE OFERTA');
 
 INSERT INTO tipo_clasificado values (7, 1, 'TERRENO', 2, 'TIPO DE INMUEBLE');
-INSERT INTO tipo_clasificado values (8, 1, 'APARTAMENTO', 2, 'TIPO DE INMUEBLE');
+INSERT INTO tipo_clasificado values (8, 1, 'DEPARTAMENTO', 2, 'TIPO DE INMUEBLE');
 INSERT INTO tipo_clasificado values (9, 1, 'CASA', 2, 'TIPO DE INMUEBLE');
 INSERT INTO tipo_clasificado values (10, 1, 'OFICINA', 2, 'TIPO DE INMUEBLE');
 INSERT INTO tipo_clasificado values (11, 1, 'OTRO', 2, 'TIPO DE INMUEBLE');
@@ -50,8 +50,8 @@ INSERT INTO tipo_clasificado values (46, 1, 'ISLAY', 3, 'DISTRITO');
 INSERT INTO tipo_clasificado values (47, 1, 'LA UNIÓN', 3, 'DISTRITO');
 
 
-INSERT INTO tipo_clasificado values (48, 2, 'OFREZCO TRABAJO', 1, 'TIPO DE OFERTA');
-INSERT INTO tipo_clasificado values (49, 2, 'BUSCO TRABAJO', 1, 'TIPO DE OFERTA');
+INSERT INTO tipo_clasificado values (48, 2, 'OFERTA', 1, 'TIPO DE OFERTA');
+INSERT INTO tipo_clasificado values (49, 2, 'SOLICITUD', 1, 'TIPO DE OFERTA');
 
 INSERT INTO tipo_clasificado values (108, 2, 'ASEO', 2, 'AREA');
 INSERT INTO tipo_clasificado values (50, 2, 'ADMINISTRATIVA Y FINANCIERA', 2, 'AREA');
@@ -146,12 +146,12 @@ INSERT INTO tipo_clasificado values (130, 3, 'ENTRE US$ 9000 Y US$ 14000', 3, 'R
 INSERT INTO tipo_clasificado values (131, 3, 'ENTRE US$ 14000 Y US$ 20000', 3, 'RANGO PRECIOS');
 INSERT INTO tipo_clasificado values (132, 3, 'MAS DE US$ 20000',  3, 'RANGO PRECIOS');
 
-INSERT INTO tipo_clasificado values (133, 1, 'SIN INFORMACIÓN', 5, 'RANGO PRECIOS ALQUILER');
-INSERT INTO tipo_clasificado values (134, 1, 'HASTA 500 ./s', 5, 'RANGO PRECIOS ALQUILER');
-INSERT INTO tipo_clasificado values (135, 1, 'ENTRE 500 ./s y 800 ./s', 5, 'RANGO PRECIOS ALQUILER');
-INSERT INTO tipo_clasificado values (136, 1, 'ENTRE 800 ./s y 1200 ./s', 5, 'RANGO PRECIOS ALQUILER');
-INSERT INTO tipo_clasificado values (137, 1, 'ENTRE 1200 ./s y 1800 ./s', 5, 'RANGO PRECIOS ALQUILER');
-INSERT INTO tipo_clasificado values (138, 1, 'MÁS DE 1800 ./s', 5, 'RANGO PRECIOS ALQUILER');
+INSERT INTO tipo_clasificado values (133, 1, 'SIN INFORMACIÓN', 6, 'RANGO PRECIOS ALQUILER');
+INSERT INTO tipo_clasificado values (134, 1, 'HASTA 500 ./s', 6, 'RANGO PRECIOS ALQUILER');
+INSERT INTO tipo_clasificado values (135, 1, 'ENTRE 500 ./s y 800 ./s', 6, 'RANGO PRECIOS ALQUILER');
+INSERT INTO tipo_clasificado values (136, 1, 'ENTRE 800 ./s y 1200 ./s', 6, 'RANGO PRECIOS ALQUILER');
+INSERT INTO tipo_clasificado values (137, 1, 'ENTRE 1200 ./s y 1800 ./s', 6, 'RANGO PRECIOS ALQUILER');
+INSERT INTO tipo_clasificado values (138, 1, 'MÁS DE 1800 ./s', 6, 'RANGO PRECIOS ALQUILER');
 
 SELECT pg_catalog.setval('tipo_clasificado_id_seq', 140, true);
 

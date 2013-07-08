@@ -2,6 +2,7 @@ package com.vi.clasificados.utils;
 
 import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.TipoClasificado;
+import java.math.BigDecimal;
 
 /**
  * @author jerviver21
@@ -47,6 +48,9 @@ public class SelectorRangos {
         TipoClasificado tipo = null;
         if(clasificado.getTipo().equals(ClasificadosTipo.INMOBILIARIO)){
             if(clasificado.getSubtipo1().getId().equals(5)){//Venta
+                if(clasificado.getValorOferta() != null && clasificado.getMoneda().equals(Monedas.SOLES)){
+                    clasificado.setValorOferta(clasificado.getValorOferta().multiply(clasificado.getMoneda().getCambio()));
+                }
                 if(clasificado.getValorOferta() == null){
                     tipo =  SININFOIMB;
                 }else if(clasificado.getValorOferta().doubleValue() <= 30000){
@@ -62,7 +66,11 @@ public class SelectorRangos {
                 }if(clasificado.getValorOferta().doubleValue() > 150000){
                     tipo =  MAS150000IMB;
                 }
+                clasificado.setSubtipo5(tipo);
             }else{
+                if(clasificado.getValorOferta() != null && clasificado.getMoneda().equals(Monedas.DOLARES)){
+                    clasificado.setValorOferta(clasificado.getValorOferta().multiply((BigDecimal.ONE.divide(clasificado.getMoneda().getCambio()))));
+                }
                 if(clasificado.getValorOferta() == null){
                     tipo =  SININFOIMBA;
                 }else if(clasificado.getValorOferta().doubleValue() <= 500){
@@ -76,9 +84,13 @@ public class SelectorRangos {
                 }if(clasificado.getValorOferta().doubleValue() > 1800){
                     tipo =  MAS1800IMBA;
                 }
+                clasificado.setSubtipo6(tipo);
             }
-            clasificado.setSubtipo5(tipo);
+            
         }else if(clasificado.getTipo().equals(ClasificadosTipo.EMPLEO)){
+            if(clasificado.getValorOferta() != null && clasificado.getMoneda().equals(Monedas.DOLARES)){
+                clasificado.setValorOferta(clasificado.getValorOferta().multiply((BigDecimal.ONE.divide(clasificado.getMoneda().getCambio()))));
+            }
             if(clasificado.getValorOferta() == null){
                 tipo =  ACONVENIR;
             }else if(clasificado.getValorOferta().doubleValue() <= 1000){
@@ -96,6 +108,9 @@ public class SelectorRangos {
             }
             clasificado.setSubtipo3(tipo);
         }else if(clasificado.getTipo().equals(ClasificadosTipo.VEHICULO)){
+            if(clasificado.getValorOferta() != null && clasificado.getMoneda().equals(Monedas.SOLES)){
+                clasificado.setValorOferta(clasificado.getValorOferta().multiply(clasificado.getMoneda().getCambio()));
+            }
             if(clasificado.getValorOferta() == null){
                 tipo =  SININFOIVEH;
             }else if(clasificado.getValorOferta().doubleValue() <= 5000){

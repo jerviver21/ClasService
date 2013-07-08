@@ -78,6 +78,9 @@ public class Clasificado implements Serializable {
     @JoinColumn(name = "id_subtipo1", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.EAGER)
     private TipoClasificado subtipo1;
+    @JoinColumn(name = "id_subtipo6", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private TipoClasificado subtipo6;
     @JoinColumn(name = "id_tipo", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private TipoClasificado tipo;
@@ -93,6 +96,10 @@ public class Clasificado implements Serializable {
     @JoinColumn(name = "id_estado", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosClasificado estado;
+    
+    @JoinColumn(name = "id_currency_oferta", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Currencies moneda;
     
     
     @Transient
@@ -123,6 +130,7 @@ public class Clasificado implements Serializable {
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
         numDias = 0;
         numPalabras = 0;
+        moneda = new Currencies();
         precio = BigDecimal.ZERO;
         estado = ClasificadoEstados.PEDIDOXPAGAR;
         valorOferta = BigDecimal.ZERO;
@@ -153,6 +161,7 @@ public class Clasificado implements Serializable {
         this.numPalabras = clasificado.getNumPalabras();
         this.estado = clasificado.getEstado();
         this.valorOferta = clasificado.getValorOferta();
+        this.moneda = clasificado.getMoneda();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
     }
 
@@ -422,6 +431,34 @@ public class Clasificado implements Serializable {
      */
     public void setValorOferta(BigDecimal valorOferta) {
         this.valorOferta = valorOferta;
+    }
+
+    /**
+     * @return the subtipo6
+     */
+    public TipoClasificado getSubtipo6() {
+        return subtipo6;
+    }
+
+    /**
+     * @param subtipo6 the subtipo6 to set
+     */
+    public void setSubtipo6(TipoClasificado subtipo6) {
+        this.subtipo6 = subtipo6;
+    }
+
+    /**
+     * @return the moneda
+     */
+    public Currencies getMoneda() {
+        return moneda;
+    }
+
+    /**
+     * @param moneda the moneda to set
+     */
+    public void setMoneda(Currencies moneda) {
+        this.moneda = moneda;
     }
 
 

@@ -6,6 +6,7 @@ import com.vi.clasificados.dominio.DetallePrecioClasificado;
 import com.vi.clasificados.dominio.DiasPrecios;
 import com.vi.clasificados.dominio.EstadosClasificado;
 import com.vi.clasificados.dominio.TipoPublicacion;
+import com.vi.clasificados.locator.ClasificadosCachingLocator;
 import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.clasificados.utils.PublicacionesTipos;
 import com.vi.clasificados.utils.SelectorRangos;
@@ -38,13 +39,26 @@ public class ClasificadosServices {
     
     Map<String, TipoPublicacion> tiposPublicacion;
     ParameterLocator locator;
+    ClasificadosCachingLocator caching;
     
     @PostConstruct
     public void init(){
         tiposPublicacion = tipoPubService.findAllTiposMapa();
         locator = ParameterLocator.getInstance();
+        caching = ClasificadosCachingLocator.getInstance(getClasificadosActivos());
     }
     
+    public ClasificadosServices(){
+        
+    }
+    
+    //Métodos básicos del EJB
+    public void edit(Clasificado clasificado) {
+        em.merge(clasificado);
+    }
+    
+    
+    //Métodos de procesamiento de la lógica del negocio
     public List<Clasificado> procesarClasificado(Clasificado clasificado){
         List<Clasificado> clasificados = new ArrayList<Clasificado>();
         for(String tipo : clasificado.getOpcionesPublicacion()){
@@ -93,6 +107,7 @@ public class ClasificadosServices {
             detalle.setNumDias(detalle.getNumDias()+1);
         }
         SelectorRangos sr = new SelectorRangos();
+        clasificado.getMoneda().getCambio();
         sr.setRangoValores(clasificado);
     }
 
@@ -104,6 +119,7 @@ public class ClasificadosServices {
         return total;
     }
 
+    //Métodos de Consultas básicas
     public List<Clasificado> getClasificados(String usr, EstadosClasificado estado) {
         List<Clasificado> clasificados;
         if(estado == null){
@@ -114,24 +130,8 @@ public class ClasificadosServices {
         }
         return clasificados;
     }
-    
-    public List<EstadosClasificado> getEstados() {
-        List<EstadosClasificado> estados = em.createNamedQuery("EstadosClasificado.findAll").getResultList();
-        return estados;
-    }
-    
-    public List<EstadosClasificado> getEstadosEditables() {
-        List<EstadosClasificado> estados = em.createQuery("SELECT e  "
-                + "FROM EstadosClasificado e "
-                + "WHERE e.id ="+ClasificadoEstados.CANCELADO.getId()+" "
-                + "OR e.id = "+ClasificadoEstados.PUBLICADO.getId()+" "
-                + "OR e.id = "+ClasificadoEstados.VENDIDO.getId()+" ").getResultList();
-        return estados;
-    }
 
-    public void edit(Clasificado clasificado) {
-        em.merge(clasificado);
-    }
+    
 
     public List<Clasificado> getClasificadosActivos() {
         List<Clasificado> clasificados = em.createNamedQuery("Clasificado.findForFiltro")
@@ -139,6 +139,34 @@ public class ClasificadosServices {
                 .setParameter("tipop", PublicacionesTipos.INTERNET).getResultList();
         return clasificados;
     }
+    
+    
+    //Métodos de consulta de filtros
+    public List<Clasificado> getFiltro(int TIPO, int... parametros){
+        List<Clasificado> clasificados = new ArrayList<Clasificado>();
+        switch(TIPO){
+            case ClasificadosCachingLocator.INMOBILIARIO:
+                clasificados = caching.getInmobiliarioFiltro(parametros[0], parametros[1], parametros[2], parametros[3], parametros[4]);
+                break;
+            case ClasificadosCachingLocator.EMPLEO:
+                clasificados = caching.getEmpleoFiltro(parametros[0], parametros[1], parametros[2]);
+                break;
+            case ClasificadosCachingLocator.VEHICULOS:
+                clasificados = caching.getVehiculosFiltro(parametros[0], parametros[1], parametros[2]);
+                break;
+            case ClasificadosCachingLocator.VARIOS:
+                clasificados = caching.getVariosFiltro(parametros[0]);
+                break;
+        }
+        
+        return clasificados;
+    }
+    
+    public void recargarCache(){
+        caching.setCacheClasificados(getClasificadosActivos());
+    }
+    
+    
 
 
 
