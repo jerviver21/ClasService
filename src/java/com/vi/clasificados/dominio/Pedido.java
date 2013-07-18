@@ -33,6 +33,7 @@ import javax.persistence.Transient;
 @Table(name = "pedido")
 @NamedQueries({
     @NamedQuery(name = "Pedido.findAll", query = "SELECT p FROM Pedido p"),
+    @NamedQuery(name = "Pedido.findByCodigo", query = "SELECT p FROM Pedido p WHERE p.codPago = :codigo"),
     @NamedQuery(name = "Pedido.findByUsrAndEstado", query = "SELECT p FROM Pedido p WHERE p.usuario = :usr AND p.estado <> :estado ORDER BY p.fechaVencimiento")
 })
 public class Pedido implements Serializable {
