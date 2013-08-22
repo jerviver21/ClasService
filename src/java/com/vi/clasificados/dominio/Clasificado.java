@@ -34,7 +34,8 @@ import javax.persistence.Transient;
     @NamedQuery(name = "Clasificado.findAll", query = "SELECT c FROM Clasificado c"),
     @NamedQuery(name = "Clasificado.findByUsr", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr"),
     @NamedQuery(name = "Clasificado.findByUsrEstado", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr AND c.estado =:estado"),
-    @NamedQuery(name = "Clasificado.findForFiltro", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop")
+    @NamedQuery(name = "Clasificado.findByEstado", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado"),
+    @NamedQuery(name = "Clasificado.findForFiltroCache", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop")
 })
 public class Clasificado implements Serializable {
 
@@ -98,7 +99,7 @@ public class Clasificado implements Serializable {
     private EstadosClasificado estado;
     
     @JoinColumn(name = "id_currency_oferta", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Currencies moneda;
     
     
@@ -130,7 +131,7 @@ public class Clasificado implements Serializable {
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
         numDias = 0;
         numPalabras = 0;
-        moneda = new Currencies();
+        moneda = new Currencies(2);///Por defecto queda en 2 = soles
         precio = BigDecimal.ZERO;
         estado = ClasificadoEstados.PEDIDOXPAGAR;
         valorOferta = BigDecimal.ZERO;
@@ -148,20 +149,22 @@ public class Clasificado implements Serializable {
     public Clasificado(Clasificado clasificado) {
         this.id = clasificado.getId();
         this.clasificado = clasificado.getClasificado();
-        this.subtipo1 = clasificado.getSubtipo1();
-        this.subtipo2 = clasificado.getSubtipo2();
-        this.subtipo3 = clasificado.getSubtipo3();
-        this.subtipo4 = clasificado.getSubtipo4();
-        this.subtipo5 = clasificado.getSubtipo5();
-        this.tipo = clasificado.getTipo();
+        this.subtipo1 = clasificado.getSubtipo1() == null?null :new TipoClasificado(clasificado.getSubtipo1().getId());
+        this.subtipo2 = clasificado.getSubtipo2() == null?null :new TipoClasificado(clasificado.getSubtipo2().getId());
+        this.subtipo3 = clasificado.getSubtipo3() == null?null :new TipoClasificado(clasificado.getSubtipo3().getId());
+        this.subtipo4 = clasificado.getSubtipo4() == null?null :new TipoClasificado(clasificado.getSubtipo4().getId());
+        this.subtipo5 = clasificado.getSubtipo5() == null?null :new TipoClasificado(clasificado.getSubtipo5().getId());
+        this.subtipo6 = clasificado.getSubtipo6() == null?null :new TipoClasificado(clasificado.getSubtipo6().getId());
+        this.tipo = clasificado.getTipo() == null?null :new TipoClasificado(clasificado.getTipo().getId());
         this.precio = clasificado.getPrecio();
         this.fechaIni = clasificado.getFechaIni();
         this.fechaFin = clasificado.getFechaFin();
         this.numDias = clasificado.getNumDias();
         this.numPalabras = clasificado.getNumPalabras();
-        this.estado = clasificado.getEstado();
+        this.estado = clasificado.getEstado() == null?null :new EstadosClasificado(clasificado.getEstado().getId());
         this.valorOferta = clasificado.getValorOferta();
-        this.moneda = clasificado.getMoneda();
+        this.moneda = clasificado.getMoneda() == null?null :new Currencies(clasificado.getMoneda().getId());
+        this.tipoPublicacion = clasificado.getTipoPublicacion() == null?null :new TipoPublicacion(clasificado.getTipoPublicacion().getId());
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
     }
 
@@ -415,7 +418,7 @@ public class Clasificado implements Serializable {
      * @return the agregarAPedido
      */
     public boolean isAgregarAPedido() {
-        agregarAPedido = estado.equals(ClasificadoEstados.PEDIDOVENCIDO);
+        agregarAPedido = estado.equals(ClasificadoEstados.PEDIDOVENCIDO) || estado.equals(ClasificadoEstados.EXPIRADO);
         return agregarAPedido;
     }
 

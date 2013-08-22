@@ -8,7 +8,7 @@
 	</parameter>
 	<parameter name="fecha" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select now() as fecha, clasificado from clasificado where id_tipo = $P{tipo} and id_estado = 2;]]>
+		<![CDATA[select now() as fecha, clasificado from clasificado where id_tipo_publicacion = $P{tipo} and id_estado = 2 and fecha_ini <= to_date($P{fecha},'yyyy-MM-dd') and fecha_fin >= to_date($P{fecha},'yyyy-MM-dd');]]>
 	</queryString>
 	<field name="fecha" class="java.sql.Timestamp"/>
 	<field name="clasificado" class="java.lang.String"/>

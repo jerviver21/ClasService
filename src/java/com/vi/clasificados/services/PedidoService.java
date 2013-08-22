@@ -5,10 +5,16 @@
 package com.vi.clasificados.services;
 
 import com.vi.clasificados.dominio.Clasificado;
+import com.vi.clasificados.dominio.EstadosPedido;
 import com.vi.clasificados.dominio.Pedido;
+import com.vi.clasificados.utils.ClasificadoEstados;
+import com.vi.clasificados.utils.EntidadesDePago;
 import com.vi.clasificados.utils.PedidoEstados;
+import com.vi.comun.exceptions.ValidacionException;
 import com.vi.comun.locator.ParameterLocator;
+import com.vi.comun.util.FechaUtils;
 import com.vi.comun.util.FilesUtils;
+import com.vi.usuarios.services.UsuariosServicesLocal;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,8 +24,10 @@ import java.io.RandomAccessFile;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -36,6 +44,9 @@ public class PedidoService {
     private EntityManager em;
     ParameterLocator locator;
     
+    @EJB
+    UsuariosServicesLocal usuarioService;
+    
     
     public PedidoService(){
         locator = ParameterLocator.getInstance();
@@ -49,17 +60,18 @@ public class PedidoService {
         return pedido.get(0);
     }
     
-    public Pedido save(Pedido pedido)throws FileNotFoundException, IOException{
+    public Pedido habilitarPago(Pedido pedido)throws FileNotFoundException, IOException{
         Date fechaLimitePago = null;
         for(Clasificado clasificado : pedido.getClasificados()){
             if(fechaLimitePago == null){
-                fechaLimitePago = clasificado.getFechaIni();
+                fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), -1, Calendar.DATE);
             }else{
                if(clasificado.getFechaIni().before(fechaLimitePago)){
-                   fechaLimitePago = clasificado.getFechaIni();
+                   fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), -1, Calendar.DATE);
                } 
             }
             clasificado.setPedido(pedido);
+            System.out.println("--> "+clasificado.getSubtipo1().getId()+" - "+clasificado.getClasificado()+" - "+clasificado.getMoneda().getId());
         }
         pedido.setFechaVencimiento(fechaLimitePago);
         pedido = em.merge(pedido);
@@ -70,12 +82,30 @@ public class PedidoService {
         generarSolicitudPago(pedido.getCodPago(), pedido.getValorTotal(), fechaLimitePago);
         return pedido;
     }
-
-    public List<Pedido> getPedidosActivos(String usr) {
+    
+    public Pedido guardarPedido(Pedido pedido)throws FileNotFoundException, IOException{
+        pedido.setEntidad(EntidadesDePago.PERIODICO);
+        pedido.setEstado(PedidoEstados.PAGO);
+        for(Clasificado clasificado : pedido.getClasificados()){
+            clasificado.setEstado(ClasificadoEstados.PUBLICADO);
+            clasificado.setPedido(pedido);
+        }
+        pedido = em.merge(pedido);
+        pedido.setMensajePago("Pedido realizado con exito.");
+        return pedido;
+    }
+    
+    public List<Pedido> getPedidos(String usuario, EstadosPedido estado) {
         List<Pedido> pedidos = em.createNamedQuery("Pedido.findByUsrAndEstado")
-                .setParameter("usr", usr)
-                .setParameter("estado", PedidoEstados.VENCIDO).getResultList();
+                .setParameter("usr", usuario)
+                .setParameter("estado", estado).getResultList();
         return pedidos;
+    }
+    
+    public List<Clasificado> getClasificados(Pedido pedido){
+        pedido = em.merge(pedido);
+        pedido.getClasificados().size();
+        return pedido.getClasificados();
     }
     
     public void generarSolicitudPago(String nroPago, BigDecimal valor, Date fechaLimite)throws FileNotFoundException, IOException{
@@ -89,11 +119,15 @@ public class PedidoService {
     }
     
     public void recibirPago()throws FileNotFoundException, IOException, ParseException{
-        SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         String ruta = locator.getParameter("rutaPago");
         File dirPagos = new File(ruta+File.separator+"recibidos");
         if(!dirPagos.exists()){
             dirPagos.mkdirs();
+        }
+        File dirArchivados = new File(ruta+File.separator+"archivados");
+        if(!dirArchivados.exists()){
+            dirArchivados.mkdirs();
         }
         String[] pagos = dirPagos.list();
         for(String nombre : pagos){
@@ -106,10 +140,46 @@ public class PedidoService {
             Pedido pedido = findByNro(nroPago);
             pedido.setEstado(PedidoEstados.PAGO);
             pedido.setFechaHoraPago(fechaHoraPago);
+            List<Clasificado> clasificados = pedido.getClasificados();
+            for(Clasificado clasificado:clasificados){
+                clasificado.setEstado(ClasificadoEstados.PUBLICADO);
+                em.merge(clasificado);
+            }
             em.merge(pedido);
-            FilesUtils.moverArchivo(archivo.getAbsolutePath(), ruta+File.separator+"archivados"+File.separator+nombre);
+            FilesUtils.moverArchivo(archivo.getAbsolutePath(), dirArchivados.getAbsolutePath()+File.separator+nombre);
         }
     }
+
+    public void simularPago(String codPago)throws FileNotFoundException, IOException {
+        SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String ruta = locator.getParameter("rutaPago");
+        File dirSolicitud = new File(ruta+File.separator+"recibidos");
+        if(!dirSolicitud.exists()){
+            dirSolicitud.mkdirs();
+        }
+        RandomAccessFile archivo = new RandomAccessFile(dirSolicitud+File.separator+codPago, "rw");
+        archivo.writeBytes(codPago+","+fd.format(new Date()));
+    }
+    
+    public void realizarPago(String codPago)throws ValidacionException {
+        Pedido pedido = findByNro(codPago);
+        
+        if(FechaUtils.getFechaHoy().after(pedido.getFechaVencimiento())){
+            throw new ValidacionException("El pedido se encuentra vencido");
+        }
+
+        pedido.setEntidad(EntidadesDePago.PERIODICO);
+        pedido.setEstado(PedidoEstados.PAGO);
+        pedido.setFechaHoraPago(new Date());
+        List<Clasificado> clasificados = pedido.getClasificados();
+        for(Clasificado clasificado:clasificados){
+            clasificado.setEstado(ClasificadoEstados.PUBLICADO);
+            em.merge(clasificado);
+        } 
+        em.merge(pedido);
+    }
+
+    
     
     
 

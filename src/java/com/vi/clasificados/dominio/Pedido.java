@@ -34,7 +34,8 @@ import javax.persistence.Transient;
 @NamedQueries({
     @NamedQuery(name = "Pedido.findAll", query = "SELECT p FROM Pedido p"),
     @NamedQuery(name = "Pedido.findByCodigo", query = "SELECT p FROM Pedido p WHERE p.codPago = :codigo"),
-    @NamedQuery(name = "Pedido.findByUsrAndEstado", query = "SELECT p FROM Pedido p WHERE p.usuario = :usr AND p.estado <> :estado ORDER BY p.fechaVencimiento")
+    @NamedQuery(name = "Pedido.findByUsrAndEstado", query = "SELECT p FROM Pedido p WHERE p.usuario = :usr AND p.estado = :estado ORDER BY p.fechaVencimiento"),
+    @NamedQuery(name = "Pedido.findByEstado", query = "SELECT p FROM Pedido p WHERE p.estado = :estado")
 })
 public class Pedido implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -52,7 +53,6 @@ public class Pedido implements Serializable {
     @Basic(optional = false)
     @Column(name = "valor_total")
     private BigDecimal valorTotal;
-    @Basic(optional = false)
     @Column(name = "fecha_vencimiento")
     @Temporal(TemporalType.DATE)
     private Date fechaVencimiento;
@@ -61,6 +61,12 @@ public class Pedido implements Serializable {
     private Date fechaHoraPago;
     @Column(name = "cod_confirmacion")
     private String codConfirmacion;
+    
+    @Column(name = "dni_cliente")
+    private String dniCliente;
+    @Column(name = "nombre_cliente")
+    private String nombreCliente;
+    
     @JoinColumn(name = "id_estado", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private EstadosPedido estado;
@@ -229,6 +235,34 @@ public class Pedido implements Serializable {
      */
     public void setMensajePago(String mensajePago) {
         this.mensajePago = mensajePago;
+    }
+
+    /**
+     * @return the dniCliente
+     */
+    public String getDniCliente() {
+        return dniCliente;
+    }
+
+    /**
+     * @param dniCliente the dniCliente to set
+     */
+    public void setDniCliente(String dniCliente) {
+        this.dniCliente = dniCliente;
+    }
+
+    /**
+     * @return the nombreCliente
+     */
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    /**
+     * @param nombreCliente the nombreCliente to set
+     */
+    public void setNombreCliente(String nombreCliente) {
+        this.nombreCliente = nombreCliente;
     }
     
 }

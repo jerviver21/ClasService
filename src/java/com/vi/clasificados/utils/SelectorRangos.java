@@ -1,6 +1,7 @@
 package com.vi.clasificados.utils;
 
 import com.vi.clasificados.dominio.Clasificado;
+import com.vi.clasificados.dominio.Currencies;
 import com.vi.clasificados.dominio.TipoClasificado;
 import java.math.BigDecimal;
 
@@ -44,84 +45,88 @@ public class SelectorRangos {
     
     
     
-    public void setRangoValores(Clasificado clasificado){
+    public void setRangoValores(Clasificado clasificado, Currencies moneda){
         TipoClasificado tipo = null;
         if(clasificado.getTipo().equals(ClasificadosTipo.INMOBILIARIO)){
             if(clasificado.getSubtipo1().getId().equals(5)){//Venta
-                if(clasificado.getValorOferta() != null && clasificado.getMoneda().equals(Monedas.SOLES)){
-                    clasificado.setValorOferta(clasificado.getValorOferta().multiply(clasificado.getMoneda().getCambio()));
+                BigDecimal valor = BigDecimal.ZERO;
+                if(clasificado.getValorOferta() != null && moneda.equals(Monedas.SOLES)){
+                    valor = clasificado.getValorOferta().multiply(moneda.getCambio());
                 }
                 if(clasificado.getValorOferta() == null){
                     tipo =  SININFOIMB;
-                }else if(clasificado.getValorOferta().doubleValue() <= 30000){
+                }else if(valor.intValue() <= 30000){
                     tipo =  HASTA30000IMB;
-                }else if(clasificado.getValorOferta().doubleValue() > 30000 && clasificado.getValorOferta().doubleValue() <= 60000){
+                }else if(valor.intValue() > 30000 && valor.intValue() <= 60000){
                     tipo =  E30000Y60000IMB;
-                }if(clasificado.getValorOferta().doubleValue() > 60000 && clasificado.getValorOferta().doubleValue() <= 90000){
+                }if(valor.intValue() > 60000 && valor.intValue() <= 90000){
                     tipo =  E60000Y90000IMB;
-                }if(clasificado.getValorOferta().doubleValue() > 90000 && clasificado.getValorOferta().doubleValue() <= 120000){
+                }if(valor.intValue() > 90000 && valor.intValue() <= 120000){
                     tipo =  E90000Y120000IMB;
-                }if(clasificado.getValorOferta().doubleValue() > 120000 && clasificado.getValorOferta().doubleValue() <= 150000){
+                }if(valor.intValue() > 120000 && valor.intValue() <= 150000){
                     tipo =  E120000Y150000IMB;
-                }if(clasificado.getValorOferta().doubleValue() > 150000){
+                }if(valor.intValue() > 150000){
                     tipo =  MAS150000IMB;
                 }
                 clasificado.setSubtipo5(tipo);
             }else{
-                if(clasificado.getValorOferta() != null && clasificado.getMoneda().equals(Monedas.DOLARES)){
-                    clasificado.setValorOferta(clasificado.getValorOferta().multiply((BigDecimal.ONE.divide(clasificado.getMoneda().getCambio()))));
+                BigDecimal valor = BigDecimal.ZERO;
+                if(clasificado.getValorOferta() != null && moneda.equals(Monedas.DOLARES)){
+                    valor = clasificado.getValorOferta().multiply((BigDecimal.ONE.divide(moneda.getCambio())));
                 }
                 if(clasificado.getValorOferta() == null){
                     tipo =  SININFOIMBA;
-                }else if(clasificado.getValorOferta().doubleValue() <= 500){
+                }else if(valor.intValue() <= 500){
                     tipo =  HASTA500IMBA;
-                }else if(clasificado.getValorOferta().doubleValue() > 500 && clasificado.getValorOferta().doubleValue() <= 800){
+                }else if(valor.intValue() > 500 && valor.intValue() <= 800){
                     tipo =  E500Y800IMBA;
-                }if(clasificado.getValorOferta().doubleValue() > 800 && clasificado.getValorOferta().doubleValue() <= 1200){
+                }else if(valor.intValue() > 800 && valor.intValue() <= 1200){
                     tipo =  E800Y1200IMBA;
-                }if(clasificado.getValorOferta().doubleValue() > 1200 && clasificado.getValorOferta().doubleValue() <= 1800){
+                }else if(valor.intValue() > 1200 && valor.intValue() <= 1800){
                     tipo =  E1200Y1800IMBA;
-                }if(clasificado.getValorOferta().doubleValue() > 1800){
+                }else if(valor.intValue() > 1800){
                     tipo =  MAS1800IMBA;
                 }
                 clasificado.setSubtipo6(tipo);
             }
             
         }else if(clasificado.getTipo().equals(ClasificadosTipo.EMPLEO)){
-            if(clasificado.getValorOferta() != null && clasificado.getMoneda().equals(Monedas.DOLARES)){
-                clasificado.setValorOferta(clasificado.getValorOferta().multiply((BigDecimal.ONE.divide(clasificado.getMoneda().getCambio()))));
+            BigDecimal valor = BigDecimal.ZERO;
+            if(clasificado.getValorOferta() != null && moneda.equals(Monedas.DOLARES)){
+               valor = clasificado.getValorOferta().multiply((BigDecimal.ONE.divide(moneda.getCambio())));
             }
             if(clasificado.getValorOferta() == null){
                 tipo =  ACONVENIR;
-            }else if(clasificado.getValorOferta().doubleValue() <= 1000){
+            }else if(valor.intValue() <= 1000){
                 tipo =  HASTA1000EMP;
-            }else if(clasificado.getValorOferta().doubleValue() > 1000 && clasificado.getValorOferta().doubleValue() <= 2000){
+            }else if(valor.intValue() > 1000 && valor.intValue() <= 2000){
                 tipo =  E1000Y2000EMP;
-            }if(clasificado.getValorOferta().doubleValue() > 2000 && clasificado.getValorOferta().doubleValue() <= 3000){
+            }else if(valor.intValue() > 2000 && valor.intValue() <= 3000){
                 tipo =  E2000Y3000EMP;
-            }if(clasificado.getValorOferta().doubleValue() > 3000 && clasificado.getValorOferta().doubleValue() <= 4000){
+            }else if(valor.intValue() > 3000 && valor.intValue() <= 4000){
                 tipo =  E3000Y4000EMP;
-            }if(clasificado.getValorOferta().doubleValue() > 4000 && clasificado.getValorOferta().doubleValue() <= 5000){
+            }else if(valor.intValue() > 4000 && valor.intValue() <= 5000){
                 tipo =  E4000Y5000EMP;
-            }if(clasificado.getValorOferta().doubleValue() > 5000){
+            }else if(valor.intValue() > 5000){
                 tipo =  MAS5000EMP;
             }
             clasificado.setSubtipo3(tipo);
         }else if(clasificado.getTipo().equals(ClasificadosTipo.VEHICULO)){
-            if(clasificado.getValorOferta() != null && clasificado.getMoneda().equals(Monedas.SOLES)){
-                clasificado.setValorOferta(clasificado.getValorOferta().multiply(clasificado.getMoneda().getCambio()));
+            BigDecimal valor = BigDecimal.ZERO;
+            if(clasificado.getValorOferta() != null && moneda.equals(Monedas.SOLES)){
+                valor = clasificado.getValorOferta().multiply(moneda.getCambio());
             }
             if(clasificado.getValorOferta() == null){
                 tipo =  SININFOIVEH;
-            }else if(clasificado.getValorOferta().doubleValue() <= 5000){
+            }else if(valor.intValue() <= 5000){
                 tipo =  HASTA5000VEH;
-            }else if(clasificado.getValorOferta().doubleValue() > 5000 && clasificado.getValorOferta().doubleValue() <= 9000){
+            }else if(valor.intValue() > 5000 && valor.intValue() <= 9000){
                 tipo =  E5000Y9000VEH;
-            }if(clasificado.getValorOferta().doubleValue() > 9000 && clasificado.getValorOferta().doubleValue() <= 14000){
+            }else if(valor.intValue() > 9000 && valor.intValue() <= 14000){
                 tipo =  E9000Y14000VEH;
-            }if(clasificado.getValorOferta().doubleValue() > 14000 && clasificado.getValorOferta().doubleValue() <= 20000){
+            }else if(valor.intValue() > 14000 && valor.intValue() <= 20000){
                 tipo =  E14000Y20000VEH;
-            }if(clasificado.getValorOferta().doubleValue() > 20000){
+            }else if(valor.intValue() > 20000){
                 tipo =  MAS20000VEH;
             }
             clasificado.setSubtipo3(tipo);

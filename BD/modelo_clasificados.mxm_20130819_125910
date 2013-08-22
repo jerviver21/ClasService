@@ -123,13 +123,11 @@
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="8517b116-6233-46c3-926a-fc33a8adc742" name="usuario" nullable="false" scale="10" size="500"/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="34b92fb5-0c3a-4026-8fa7-ad47b2c2b5f1" name="cod_pago" nullable="true" scale="10" size="25"/>
             <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="c3aa1203-73c0-4aec-b3e0-db1651fdc45c" name="valor_total" nullable="false" scale="10" size="10"/>
+            <Attribute datatype="date" defaultvalue="" extra="" fraction="null" id="65ed3f54-f10b-442b-9fda-e5a23e57c996" name="fecha_vencimiento" nullable="false" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="38225f07-dea4-46d6-9914-c71d5d9be8a5" name="id_estado" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="e0ab9997-eacd-4c54-9f2a-af48a560375c" name="cod_confirmacion" nullable="true" scale="10" size="25"/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="9fb35c6b-6a09-42e1-acbb-e5a9aacc44a1" name="id_entidad_pago" nullable="true" scale="10" size=""/>
             <Attribute datatype="timestamp" defaultvalue="" extra="" fraction="null" id="7f0befac-1b1e-49dc-85d0-0788eacc38ab" name="fecha_hora_pago" nullable="true" scale="10" size=""/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="e220c519-409a-4bf5-9fcd-e5a87af39272" name="dni_cliente" nullable="true" scale="10" size="20"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="c81c6768-2c21-4fa5-8113-9d5ab28012f4" name="nombre_cliente" nullable="true" scale="10" size="255"/>
-            <Attribute datatype="date" defaultvalue="" extra="" fraction="null" id="01ad0ec8-3d86-47ca-84f8-314881d4f18a" name="fecha_vencimiento" nullable="true" scale="10" size=""/>
             <Index id="c92c32b5-275c-405f-a368-661f6c5fbb46" indextype="PRIMARYKEY" name="pedido_pk">
                 <Indexattribute attributerefid="eecd05aa-e248-4ab4-a400-f9bccadd4750" id="70d3d24a-2cb3-4db2-8354-c4fdb85dc1a0"/>
             </Index>
