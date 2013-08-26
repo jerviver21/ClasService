@@ -14,6 +14,7 @@ import com.vi.comun.exceptions.ValidacionException;
 import com.vi.comun.locator.ParameterLocator;
 import com.vi.comun.util.FechaUtils;
 import com.vi.comun.util.FilesUtils;
+import com.vi.usuarios.dominio.Users;
 import com.vi.usuarios.services.UsuariosServicesLocal;
 import java.io.BufferedReader;
 import java.io.File;
@@ -71,9 +72,12 @@ public class PedidoService {
                } 
             }
             clasificado.setPedido(pedido);
-            System.out.println("--> "+clasificado.getSubtipo1().getId()+" - "+clasificado.getClasificado()+" - "+clasificado.getMoneda().getId());
         }
         pedido.setFechaVencimiento(fechaLimitePago);
+        Users usr = usuarioService.findByUser(pedido.getUsuario());
+        pedido.setNombreCliente(usr.getNombre());
+        pedido.setDniCliente(usr.getNumId());
+        
         pedido = em.merge(pedido);
         //Aqui habra que decidir la cuestion de acuerdo a la entidad de pago
         pedido.setCodPago(String.format("%012d", pedido.getId()));

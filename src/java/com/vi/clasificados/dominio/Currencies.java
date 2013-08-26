@@ -35,6 +35,10 @@ public class Currencies implements Serializable {
     @Basic(optional = false)
     @Column(name = "cambio")
     private BigDecimal cambio;
+    
+
+    @Column(name = "simbolo")
+    private String simbolo;
 
     public Currencies() {
     }
@@ -96,6 +100,20 @@ public class Currencies implements Serializable {
     @Override
     public String toString() {
         return "com.vi.clasificados.dominio.Currencies[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the simbolo
+     */
+    public String getSimbolo() {
+        return simbolo;
+    }
+
+    /**
+     * @param simbolo the simbolo to set
+     */
+    public void setSimbolo(String simbolo) {
+        this.simbolo = simbolo;
     }
     
 }

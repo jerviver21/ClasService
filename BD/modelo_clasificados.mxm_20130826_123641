@@ -168,7 +168,6 @@
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="2b0c70b9-078a-4d3b-99fb-f453e441c98e" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="8af46252-2232-4d1b-b389-cf232dafd04a" name="nombre" nullable="false" scale="10" size="25"/>
             <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="18f7ca72-751f-4e7a-b620-ffe2a5c6d0b0" name="cambio" nullable="false" scale="10" size="10"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="da02b64c-1706-429c-976f-eff1f5cc6a93" name="simbolo" nullable="true" scale="10" size="10"/>
             <Index id="db9e716a-26ef-46a1-9d15-2f7bff406d9c" indextype="PRIMARYKEY" name="currencies_pk">
                 <Indexattribute attributerefid="2b0c70b9-078a-4d3b-99fb-f453e441c98e" id="e26ecb47-6a22-43a2-ba0a-b142939ed55f"/>
             </Index>

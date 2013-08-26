@@ -165,7 +165,7 @@ public class ConsultasService {
            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
                 .setParameter("tipop", PublicacionesTipos.INTERNET)
-                .setParameter("tipo", ClasificadosTipo.EMPLEO)
+                .setParameter("tipo", ClasificadosTipo.VEHICULO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .setParameter("sub2", new TipoClasificado(marca))
                 .setParameter("sub3", new TipoClasificado(rango))
@@ -174,7 +174,7 @@ public class ConsultasService {
             clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo3 =:sub3")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
                 .setParameter("tipop", PublicacionesTipos.INTERNET)
-                .setParameter("tipo", ClasificadosTipo.EMPLEO)
+                .setParameter("tipo", ClasificadosTipo.VEHICULO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .setParameter("sub3", new TipoClasificado(rango))
                 .getResultList();
@@ -183,7 +183,7 @@ public class ConsultasService {
             clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
                 .setParameter("tipop", PublicacionesTipos.INTERNET)
-                .setParameter("tipo", ClasificadosTipo.EMPLEO)
+                .setParameter("tipo", ClasificadosTipo.VEHICULO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .setParameter("sub2", new TipoClasificado(marca))
                 .getResultList();
@@ -192,7 +192,7 @@ public class ConsultasService {
             clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
                 .setParameter("tipop", PublicacionesTipos.INTERNET)
-                .setParameter("tipo", ClasificadosTipo.EMPLEO)
+                .setParameter("tipo", ClasificadosTipo.VEHICULO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .getResultList();
             
