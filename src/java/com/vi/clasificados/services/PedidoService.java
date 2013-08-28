@@ -10,10 +10,12 @@ import com.vi.clasificados.dominio.Pedido;
 import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.clasificados.utils.EntidadesDePago;
 import com.vi.clasificados.utils.PedidoEstados;
+import com.vi.comun.exceptions.ParametroException;
 import com.vi.comun.exceptions.ValidacionException;
 import com.vi.comun.locator.ParameterLocator;
 import com.vi.comun.util.FechaUtils;
 import com.vi.comun.util.FilesUtils;
+import com.vi.comun.util.Log;
 import com.vi.usuarios.dominio.Users;
 import com.vi.usuarios.services.UsuariosServicesLocal;
 import java.io.BufferedReader;
@@ -28,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -181,6 +184,43 @@ public class PedidoService {
             em.merge(clasificado);
         } 
         em.merge(pedido);
+    }
+    
+    public void actualizarEstados()throws ParametroException{
+        Boolean depurar = Boolean.parseBoolean(locator.getParameter("depurar"));
+        if(depurar == null){
+            throw  new ParametroException("No existe el parámetro depurar");
+        }
+        
+        Date fechaHoy = FechaUtils.getFechaHoy();
+
+        List<Pedido> pedidos = em.createNamedQuery("Pedido.findByEstado").setParameter("estado", PedidoEstados.ACTIVO_PAGO).getResultList();
+        
+        if(depurar){
+            Log.getLogger().log(Level.INFO, "Pedidos por pagar: -> {0}", pedidos.size());
+        }
+        
+        for(Pedido pedido:pedidos){
+            if(pedido.getFechaVencimiento()== null || fechaHoy.after(pedido.getFechaVencimiento())){
+                pedido.setEstado(PedidoEstados.VENCIDO);
+                //Si el pedido está vencido todos los clasificados asociados quedaran automaticamente vencidos
+                for(Clasificado clasificado:pedido.getClasificados()){
+                    
+                    if(depurar){
+                        Log.getLogger().log(Level.INFO, "Fecha Inicial del Clasificado: : {0} - Fecha de Hoy: {1} - Pedido: {2} - Nuevo Estado: {3}", new Object[]{clasificado.getFechaIni(), fechaHoy, clasificado.getPedido().getId(), clasificado.getEstado().getId()} );
+                    }
+                    
+                    clasificado.setEstado(ClasificadoEstados.PEDIDOVENCIDO);
+                    em.merge(clasificado);
+                }
+                em.merge(pedido);
+            }
+            
+            if(depurar){
+                Log.getLogger().log(Level.INFO, "Pedido: {0} - Fecha vencimiento del Pedido: : {1} - Fecha de Hoy: {2} - Nuevo Estado: {3}", new Object[]{pedido.getId(), pedido.getFechaVencimiento(), fechaHoy, pedido.getEstado().getId()} );
+            }
+        }
+        
     }
 
     
