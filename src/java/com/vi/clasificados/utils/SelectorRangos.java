@@ -47,9 +47,12 @@ public class SelectorRangos {
     
     public void setRangoValores(Clasificado clasificado, Currencies moneda){
         TipoClasificado tipo = null;
+        BigDecimal valor = BigDecimal.ZERO;
+        if(clasificado.getValorOferta() != null){
+            valor = clasificado.getValorOferta();
+        }
         if(clasificado.getTipo().equals(ClasificadosTipo.INMOBILIARIO)){
             if(clasificado.getSubtipo1().getId().equals(5)){//Venta
-                BigDecimal valor = BigDecimal.ZERO;
                 if(clasificado.getValorOferta() != null && moneda.equals(Monedas.SOLES)){
                     valor = clasificado.getValorOferta().multiply(moneda.getCambio());
                 }
@@ -70,9 +73,8 @@ public class SelectorRangos {
                 }
                 clasificado.setSubtipo5(tipo);
             }else{
-                BigDecimal valor = BigDecimal.ZERO;
                 if(clasificado.getValorOferta() != null && moneda.equals(Monedas.DOLARES)){
-                    valor = clasificado.getValorOferta().multiply((BigDecimal.ONE.divide(moneda.getCambio())));
+                    valor = clasificado.getValorOferta().multiply(moneda.getCambio());
                 }
                 if(clasificado.getValorOferta() == null){
                     tipo =  SININFOIMBA;
@@ -91,9 +93,8 @@ public class SelectorRangos {
             }
             
         }else if(clasificado.getTipo().equals(ClasificadosTipo.EMPLEO)){
-            BigDecimal valor = BigDecimal.ZERO;
             if(clasificado.getValorOferta() != null && moneda.equals(Monedas.DOLARES)){
-               valor = clasificado.getValorOferta().multiply((BigDecimal.ONE.divide(moneda.getCambio())));
+               valor = clasificado.getValorOferta().multiply(moneda.getCambio());
             }
             if(clasificado.getValorOferta() == null){
                 tipo =  ACONVENIR;
@@ -112,7 +113,6 @@ public class SelectorRangos {
             }
             clasificado.setSubtipo3(tipo);
         }else if(clasificado.getTipo().equals(ClasificadosTipo.VEHICULO)){
-            BigDecimal valor = BigDecimal.ZERO;
             if(clasificado.getValorOferta() != null && moneda.equals(Monedas.SOLES)){
                 valor = clasificado.getValorOferta().multiply(moneda.getCambio());
             }
@@ -131,7 +131,6 @@ public class SelectorRangos {
             }
             clasificado.setSubtipo3(tipo);
         }
-        
     }
     
     
