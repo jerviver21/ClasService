@@ -145,6 +145,7 @@ public class PedidoService {
             String nroPago = datos[0];
             Date fechaHoraPago = fd.parse(datos[1]);
             Pedido pedido = findByNro(nroPago);
+            System.out.println(pedido+" - "+nroPago);
             pedido.setEstado(PedidoEstados.PAGO);
             pedido.setFechaHoraPago(fechaHoraPago);
             List<Clasificado> clasificados = pedido.getClasificados();
