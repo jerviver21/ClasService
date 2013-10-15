@@ -32,9 +32,6 @@
             <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="2866ee24-c987-43db-8477-d88563c5c9d4" name="valor_oferta" nullable="true" scale="10" size="10"/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="e6c384d0-2fb7-4fbb-a314-ceab487f50ef" name="id_subtipo6" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="c9bd5e89-9439-461c-9720-3ca119ba4baf" name="id_currency_oferta" nullable="true" scale="10" size=""/>
-            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="de87cbc7-31ec-405c-905a-5895d5078d30" name="ruta_imagen" nullable="true" scale="10" size=""/>
-            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="d74988b2-d804-4a4d-9e20-f75a4e7405a9" name="num_imagenes" nullable="true" scale="10" size=""/>
-            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="c4547383-ca77-4478-a948-a63f11d058ce" name="prioridad" nullable="true" scale="10" size=""/>
             <Index id="c1a8c652-e408-4a36-960e-a0043baf5595" indextype="PRIMARYKEY" name="clasificado_pk">
                 <Indexattribute attributerefid="635c3f79-fe2c-4245-91a5-bd0f42fc3782" id="72925edc-0729-47db-b999-ddaa51be9656"/>
             </Index>

@@ -64,7 +64,7 @@ public class Publicidad implements Serializable {
     @Column(name = "width")
     private Integer width;
     @JoinColumn(name = "id_imagen", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private ImagenesPublicidad imagen;
 
     public Publicidad() {

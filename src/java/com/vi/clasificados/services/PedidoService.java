@@ -23,6 +23,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.math.BigDecimal;
 import java.text.ParseException;
@@ -64,7 +65,7 @@ public class PedidoService {
         return pedido.get(0);
     }
     
-    public Pedido habilitarPago(Pedido pedido)throws FileNotFoundException, IOException{
+    public Pedido habilitarPago(Pedido pedido)throws ParametroException, FileNotFoundException, IOException{
         Date fechaLimitePago = null;
         for(Clasificado clasificado : pedido.getClasificados()){
             if(fechaLimitePago == null){
@@ -80,8 +81,17 @@ public class PedidoService {
         Users usr = usuarioService.findByUser(pedido.getUsuario());
         pedido.setNombreCliente(usr.getNombre());
         pedido.setDniCliente(usr.getNumId());
-        
         pedido = em.merge(pedido);
+        //Se guardan las imagenes
+        System.out.println("Guardando imagenes... ");
+        for(Clasificado clasificado : pedido.getClasificados()){
+            System.out.println("... "+clasificado.getImg1()+" - "+clasificado.getExtImg1());
+           if(clasificado.getImg1()!= null){
+                clasificado.setRutaImagen(cargarImg("IMG1."+clasificado.getExtImg1(), clasificado.getId(), clasificado.getImg1()));
+                clasificado.setNumImagenes(1);
+                clasificado.setPrioridad(1);
+            } 
+        }
         //Aqui habra que decidir la cuestion de acuerdo a la entidad de pago
         pedido.setCodPago(String.format("%012d", pedido.getId()));
         pedido = em.merge(pedido);
@@ -90,7 +100,7 @@ public class PedidoService {
         return pedido;
     }
     
-    public Pedido guardarPedido(Pedido pedido)throws FileNotFoundException, IOException{
+    public Pedido guardarPedido(Pedido pedido)throws ParametroException, FileNotFoundException, IOException{
         pedido.setEntidad(EntidadesDePago.PERIODICO);
         pedido.setEstado(PedidoEstados.PAGO);
         for(Clasificado clasificado : pedido.getClasificados()){
@@ -98,6 +108,14 @@ public class PedidoService {
             clasificado.setPedido(pedido);
         }
         pedido = em.merge(pedido);
+        //Se guardan las imagenes
+        for(Clasificado clasificado : pedido.getClasificados()){
+           if(clasificado.getImg1()!= null){
+                clasificado.setRutaImagen(cargarImg("IMG1."+clasificado.getExtImg1(), clasificado.getId(), clasificado.getImg1()));
+                clasificado.setNumImagenes(1);
+                clasificado.setPrioridad(1);
+            } 
+        }
         pedido.setMensajePago("Pedido realizado con exito.");
         return pedido;
     }
@@ -222,6 +240,15 @@ public class PedidoService {
             }
         }
         
+    }
+    
+    
+    public String cargarImg(String nombre, long id, InputStream input)throws ParametroException, IOException{
+        String rutaImgs = locator.getParameter("rutaImagenes");
+        if(rutaImgs == null){
+            throw new ParametroException("El parámetro dirCertificados no existe " );
+        }
+        return new FilesUtils().crearArchivo(rutaImgs+File.separator+id, nombre, input);
     }
 
     

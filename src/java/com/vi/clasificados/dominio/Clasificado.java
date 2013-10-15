@@ -3,6 +3,7 @@ package com.vi.clasificados.dominio;
 
 import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.clasificados.utils.PublicacionesTipos;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -52,6 +53,12 @@ public class Clasificado implements Serializable {
     @Basic(optional = false)
     @Column(name = "clasificado")
     private String clasificado;
+    @Column(name = "ruta_imagen")
+    private String rutaImagen;
+    @Column(name = "num_imagenes")
+    private Integer numImagenes;
+    @Column(name = "prioridad")
+    private Integer prioridad;
     @Column(name = "fecha_ini")
     @Temporal(TemporalType.DATE)
     private Date fechaIni;
@@ -118,6 +125,15 @@ public class Clasificado implements Serializable {
     @Transient
     private boolean agregarAPedido;
     
+    @Transient
+    private InputStream img1;
+    
+    @Transient
+    private String extImg1;
+    
+    @Transient
+    private boolean imgCargada;
+    
 
     public Clasificado() {
         tipo = new TipoClasificado(1);// 1 - Es el tipo: FINCA RAIZ 
@@ -165,6 +181,9 @@ public class Clasificado implements Serializable {
         this.valorOferta = clasificado.getValorOferta();
         this.moneda = clasificado.getMoneda() == null?null :new Currencies(clasificado.getMoneda().getId());
         this.tipoPublicacion = clasificado.getTipoPublicacion() == null?null :new TipoPublicacion(clasificado.getTipoPublicacion().getId());
+        this.img1 = clasificado.getImg1();
+        this.extImg1 = clasificado.getExtImg1();
+        this.imgCargada = clasificado.isImgCargada();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
     }
 
@@ -462,6 +481,90 @@ public class Clasificado implements Serializable {
      */
     public void setMoneda(Currencies moneda) {
         this.moneda = moneda;
+    }
+
+    /**
+     * @return the rutaImagen
+     */
+    public String getRutaImagen() {
+        return rutaImagen;
+    }
+
+    /**
+     * @param rutaImagen the rutaImagen to set
+     */
+    public void setRutaImagen(String rutaImagen) {
+        this.rutaImagen = rutaImagen;
+    }
+
+    /**
+     * @return the numImagenes
+     */
+    public Integer getNumImagenes() {
+        return numImagenes;
+    }
+
+    /**
+     * @param numImagenes the numImagenes to set
+     */
+    public void setNumImagenes(Integer numImagenes) {
+        this.numImagenes = numImagenes;
+    }
+
+    /**
+     * @return the prioridad
+     */
+    public Integer getPrioridad() {
+        return prioridad;
+    }
+
+    /**
+     * @param prioridad the prioridad to set
+     */
+    public void setPrioridad(Integer prioridad) {
+        this.prioridad = prioridad;
+    }
+
+    /**
+     * @return the img1
+     */
+    public InputStream getImg1() {
+        return img1;
+    }
+
+    /**
+     * @param img1 the img1 to set
+     */
+    public void setImg1(InputStream img1) {
+        this.img1 = img1;
+    }
+
+    /**
+     * @return the extImg1
+     */
+    public String getExtImg1() {
+        return extImg1;
+    }
+
+    /**
+     * @param extImg1 the extImg1 to set
+     */
+    public void setExtImg1(String extImg1) {
+        this.extImg1 = extImg1;
+    }
+
+    /**
+     * @return the imgCargada
+     */
+    public boolean isImgCargada() {
+        return imgCargada;
+    }
+
+    /**
+     * @param imgCargada the imgCargada to set
+     */
+    public void setImgCargada(boolean imgCargada) {
+        this.imgCargada = imgCargada;
     }
 
 

@@ -10,6 +10,7 @@ import com.vi.clasificados.dominio.DetallePrecioClasificado;
 import com.vi.clasificados.dominio.DiasPrecios;
 import com.vi.clasificados.dominio.TipoPublicacion;
 import com.vi.clasificados.utils.SelectorRangos;
+import com.vi.comun.locator.ParameterLocator;
 import com.vi.comun.util.FechaUtils;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -40,8 +41,11 @@ public class PublicacionService {
     
     Map<String, TipoPublicacion> tiposPublicacion;
     
+    ParameterLocator locator;
+    
     @PostConstruct
     public void init(){
+        locator = ParameterLocator.getInstance();
         tiposPublicacion = tipoPubService.findAllTiposMapa();
     }
 
@@ -104,5 +108,7 @@ public class PublicacionService {
         }
         return total;
     }
+    
+    
 
 }
