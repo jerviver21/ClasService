@@ -54,6 +54,7 @@ public class PublicacionService {
         List<Clasificado> clasificados = new ArrayList<Clasificado>();
         for(String tipo : clasificado.getOpcionesPublicacion()){
             Clasificado nuevoClas = new Clasificado(clasificado);
+            System.out.println("---> "+clasificado.getExtImg1()+" - "+clasificado.getImg1());
             nuevoClas.setTipoPublicacion(tiposPublicacion.get(tipo));
             Map preciosXDia = tiposPublicacion.get(tipo).getMapaPrecios();
             calcularValores(nuevoClas, preciosXDia);

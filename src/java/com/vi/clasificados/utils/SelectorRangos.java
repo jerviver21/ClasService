@@ -89,7 +89,7 @@ public class SelectorRangos {
                 }else if(valor.intValue() > 1800){
                     tipo =  MAS1800IMBA;
                 }
-                clasificado.setSubtipo6(tipo);
+                clasificado.setSubtipo5(tipo);
             }
             
         }else if(clasificado.getTipo().equals(ClasificadosTipo.EMPLEO)){

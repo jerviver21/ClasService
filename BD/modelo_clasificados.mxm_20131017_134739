@@ -32,7 +32,7 @@
             <Attribute datatype="numeric" defaultvalue="" extra="" fraction="2" id="2866ee24-c987-43db-8477-d88563c5c9d4" name="valor_oferta" nullable="true" scale="10" size="10"/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="e6c384d0-2fb7-4fbb-a314-ceab487f50ef" name="id_subtipo6" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="c9bd5e89-9439-461c-9720-3ca119ba4baf" name="id_currency_oferta" nullable="true" scale="10" size=""/>
-            <Attribute datatype="bigint" defaultvalue="" extra="" fraction="null" id="de87cbc7-31ec-405c-905a-5895d5078d30" name="id_imagenes" nullable="true" scale="10" size=""/>
+            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="de87cbc7-31ec-405c-905a-5895d5078d30" name="ruta_imagen" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="d74988b2-d804-4a4d-9e20-f75a4e7405a9" name="num_imagenes" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="c4547383-ca77-4478-a948-a63f11d058ce" name="prioridad" nullable="true" scale="10" size=""/>
             <Index id="c1a8c652-e408-4a36-960e-a0043baf5595" indextype="PRIMARYKEY" name="clasificado_pk">
@@ -177,7 +177,7 @@
             </Index>
         </Table>
         <Table id="91fcd612-92fa-4e07-9731-17e2dcad9045" name="publicidad" schema="">
-            <Property name="LOCATION" value="260:1018"/>
+            <Property name="LOCATION" value="299:688"/>
             <Attribute datatype="bigserial" defaultvalue="" extra="" fraction="null" id="2e6af169-13f8-4490-893a-d7af3f9a5c0e" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="date" defaultvalue="" extra="" fraction="null" id="c60a94fc-8b58-439d-98f5-c21bbaebc2f1" name="fecha_ini" nullable="false" scale="10" size=""/>
             <Attribute datatype="bigint" defaultvalue="" extra="" fraction="null" id="6ab2922a-6ba5-4d46-be32-7e5e56b89f16" name="id_imagen" nullable="false" scale="10" size=""/>
@@ -196,7 +196,7 @@
             </Index>
         </Table>
         <Table id="d4ee5b3d-8fc8-406a-a82b-8a6730151687" name="imagenes_publicidad" schema="">
-            <Property name="LOCATION" value="771:1006"/>
+            <Property name="LOCATION" value="683:701"/>
             <Attribute datatype="bigserial" defaultvalue="" extra="" fraction="null" id="f4e55204-208e-4548-9b7b-73560e91ee9e" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="7ca80d77-0c3f-42d3-b273-bdb684905a81" name="url_fuente" nullable="false" scale="10" size="1000"/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="71057c06-e653-439c-b729-f7a6ae8ad931" name="nombre_cliente" nullable="false" scale="10" size="1000"/>
@@ -209,19 +209,11 @@
             </Index>
         </Table>
         <Table id="be7ebffe-067d-4bce-aef6-601223778ac4" name="tipo_fuente" schema="">
-            <Property name="LOCATION" value="1312:1036"/>
+            <Property name="LOCATION" value="1167:741"/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="e59dd249-0062-485d-8f9b-64f3beab49be" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="8174c184-841b-48ee-9c46-1c8f40de536f" name="nombre" nullable="false" scale="10" size="25"/>
             <Index id="1dd319e0-e785-4fe2-8d29-defbec2e1ab4" indextype="PRIMARYKEY" name="tipo_fuente_pk">
                 <Indexattribute attributerefid="e59dd249-0062-485d-8f9b-64f3beab49be" id="79b1b890-4465-4ab3-b9be-a8efd0f15163"/>
-            </Index>
-        </Table>
-        <Table id="5f97ff33-e089-4774-a69b-de553270441c" name="img_clasificado" schema="">
-            <Property name="LOCATION" value="685:669"/>
-            <Attribute datatype="bigserial" defaultvalue="" extra="" fraction="null" id="16646beb-f36c-48f5-aba8-6b9d37b6f343" name="id" nullable="false" scale="10" size=""/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="9900dabb-d785-42d1-bd25-8a9d8180407f" name="ruta_imagenes" nullable="true" scale="10" size="1000"/>
-            <Index id="f1b96d53-5b34-4b51-85f6-397e61377cfb" indextype="PRIMARYKEY" name="img_clasificado_pk">
-                <Indexattribute attributerefid="16646beb-f36c-48f5-aba8-6b9d37b6f343" id="e966dd92-68cf-4a75-9035-4f3a3b1c1bc5"/>
             </Index>
         </Table>
     </Tables>
@@ -304,9 +296,6 @@
         </Relation>
         <Relation exportingtablerefid="be7ebffe-067d-4bce-aef6-601223778ac4" id="5156916f-642a-45db-be24-1257de5e0e53" importingtablerefid="d4ee5b3d-8fc8-406a-a82b-8a6730151687" name="tipo_fuente_fk" ondelete="NOTHING" onupdate="NOTHING">
             <Mapping exportingexpressionrefid="79b1b890-4465-4ab3-b9be-a8efd0f15163" importingattributerefid="d56a35aa-fc08-4784-b92b-d49f0a1493cf"/>
-        </Relation>
-        <Relation exportingtablerefid="5f97ff33-e089-4774-a69b-de553270441c" id="5d715274-ebce-4484-9a18-e463b9981e46" importingtablerefid="7cd159ca-e556-4d6d-befd-d5b753ea4460" name="imagen_clasificado_pk" ondelete="NOTHING" onupdate="NOTHING">
-            <Mapping exportingexpressionrefid="e966dd92-68cf-4a75-9035-4f3a3b1c1bc5" importingattributerefid="de87cbc7-31ec-405c-905a-5895d5078d30"/>
         </Relation>
     </Relations>
     <Views/>

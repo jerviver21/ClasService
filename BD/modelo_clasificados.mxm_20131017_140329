@@ -217,9 +217,9 @@
             </Index>
         </Table>
         <Table id="5f97ff33-e089-4774-a69b-de553270441c" name="img_clasificado" schema="">
-            <Property name="LOCATION" value="685:669"/>
+            <Property name="LOCATION" value="716:646"/>
             <Attribute datatype="bigserial" defaultvalue="" extra="" fraction="null" id="16646beb-f36c-48f5-aba8-6b9d37b6f343" name="id" nullable="false" scale="10" size=""/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="9900dabb-d785-42d1-bd25-8a9d8180407f" name="ruta_imagenes" nullable="true" scale="10" size="1000"/>
+            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="833a13ce-74ea-414a-b7e3-e3a828142fa0" name="ruta_imagenes" nullable="false" scale="10" size="10"/>
             <Index id="f1b96d53-5b34-4b51-85f6-397e61377cfb" indextype="PRIMARYKEY" name="img_clasificado_pk">
                 <Indexattribute attributerefid="16646beb-f36c-48f5-aba8-6b9d37b6f343" id="e966dd92-68cf-4a75-9035-4f3a3b1c1bc5"/>
             </Index>

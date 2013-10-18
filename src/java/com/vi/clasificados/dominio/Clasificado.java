@@ -20,6 +20,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -53,8 +54,6 @@ public class Clasificado implements Serializable {
     @Basic(optional = false)
     @Column(name = "clasificado")
     private String clasificado;
-    @Column(name = "ruta_imagen")
-    private String rutaImagen;
     @Column(name = "num_imagenes")
     private Integer numImagenes;
     @Column(name = "prioridad")
@@ -69,6 +68,10 @@ public class Clasificado implements Serializable {
     private BigDecimal precio;
     @Column(name = "valor_oferta")
     private BigDecimal valorOferta;
+
+    @JoinColumn(name = "id_imagenes", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.EAGER)
+    private ImgClasificado imagenes;
 
 
     @JoinColumn(name = "id_subtipo5", referencedColumnName = "id")
@@ -110,6 +113,9 @@ public class Clasificado implements Serializable {
     private Currencies moneda;
     
     
+    
+    
+    
     @Transient
     private List<String> opcionesPublicacion;
     
@@ -142,6 +148,7 @@ public class Clasificado implements Serializable {
         subtipo3 = null;
         subtipo4 = null;
         subtipo5 = null;
+        subtipo6 = null;
         tipoPublicacion = new TipoPublicacion();
         opcionesPublicacion = new ArrayList<String>();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
@@ -483,19 +490,6 @@ public class Clasificado implements Serializable {
         this.moneda = moneda;
     }
 
-    /**
-     * @return the rutaImagen
-     */
-    public String getRutaImagen() {
-        return rutaImagen;
-    }
-
-    /**
-     * @param rutaImagen the rutaImagen to set
-     */
-    public void setRutaImagen(String rutaImagen) {
-        this.rutaImagen = rutaImagen;
-    }
 
     /**
      * @return the numImagenes
@@ -565,6 +559,20 @@ public class Clasificado implements Serializable {
      */
     public void setImgCargada(boolean imgCargada) {
         this.imgCargada = imgCargada;
+    }
+
+    /**
+     * @return the imagenes
+     */
+    public ImgClasificado getImagenes() {
+        return imagenes;
+    }
+
+    /**
+     * @param imagenes the imagenes to set
+     */
+    public void setImagenes(ImgClasificado imagenes) {
+        this.imagenes = imagenes;
     }
 
 

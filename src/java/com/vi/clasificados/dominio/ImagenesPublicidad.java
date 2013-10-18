@@ -6,6 +6,7 @@ package com.vi.clasificados.dominio;
 
 import com.vi.comun.util.Log;
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -172,8 +173,10 @@ public class ImagenesPublicidad implements Serializable {
      */
     public StreamedContent getImagen() {
         try {
-           BufferedInputStream stream = new BufferedInputStream(new FileInputStream(urlFuente));
-           imagen = new DefaultStreamedContent(stream, "image/"+urlFuente.replaceAll(".*\\.(\\w{3,4})$", "$1"));
+            File inFile = new File(urlFuente);
+            System.out.println("Publicidad: Imagen que se está cargando: "+urlFuente+" - extension: "+urlFuente.replaceAll(".*\\.(\\w{3,4})$", "$1"));
+            FileInputStream in = new FileInputStream(inFile);
+            imagen = new DefaultStreamedContent(in, "image/"+urlFuente.replaceAll(".*\\.(\\w{3,4})$", "$1"));
         } catch (Exception e) {
             Log.getLogger().log(Level.SEVERE, e.getMessage(), e);
         }

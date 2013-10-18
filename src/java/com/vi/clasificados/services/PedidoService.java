@@ -6,6 +6,7 @@ package com.vi.clasificados.services;
 
 import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.EstadosPedido;
+import com.vi.clasificados.dominio.ImgClasificado;
 import com.vi.clasificados.dominio.Pedido;
 import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.clasificados.utils.EntidadesDePago;
@@ -76,22 +77,21 @@ public class PedidoService {
                } 
             }
             clasificado.setPedido(pedido);
+            if(clasificado.getImg1() != null){
+                ImgClasificado imagenes = new ImgClasificado();
+                imagenes= em.merge(imagenes);//Guarda el id, que nos permite crear la ruta para guardar las imagenes del clasificado.
+                imagenes.setRutaImagenes(cargarImg("IMG1."+clasificado.getExtImg1(), imagenes.getId(), clasificado.getImg1()));
+                clasificado.setImagenes(imagenes);
+                clasificado.setNumImagenes(1);
+                clasificado.setPrioridad(1);
+            }
+            System.out.println("Habilitando Pago pedidos... "+clasificado.getExtImg1()+" - "+clasificado.getImg1());
         }
         pedido.setFechaVencimiento(fechaLimitePago);
         Users usr = usuarioService.findByUser(pedido.getUsuario());
         pedido.setNombreCliente(usr.getNombre());
         pedido.setDniCliente(usr.getNumId());
         pedido = em.merge(pedido);
-        //Se guardan las imagenes
-        System.out.println("Guardando imagenes... ");
-        for(Clasificado clasificado : pedido.getClasificados()){
-            System.out.println("... "+clasificado.getImg1()+" - "+clasificado.getExtImg1());
-           if(clasificado.getImg1()!= null){
-                clasificado.setRutaImagen(cargarImg("IMG1."+clasificado.getExtImg1(), clasificado.getId(), clasificado.getImg1()));
-                clasificado.setNumImagenes(1);
-                clasificado.setPrioridad(1);
-            } 
-        }
         //Aqui habra que decidir la cuestion de acuerdo a la entidad de pago
         pedido.setCodPago(String.format("%012d", pedido.getId()));
         pedido = em.merge(pedido);
@@ -108,14 +108,6 @@ public class PedidoService {
             clasificado.setPedido(pedido);
         }
         pedido = em.merge(pedido);
-        //Se guardan las imagenes
-        for(Clasificado clasificado : pedido.getClasificados()){
-           if(clasificado.getImg1()!= null){
-                clasificado.setRutaImagen(cargarImg("IMG1."+clasificado.getExtImg1(), clasificado.getId(), clasificado.getImg1()));
-                clasificado.setNumImagenes(1);
-                clasificado.setPrioridad(1);
-            } 
-        }
         pedido.setMensajePago("Pedido realizado con exito.");
         return pedido;
     }
