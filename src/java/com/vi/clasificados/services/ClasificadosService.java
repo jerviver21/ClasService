@@ -51,6 +51,10 @@ public class ClasificadosService {
         em.merge(clasificado);
     }
     
+    public Clasificado find(Long id){
+        return em.find(Clasificado.class, id);
+    }
+    
 
     //Métodos de Consultas básicas
     public List<Clasificado> getClasificados(String usr, EstadosClasificado estado) {
