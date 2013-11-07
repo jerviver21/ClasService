@@ -72,7 +72,7 @@ public class SelectorRangos {
                     tipo =  MAS150000IMB;
                 }
                 clasificado.setSubtipo5(tipo);
-            }else{
+            }else{//Alquiler
                 if(clasificado.getValorOferta() != null && moneda.equals(Monedas.DOLARES)){
                     valor = clasificado.getValorOferta().multiply(moneda.getCambio());
                 }

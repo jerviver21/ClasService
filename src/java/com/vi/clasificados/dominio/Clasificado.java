@@ -113,12 +113,6 @@ public class Clasificado implements Serializable {
     private Currencies moneda;
     
     
-    
-    
-    
-    @Transient
-    private List<String> opcionesPublicacion;
-    
     @Transient
     private String clasificadoFrac;
     
@@ -150,7 +144,6 @@ public class Clasificado implements Serializable {
         subtipo5 = null;
         subtipo6 = null;
         tipoPublicacion = new TipoPublicacion();
-        opcionesPublicacion = new ArrayList<String>();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
         numDias = 0;
         numPalabras = 0;
@@ -357,22 +350,6 @@ public class Clasificado implements Serializable {
     public void setNumPalabras(Integer numPalabras) {
         this.numPalabras = numPalabras;
     }
-
-    /**
-     * @return the opcionesPublicacion
-     */
-    public List<String> getOpcionesPublicacion() {
-        return opcionesPublicacion;
-    }
-
-    /**
-     * @param opcionesPublicacion the opcionesPublicacion to set
-     */
-    public void setOpcionesPublicacion(List<String> opcionesPublicacion) {
-        this.opcionesPublicacion = opcionesPublicacion;
-    }
-
-
 
     /**
      * @return the clasificadoFrac

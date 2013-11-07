@@ -133,7 +133,6 @@
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="e220c519-409a-4bf5-9fcd-e5a87af39272" name="dni_cliente" nullable="true" scale="10" size="20"/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="c81c6768-2c21-4fa5-8113-9d5ab28012f4" name="nombre_cliente" nullable="true" scale="10" size="255"/>
             <Attribute datatype="date" defaultvalue="" extra="" fraction="null" id="01ad0ec8-3d86-47ca-84f8-314881d4f18a" name="fecha_vencimiento" nullable="true" scale="10" size=""/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="90978e53-2bcc-48f3-8b67-712d21a044d7" name="tipo_pedido" nullable="true" scale="10" size="50"/>
             <Index id="c92c32b5-275c-405f-a368-661f6c5fbb46" indextype="PRIMARYKEY" name="pedido_pk">
                 <Indexattribute attributerefid="eecd05aa-e248-4ab4-a400-f9bccadd4750" id="70d3d24a-2cb3-4db2-8354-c4fdb85dc1a0"/>
             </Index>

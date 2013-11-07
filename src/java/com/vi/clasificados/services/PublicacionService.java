@@ -39,7 +39,7 @@ public class PublicacionService {
     @EJB
     TiposPublicacionService tipoPubService;
     
-    Map<String, TipoPublicacion> tiposPublicacion;
+    Map<Integer, TipoPublicacion> tiposPublicacion;
     
     ParameterLocator locator;
     
@@ -50,27 +50,15 @@ public class PublicacionService {
     }
 
     //Métodos de procesamiento de la lógica del negocio
-    public List<Clasificado> procesarClasificado(Clasificado clasificado){
-        List<Clasificado> clasificados = new ArrayList<Clasificado>();
-        for(String tipo : clasificado.getOpcionesPublicacion()){
-            Clasificado nuevoClas = new Clasificado(clasificado);
-            System.out.println("---> "+clasificado.getExtImg1()+" - "+clasificado.getImg1());
-            nuevoClas.setTipoPublicacion(tiposPublicacion.get(tipo));
-            Map preciosXDia = tiposPublicacion.get(tipo).getMapaPrecios();
-            calcularValores(nuevoClas, preciosXDia);
-            clasificados.add(nuevoClas);
-        }
-        return clasificados;
-    }
-    
-    public Clasificado procesarEdicion(Clasificado clasificado){
+  
+    public void procesar(Clasificado clasificado){
         clasificado.setNumDias(0);
         clasificado.setNumPalabras(0);
         clasificado.setPrecio(BigDecimal.ZERO);
         clasificado.setDetallePrecio(new ArrayList<DetallePrecioClasificado>());
+        clasificado.setTipoPublicacion(tiposPublicacion.get(clasificado.getTipoPublicacion().getId()));
         Map preciosXDia = clasificado.getTipoPublicacion().getMapaPrecios();
         calcularValores(clasificado, preciosXDia);
-        return clasificado;
     }
     
     public void calcularValores(Clasificado clasificado, Map preciosXDia){

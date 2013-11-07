@@ -28,7 +28,9 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "tipo_publicacion")
 @NamedQueries({
-    @NamedQuery(name = "TipoPublicacion.findAll", query = "SELECT t FROM TipoPublicacion t")})
+    @NamedQuery(name = "TipoPublicacion.findAll", query = "SELECT t FROM TipoPublicacion t"),
+    @NamedQuery(name = "TipoPublicacion.findImpresos", query = "SELECT t FROM TipoPublicacion t WHERE t.id <= 3")
+})
 public class TipoPublicacion implements Serializable {
   
     private static final long serialVersionUID = 1L;

@@ -26,17 +26,26 @@ public class TiposPublicacionService {
         return tipos;
     }
     
-    public Map<String, TipoPublicacion> findAllTiposMapa(){
-        Map<String, TipoPublicacion> mapa = new LinkedHashMap<String, TipoPublicacion>();
+    public Map<Integer, TipoPublicacion> findAllTiposMapa(){
+        Map<Integer, TipoPublicacion> mapa = new LinkedHashMap<Integer, TipoPublicacion>();
         List<TipoPublicacion> tipos = em.createNamedQuery("TipoPublicacion.findAll").getResultList();
         for(TipoPublicacion tipo : tipos){
-            mapa.put(tipo.getNombre(), tipo);
+            mapa.put(tipo.getId(), tipo);
         }
         return mapa;
     }
 
     public List<String> findAll(){
         List<TipoPublicacion> tipos = em.createNamedQuery("TipoPublicacion.findAll").getResultList();
+        List<String> nombresTipos = new ArrayList<String>();
+        for(TipoPublicacion tipo : tipos){
+            nombresTipos.add(tipo.getNombre());
+        }
+        return nombresTipos;
+    }
+    
+    public List<String> findImpresos(){
+        List<TipoPublicacion> tipos = em.createNamedQuery("TipoPublicacion.findImpresos").getResultList();
         List<String> nombresTipos = new ArrayList<String>();
         for(TipoPublicacion tipo : tipos){
             nombresTipos.add(tipo.getNombre());
