@@ -1,9 +1,9 @@
 
 package com.vi.clasificados.dominio;
 
+import com.vi.clasificados.to.ImgClasificadoTO;
 import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.clasificados.utils.PublicacionesTipos;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -68,10 +68,9 @@ public class Clasificado implements Serializable {
     private BigDecimal precio;
     @Column(name = "valor_oferta")
     private BigDecimal valorOferta;
-
-    @JoinColumn(name = "id_imagenes", referencedColumnName = "id")
+    @JoinColumn(name = "id_ruta_imagenes", referencedColumnName = "id")
     @OneToOne(fetch = FetchType.EAGER)
-    private ImgClasificado imagenes;
+    private RutaImagenes rutaImagenes;
 
 
     @JoinColumn(name = "id_subtipo5", referencedColumnName = "id")
@@ -125,15 +124,9 @@ public class Clasificado implements Serializable {
     @Transient
     private boolean agregarAPedido;
     
+    //Atributos para la administración de las imagenes del aviso.
     @Transient
-    private InputStream img1;
-    
-    @Transient
-    private String extImg1;
-    
-    @Transient
-    private boolean imgCargada;
-    
+    List<ImgClasificadoTO> imagenes;
 
     public Clasificado() {
         tipo = new TipoClasificado(1);// 1 - Es el tipo: FINCA RAIZ 
@@ -145,6 +138,7 @@ public class Clasificado implements Serializable {
         subtipo6 = null;
         tipoPublicacion = new TipoPublicacion();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
+        imagenes = new ArrayList<ImgClasificadoTO>();
         numDias = 0;
         numPalabras = 0;
         moneda = new Currencies(2);///Por defecto queda en 2 = soles
@@ -181,9 +175,9 @@ public class Clasificado implements Serializable {
         this.valorOferta = clasificado.getValorOferta();
         this.moneda = clasificado.getMoneda() == null?null :new Currencies(clasificado.getMoneda().getId());
         this.tipoPublicacion = clasificado.getTipoPublicacion() == null?null :new TipoPublicacion(clasificado.getTipoPublicacion().getId());
-        this.img1 = clasificado.getImg1();
-        this.extImg1 = clasificado.getExtImg1();
-        this.imgCargada = clasificado.isImgCargada();
+        this.rutaImagenes = clasificado.getRutaImagenes();
+        this.imagenes = clasificado.getImagenes();
+        
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
     }
 
@@ -497,59 +491,31 @@ public class Clasificado implements Serializable {
     }
 
     /**
-     * @return the img1
-     */
-    public InputStream getImg1() {
-        return img1;
-    }
-
-    /**
-     * @param img1 the img1 to set
-     */
-    public void setImg1(InputStream img1) {
-        this.img1 = img1;
-    }
-
-    /**
-     * @return the extImg1
-     */
-    public String getExtImg1() {
-        return extImg1;
-    }
-
-    /**
-     * @param extImg1 the extImg1 to set
-     */
-    public void setExtImg1(String extImg1) {
-        this.extImg1 = extImg1;
-    }
-
-    /**
-     * @return the imgCargada
-     */
-    public boolean isImgCargada() {
-        return imgCargada;
-    }
-
-    /**
-     * @param imgCargada the imgCargada to set
-     */
-    public void setImgCargada(boolean imgCargada) {
-        this.imgCargada = imgCargada;
-    }
-
-    /**
      * @return the imagenes
      */
-    public ImgClasificado getImagenes() {
+    public List<ImgClasificadoTO> getImagenes() {
         return imagenes;
     }
 
     /**
      * @param imagenes the imagenes to set
      */
-    public void setImagenes(ImgClasificado imagenes) {
+    public void setImagenes(List<ImgClasificadoTO> imagenes) {
         this.imagenes = imagenes;
+    }
+
+    /**
+     * @return the rutaImagenes
+     */
+    public RutaImagenes getRutaImagenes() {
+        return rutaImagenes;
+    }
+
+    /**
+     * @param rutaImagenes the rutaImagenes to set
+     */
+    public void setRutaImagenes(RutaImagenes rutaImagenes) {
+        this.rutaImagenes = rutaImagenes;
     }
 
 

@@ -50,8 +50,16 @@ public class PublicacionService {
     }
 
     //Métodos de procesamiento de la lógica del negocio
+    public void procesarweb(Clasificado clasificado, int tipopubweb){
+        clasificado.setTipoPublicacion(tiposPublicacion.get(tipopubweb));
+        clasificado.setPrecio(new BigDecimal(clasificado.getTipoPublicacion().getPrecio()));
+        clasificado.setFechaFin(FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), clasificado.getTipoPublicacion().getDuracion(), Calendar.DATE));
+        Currencies moneda = (Currencies)em.find(Currencies.class, clasificado.getMoneda().getId());
+        new SelectorRangos().setRangoValores(clasificado, moneda);  
+    }
+    
   
-    public void procesar(Clasificado clasificado){
+    public void procesarImpreso(Clasificado clasificado){
         clasificado.setNumDias(0);
         clasificado.setNumPalabras(0);
         clasificado.setPrecio(BigDecimal.ZERO);

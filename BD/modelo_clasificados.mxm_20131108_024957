@@ -90,7 +90,6 @@
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="be220992-8696-4160-8bf5-c5e93203ded0" name="nombre" nullable="false" scale="10" size="255"/>
             <Attribute datatype="int4" defaultvalue="0" extra="" fraction="null" id="9f98f616-67c5-44b4-984a-53232b961c26" name="precio" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="8" extra="" fraction="null" id="157075e5-541d-4632-912c-d90c84c27006" name="duracion" nullable="true" scale="10" size=""/>
-            <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="7ff6fc72-49d5-4c94-b725-d50ec548c9a8" name="prioridad" nullable="true" scale="10" size=""/>
             <Index id="22242684-0ac3-43a5-8fde-b82b7561b1b4" indextype="PRIMARYKEY" name="tipo_publicacion_pk">
                 <Indexattribute attributerefid="c43f417f-22a9-42a6-a668-bca05ac2298d" id="47c39114-e786-4fae-b521-e209e8acf844"/>
             </Index>
@@ -308,9 +307,6 @@
         </Relation>
         <Relation exportingtablerefid="be7ebffe-067d-4bce-aef6-601223778ac4" id="5156916f-642a-45db-be24-1257de5e0e53" importingtablerefid="d4ee5b3d-8fc8-406a-a82b-8a6730151687" name="tipo_fuente_fk" ondelete="NOTHING" onupdate="NOTHING">
             <Mapping exportingexpressionrefid="79b1b890-4465-4ab3-b9be-a8efd0f15163" importingattributerefid="d56a35aa-fc08-4784-b92b-d49f0a1493cf"/>
-        </Relation>
-        <Relation exportingtablerefid="0df52349-4d52-4f5e-9803-b6fbfcadd907" id="42991396-e470-4a4b-8f5e-71a0eb31f925" importingtablerefid="7cd159ca-e556-4d6d-befd-d5b753ea4460" name="ruta_clas_fk" ondelete="CASCADE" onupdate="CASCADE">
-            <Mapping exportingexpressionrefid="70fee603-e701-437c-8df5-d13cf5ca4211" importingattributerefid="2dd01b83-7e85-4a18-9e28-8365db40d88a"/>
         </Relation>
     </Relations>
     <Views/>

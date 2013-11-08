@@ -42,6 +42,12 @@ public class TipoPublicacion implements Serializable {
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
+    @Column(name = "precio")
+    private Integer precio;
+    @Column(name = "duracion")
+    private Integer duracion;
+    @Column(name = "prioridad")
+    private Integer prioridad;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPublicacion", fetch = FetchType.EAGER)
     private List<DiasPrecios> precios;
 
@@ -113,6 +119,48 @@ public class TipoPublicacion implements Serializable {
     @Override
     public String toString() {
         return nombre;
+    }
+
+    /**
+     * @return the precio
+     */
+    public Integer getPrecio() {
+        return precio;
+    }
+
+    /**
+     * @param precio the precio to set
+     */
+    public void setPrecio(Integer precio) {
+        this.precio = precio;
+    }
+
+    /**
+     * @return the duracion
+     */
+    public Integer getDuracion() {
+        return duracion;
+    }
+
+    /**
+     * @param duracion the duracion to set
+     */
+    public void setDuracion(Integer duracion) {
+        this.duracion = duracion;
+    }
+
+    /**
+     * @return the prioridad
+     */
+    public Integer getPrioridad() {
+        return prioridad;
+    }
+
+    /**
+     * @param prioridad the prioridad to set
+     */
+    public void setPrioridad(Integer prioridad) {
+        this.prioridad = prioridad;
     }
 
 
