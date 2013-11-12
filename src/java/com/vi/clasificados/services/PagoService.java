@@ -106,6 +106,8 @@ public class PagoService {
     public void realizarPago(String codPago)throws ValidacionException {
         Pedido pedido = pedidoService.findByNro(codPago);
         
+        
+        System.out.println(FechaUtils.getFechaHoy()+" - "+pedido.getFechaVencimiento());
         if(FechaUtils.getFechaHoy().after(pedido.getFechaVencimiento())){
             throw new ValidacionException("El pedido se encuentra vencido");
         }

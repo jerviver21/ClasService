@@ -52,8 +52,6 @@ public class ImgClasificadoTO {
      */
     public StreamedContent getPrimeImg() {
         try {
-            StreamedContent defaultFileContent = new DefaultStreamedContent(new FileInputStream(new File("/home/server/appfiles/img_clasificados/3/silla1.jpg")), "image/jpg");
-            
             if(img == null){
                 File inFile = new File(rutaImg);
                 img = new FileInputStream(inFile);  

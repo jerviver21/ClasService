@@ -37,7 +37,7 @@ import javax.persistence.Transient;
     @NamedQuery(name = "Clasificado.findByUsr", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr"),
     @NamedQuery(name = "Clasificado.findByUsrEstado", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr AND c.estado =:estado"),
     @NamedQuery(name = "Clasificado.findByEstado", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado"),
-    @NamedQuery(name = "Clasificado.findForFiltroCache", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop")
+    @NamedQuery(name = "Clasificado.findForFiltroCache", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND (c.tipoPublicacion =:tipop1 OR c.tipoPublicacion =:tipop2 OR c.tipoPublicacion =:tipop3)")
 })
 public class Clasificado implements Serializable {
 
@@ -100,7 +100,7 @@ public class Clasificado implements Serializable {
     private TipoPublicacion tipoPublicacion;
     
     @JoinColumn(name = "id_pedido", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Pedido pedido;
     
     @JoinColumn(name = "id_estado", referencedColumnName = "id")
@@ -407,7 +407,7 @@ public class Clasificado implements Serializable {
      * @return the editarEstado
      */
     public boolean isEditarEstado() {
-        editarEstado = tipoPublicacion.equals(PublicacionesTipos.INTERNET) && (estado.equals(ClasificadoEstados.PUBLICADO) || estado.equals(ClasificadoEstados.CANCELADO) || estado.equals(ClasificadoEstados.VENDIDO));
+        editarEstado = (tipoPublicacion.equals(PublicacionesTipos.INTERNETGRATIS) || tipoPublicacion.equals(PublicacionesTipos.INTERNET15) || tipoPublicacion.equals(PublicacionesTipos.INTERNET25)) && (estado.equals(ClasificadoEstados.PUBLICADO) || estado.equals(ClasificadoEstados.CANCELADO) || estado.equals(ClasificadoEstados.VENDIDO));
         return editarEstado;
     }
 

@@ -30,9 +30,9 @@ public class ConsultasService {
     public List<Clasificado> consultarInmobiliarios(int tipoOferta, int tipoInmueble, int ubicacion, int area, int precio){
         List<Clasificado> clasificados = new ArrayList<Clasificado>();
         if(ubicacion != 0 && area != 0 && precio != 0){
-           clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3 AND c.subtipo4 =:sub4 AND c.subtipo5 =:sub5 ")
+           clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3)1 AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3 AND c.subtipo4 =:sub4 AND c.subtipo5 =:sub5 ")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.INMOBILIARIO)
                 .setParameter("sub1", new TipoClasificado(tipoOferta))
                 .setParameter("sub2", new TipoClasificado(tipoInmueble))
@@ -41,9 +41,9 @@ public class ConsultasService {
                 .setParameter("sub5", new TipoClasificado(precio))
                 .getResultList(); 
         }else if(ubicacion != 0 && area != 0 && precio == 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3 AND c.subtipo4 =:sub4")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3 AND c.subtipo4 =:sub4")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.INMOBILIARIO)
                 .setParameter("sub1", new TipoClasificado(tipoOferta))
                 .setParameter("sub2", new TipoClasificado(tipoInmueble))
@@ -52,27 +52,27 @@ public class ConsultasService {
                 .getResultList(); 
             
         }else if(ubicacion != 0 && area == 0 && precio == 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.INMOBILIARIO)
                 .setParameter("sub1", new TipoClasificado(tipoOferta))
                 .setParameter("sub2", new TipoClasificado(tipoInmueble))
                 .setParameter("sub3", new TipoClasificado(ubicacion))
                 .getResultList(); 
         }else if(ubicacion == 0 && area == 0 && precio == 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.INMOBILIARIO)
                 .setParameter("sub1", new TipoClasificado(tipoOferta))
                 .setParameter("sub2", new TipoClasificado(tipoInmueble))
                 .getResultList(); 
             
         }else if(ubicacion == 0 && area == 0 && precio != 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo5 =:sub5 ")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo5 =:sub5 ")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.INMOBILIARIO)
                 .setParameter("sub1", new TipoClasificado(tipoOferta))
                 .setParameter("sub2", new TipoClasificado(tipoInmueble))
@@ -80,9 +80,9 @@ public class ConsultasService {
                 .getResultList(); 
             
         }else if(ubicacion == 0 && area != 0 && precio != 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo4 =:sub4 AND c.subtipo5 =:sub5 ")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo4 =:sub4 AND c.subtipo5 =:sub5 ")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.INMOBILIARIO)
                 .setParameter("sub1", new TipoClasificado(tipoOferta))
                 .setParameter("sub2", new TipoClasificado(tipoInmueble))
@@ -91,9 +91,9 @@ public class ConsultasService {
                 .getResultList(); 
             
         }else if(ubicacion != 0 && area == 0 && precio != 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3 AND c.subtipo5 =:sub5 ")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3 AND c.subtipo5 =:sub5 ")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.INMOBILIARIO)
                 .setParameter("sub1", new TipoClasificado(tipoOferta))
                 .setParameter("sub2", new TipoClasificado(tipoInmueble))
@@ -102,9 +102,9 @@ public class ConsultasService {
                 .getResultList(); 
             
         }else if(ubicacion == 0 && area != 0 && precio == 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo4 =:sub4 ")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo4 =:sub4 ")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.INMOBILIARIO)
                 .setParameter("sub1", new TipoClasificado(tipoOferta))
                 .setParameter("sub2", new TipoClasificado(tipoInmueble))
@@ -120,36 +120,36 @@ public class ConsultasService {
         List<Clasificado> clasificados =  new ArrayList<Clasificado>();
         
         if(area != 0 && rango != 0){
-           clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3")
+           clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.EMPLEO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .setParameter("sub2", new TipoClasificado(area))
                 .setParameter("sub3", new TipoClasificado(rango))
                 .getResultList();
         }else if(area == 0 && rango != 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo3 =:sub3")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo3 =:sub3")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.EMPLEO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .setParameter("sub3", new TipoClasificado(rango))
                 .getResultList();
             
         }else if(area != 0 && rango == 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.EMPLEO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .setParameter("sub2", new TipoClasificado(area))
                 .getResultList();
             
         }else if(area == 0 && rango == 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.EMPLEO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .getResultList();
@@ -162,36 +162,36 @@ public class ConsultasService {
         List<Clasificado> clasificados =  new ArrayList<Clasificado>();
         
         if(marca != 0 && rango != 0){
-           clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3")
+           clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2 AND c.subtipo3 =:sub3")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.VEHICULO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .setParameter("sub2", new TipoClasificado(marca))
                 .setParameter("sub3", new TipoClasificado(rango))
                 .getResultList();
         }else if(marca == 0 && rango != 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo3 =:sub3")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo3 =:sub3")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.VEHICULO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .setParameter("sub3", new TipoClasificado(rango))
                 .getResultList();
             
         }else if(marca != 0 && rango == 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1 AND c.subtipo2 =:sub2")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.VEHICULO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .setParameter("sub2", new TipoClasificado(marca))
                 .getResultList();
             
         }else if(marca == 0 && rango == 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.VEHICULO)
                 .setParameter("sub1", new TipoClasificado(tipo))
                 .getResultList();
@@ -203,15 +203,15 @@ public class ConsultasService {
     public List<Clasificado> consultarVarios(int tipoOferta){
         List<Clasificado> clasificados;
         if(tipoOferta == 0){
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3)")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.VARIOS)
                 .getResultList();
         }else{
-            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND c.tipo = :tipo AND c.subtipo1 =:sub1")
+            clasificados = em.createQuery("SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop AND (c.tipo = :tipo1 or c.tipo = :tipo2 or c.tipo = :tipo3) AND c.subtipo1 =:sub1")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET)
+                .setParameter("tipo1", PublicacionesTipos.INTERNETGRATIS).setParameter("tipo2", PublicacionesTipos.INTERNET15).setParameter("tipo3", PublicacionesTipos.INTERNET25)
                 .setParameter("tipo", ClasificadosTipo.VARIOS)
                 .setParameter("sub1", new TipoClasificado(tipoOferta))
                 .getResultList();

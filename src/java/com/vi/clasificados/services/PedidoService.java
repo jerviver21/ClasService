@@ -119,10 +119,10 @@ public class PedidoService {
         Date fechaLimitePago = null;
         for(Clasificado clasificado : pedido.getClasificados()){
             if(fechaLimitePago == null){
-                fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), -1, Calendar.DATE);
+                fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), 0, Calendar.DATE);
             }else{
                if(clasificado.getFechaIni().before(fechaLimitePago)){
-                   fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), -1, Calendar.DATE);
+                   fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), 0, Calendar.DATE);
                } 
             }
             clasificado.setPedido(pedido);
