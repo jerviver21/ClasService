@@ -145,6 +145,7 @@ public class Clasificado implements Serializable {
         precio = BigDecimal.ZERO;
         estado = ClasificadoEstados.PEDIDOXPAGAR;
         valorOferta = BigDecimal.ZERO;
+        fechaIni = new Date();
     }
 
     public Clasificado(Long id) {

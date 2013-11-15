@@ -171,15 +171,20 @@ public class PedidoService {
             RutaImagenes ruta = new RutaImagenes();
             ruta= em.merge(ruta);//Guarda el id, que nos permite crear la ruta para guardar las imagenes del clasificado.
             String rutaImgs = locator.getParameter("rutaImagenes");
-            if(rutaImgs == null){
-                throw new ParametroException("El parámetro dirCertificados no existe " );
+            String urlImgs = locator.getParameter("url_imagenes");
+            if(rutaImgs == null || urlImgs == null){
+                throw new ParametroException("Los parametros de almacenamiento de imagenes no existen " );
             }
+            ruta.setUrlRoot(urlImgs+File.separator+ruta.getId());
             ruta.setRuta(rutaImgs+File.separator+ruta.getId());
             clasificado.setRutaImagenes(ruta);
             clasificado.setNumImagenes(clasificado.getImagenes().size());
             int consecutivoImg = 0;
             for(ImgClasificadoTO img : clasificado.getImagenes()){
-                FilesUtils.crearArchivo(ruta.getRuta(), "IMG"+consecutivoImg+"."+img.getExtension(), img.getImg());
+                FilesUtils.crearArchivo(rutaImgs+File.separator+ruta.getId(), "IMG"+consecutivoImg+"."+img.getExtension(), img.getImg());
+                if(consecutivoImg==0){
+                   ruta.setImg0("IMG"+consecutivoImg+"."+img.getExtension());
+                }
                 img.getImg().close();
                 consecutivoImg++;
             }

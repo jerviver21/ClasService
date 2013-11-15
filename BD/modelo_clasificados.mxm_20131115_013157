@@ -223,9 +223,8 @@
         <Table id="0df52349-4d52-4f5e-9803-b6fbfcadd907" name="ruta_imagenes" schema="">
             <Property name="LOCATION" value="723:602"/>
             <Attribute datatype="bigserial" defaultvalue="" extra="" fraction="null" id="945feea8-f767-4d94-b4d2-c47b08992d8d" name="id" nullable="false" scale="10" size=""/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="3b3117e2-31ef-4199-97c7-097f1bb05f3b" name="url_root" nullable="false" scale="10" size="1000"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="e5f20bd9-1f8d-406f-9d14-db4d09a2dc3c" name="img0" nullable="true" scale="10" size="1000"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="0f675455-d843-465a-9999-b20bbc0f1c05" name="ruta" nullable="true" scale="10" size="1000"/>
+            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="3b3117e2-31ef-4199-97c7-097f1bb05f3b" name="ruta" nullable="false" scale="10" size="1000"/>
+            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="e5f20bd9-1f8d-406f-9d14-db4d09a2dc3c" name="rutaimgo" nullable="true" scale="10" size="1000"/>
             <Index id="0f8c70b6-b516-49c7-9ead-90b5c4c98b95" indextype="PRIMARYKEY" name="ruta_imagenes_pk">
                 <Indexattribute attributerefid="945feea8-f767-4d94-b4d2-c47b08992d8d" id="70fee603-e701-437c-8df5-d13cf5ca4211"/>
             </Index>

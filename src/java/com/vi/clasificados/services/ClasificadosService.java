@@ -66,7 +66,7 @@ public class ClasificadosService {
             ImgClasificadoTO img=new ImgClasificadoTO();
             img.setConsecutivo(consecutivo);
             img.setExtension(nImg.replaceAll(".*\\.(.*)","$1"));
-            img.setRutaImg(clasificado.getRutaImagenes().getRuta()+File.separator+nImg);
+            img.setRutaImg(clasificado.getRutaImagenes().getUrlRoot()+File.separator+nImg);
             clasificado.getImagenes().add(img);
             consecutivo++;
         }
