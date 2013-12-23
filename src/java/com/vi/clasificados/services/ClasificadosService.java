@@ -3,15 +3,14 @@ package com.vi.clasificados.services;
 
 import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.EstadosClasificado;
+import com.vi.clasificados.dominio.ImgClasificado;
 import com.vi.clasificados.locator.ClasificadosCachingLocator;
-import com.vi.clasificados.to.ImgClasificadoTO;
 import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.clasificados.utils.PublicacionesTipos;
 import com.vi.comun.exceptions.ParametroException;
 import com.vi.comun.locator.ParameterLocator;
 import com.vi.comun.util.FechaUtils;
 import com.vi.comun.util.Log;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,16 +58,8 @@ public class ClasificadosService {
     
     public Clasificado findWithImgs(Long id){
         Clasificado clasificado = em.find(Clasificado.class, id);
-        File directorioImgs = new File(clasificado.getRutaImagenes().getRuta());
-        String[] nImgs = directorioImgs.list();
-        int consecutivo = 0;
-        for(String nImg : nImgs){
-            ImgClasificadoTO img=new ImgClasificadoTO();
-            img.setConsecutivo(consecutivo);
-            img.setExtension(nImg.replaceAll(".*\\.(.*)","$1"));
-            img.setRutaImg(clasificado.getRutaImagenes().getUrlRoot()+File.separator+nImg);
-            clasificado.getImagenes().add(img);
-            consecutivo++;
+        for(ImgClasificado img : clasificado.getImgs()){
+            img.getExtension();
         }
         return clasificado;
     }

@@ -1,7 +1,6 @@
 
 package com.vi.clasificados.dominio;
 
-import com.vi.clasificados.to.ImgClasificadoTO;
 import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.clasificados.utils.PublicacionesTipos;
 import java.io.Serializable;
@@ -10,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +20,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -41,6 +41,7 @@ import javax.persistence.Transient;
 })
 public class Clasificado implements Serializable {
 
+
     @Column(name = "num_dias")
     private Integer numDias;
     @Column(name = "num_palabras")
@@ -54,8 +55,8 @@ public class Clasificado implements Serializable {
     @Basic(optional = false)
     @Column(name = "clasificado")
     private String clasificado;
-    @Column(name = "num_imagenes")
-    private Integer numImagenes;
+    @Column(name = "url_img0")
+    private String urlImg0;
     @Column(name = "prioridad")
     private Integer prioridad;
     @Column(name = "fecha_ini")
@@ -68,9 +69,6 @@ public class Clasificado implements Serializable {
     private BigDecimal precio;
     @Column(name = "valor_oferta")
     private BigDecimal valorOferta;
-    @JoinColumn(name = "id_ruta_imagenes", referencedColumnName = "id")
-    @OneToOne(fetch = FetchType.EAGER)
-    private RutaImagenes rutaImagenes;
 
 
     @JoinColumn(name = "id_subtipo5", referencedColumnName = "id")
@@ -111,6 +109,8 @@ public class Clasificado implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Currencies moneda;
     
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clasificado", fetch = FetchType.LAZY)
+    private List<ImgClasificado> imgs;
     
     @Transient
     private String clasificadoFrac;
@@ -124,9 +124,6 @@ public class Clasificado implements Serializable {
     @Transient
     private boolean agregarAPedido;
     
-    //Atributos para la administración de las imagenes del aviso.
-    @Transient
-    List<ImgClasificadoTO> imagenes;
 
     public Clasificado() {
         tipo = new TipoClasificado(1);// 1 - Es el tipo: FINCA RAIZ 
@@ -138,7 +135,7 @@ public class Clasificado implements Serializable {
         subtipo6 = null;
         tipoPublicacion = new TipoPublicacion();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
-        imagenes = new ArrayList<ImgClasificadoTO>();
+        imgs = new ArrayList<ImgClasificado>();
         numDias = 0;
         numPalabras = 0;
         moneda = new Currencies(2);///Por defecto queda en 2 = soles
@@ -176,8 +173,7 @@ public class Clasificado implements Serializable {
         this.valorOferta = clasificado.getValorOferta();
         this.moneda = clasificado.getMoneda() == null?null :new Currencies(clasificado.getMoneda().getId());
         this.tipoPublicacion = clasificado.getTipoPublicacion() == null?null :new TipoPublicacion(clasificado.getTipoPublicacion().getId());
-        this.rutaImagenes = clasificado.getRutaImagenes();
-        this.imagenes = clasificado.getImagenes();
+        this.imgs = clasificado.getImgs();
         
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
     }
@@ -462,21 +458,6 @@ public class Clasificado implements Serializable {
         this.moneda = moneda;
     }
 
-
-    /**
-     * @return the numImagenes
-     */
-    public Integer getNumImagenes() {
-        return numImagenes;
-    }
-
-    /**
-     * @param numImagenes the numImagenes to set
-     */
-    public void setNumImagenes(Integer numImagenes) {
-        this.numImagenes = numImagenes;
-    }
-
     /**
      * @return the prioridad
      */
@@ -492,31 +473,31 @@ public class Clasificado implements Serializable {
     }
 
     /**
-     * @return the imagenes
+     * @return the imgs
      */
-    public List<ImgClasificadoTO> getImagenes() {
-        return imagenes;
+    public List<ImgClasificado> getImgs() {
+        return imgs;
     }
 
     /**
-     * @param imagenes the imagenes to set
+     * @param imgs the imgs to set
      */
-    public void setImagenes(List<ImgClasificadoTO> imagenes) {
-        this.imagenes = imagenes;
+    public void setImgs(List<ImgClasificado> imgs) {
+        this.imgs = imgs;
     }
 
     /**
-     * @return the rutaImagenes
+     * @return the urlImg0
      */
-    public RutaImagenes getRutaImagenes() {
-        return rutaImagenes;
+    public String getUrlImg0() {
+        return urlImg0;
     }
 
     /**
-     * @param rutaImagenes the rutaImagenes to set
+     * @param urlImg0 the urlImg0 to set
      */
-    public void setRutaImagenes(RutaImagenes rutaImagenes) {
-        this.rutaImagenes = rutaImagenes;
+    public void setUrlImg0(String urlImg0) {
+        this.urlImg0 = urlImg0;
     }
 
 

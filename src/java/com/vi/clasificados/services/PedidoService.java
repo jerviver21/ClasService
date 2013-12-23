@@ -4,11 +4,13 @@
  */
 package com.vi.clasificados.services;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.EstadosPedido;
+import com.vi.clasificados.dominio.ImgClasificado;
 import com.vi.clasificados.dominio.Pedido;
-import com.vi.clasificados.dominio.RutaImagenes;
-import com.vi.clasificados.to.ImgClasificadoTO;
+import com.vi.clasificados.utils.AWSUtils;
 import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.clasificados.utils.EntidadesDePago;
 import com.vi.clasificados.utils.PedidoEstados;
@@ -116,6 +118,7 @@ public class PedidoService {
     
     //Métodos de publicación
     public Pedido guardarPedido(Pedido pedido)throws ParametroException, FileNotFoundException, IOException{
+        //Primero definimos la fecha límite de pago:
         Date fechaLimitePago = null;
         for(Clasificado clasificado : pedido.getClasificados()){
             if(fechaLimitePago == null){
@@ -125,21 +128,13 @@ public class PedidoService {
                    fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), 0, Calendar.DATE);
                } 
             }
-            clasificado.setPedido(pedido);
-            //Para los clasificados que contengan imagenes se guardan las imagenes en el disco.
-            cargarImagenes(clasificado);
         }
-        
-        boolean esAsesor = usuarioService.findRolesUser(pedido.getUsuario()).contains("ASESOR PAGOS");
-        System.out.println("Es asesor: "+esAsesor);
-        
-        if(esAsesor){
+        //Segundo: guardamos el pedido, Le quitamos los clasificados, para obtener el id, si borrar datos transient
+        List<Clasificado> clasificados = pedido.getClasificados();
+        pedido.setClasificados(null);
+        if(usuarioService.findRolesUser(pedido.getUsuario()).contains("ASESOR PAGOS")){
             pedido.setEntidad(EntidadesDePago.PERIODICO);
             pedido.setEstado(PedidoEstados.PAGO);
-            for(Clasificado clasificado : pedido.getClasificados()){
-                clasificado.setEstado(ClasificadoEstados.PUBLICADO);
-                clasificado.setPedido(pedido);
-            }
             pedido = em.merge(pedido);
             pedido.setMensajePago("Pedido realizado con exito.");
         }else{
@@ -150,9 +145,6 @@ public class PedidoService {
             pedido = em.merge(pedido);
             if(pedido.getValorTotal().equals(BigDecimal.ZERO)){
                 pedido.setEstado(PedidoEstados.PAGO);
-                for(Clasificado clasificado : pedido.getClasificados()){
-                    clasificado.setEstado(ClasificadoEstados.PUBLICADO);
-                }
                 pedido.setMensajePago("Su pedido ha sido enviado, su contenido será revisado y se publicará en las próximas 24 horas");
             }else{
                 //Aqui habra que decidir la cuestion de acuerdo a la entidad de pago
@@ -162,31 +154,50 @@ public class PedidoService {
             }
             pedido = em.merge(pedido);
         }
+        
+        //Tercero guardamos los clasificados, no sin antes subir las imagenes a AWS S3.
+        for(Clasificado clasificado : clasificados){
+            clasificado.setPedido(pedido);
+            if(pedido.getEstado().equals(PedidoEstados.PAGO)){
+                clasificado.setEstado(ClasificadoEstados.PUBLICADO);
+            }
+            //Sacamos las imagenes dado que estan en un transient, y requerimos hacer merge, para el id que nos dara la ruta de la imagen
+            List<ImgClasificado> imagenes = clasificado.getImgs();
+            clasificado.setImgs(null);
+            clasificado.setUrlImg0("s3.amazonaws.com/clasificadosp1/F1/logo1.png");
+            clasificado = em.merge(clasificado);
+            cargarImagenes(clasificado, imagenes);
+         }
         return pedido;
     }
     
     
-    public void cargarImagenes(Clasificado clasificado)throws ParametroException, FileNotFoundException, IOException{
-        if(!clasificado.getImagenes().isEmpty()){
-            RutaImagenes ruta = new RutaImagenes();
-            ruta= em.merge(ruta);//Guarda el id, que nos permite crear la ruta para guardar las imagenes del clasificado.
-            String rutaImgs = locator.getParameter("rutaImagenes");
+    public void cargarImagenes(Clasificado clasificado, List<ImgClasificado> imagenes)throws ParametroException, FileNotFoundException, IOException{
+        if(!imagenes.isEmpty()){
+            String nombreBucket = locator.getParameter("nombre_bucket");
             String urlImgs = locator.getParameter("url_imagenes");
-            if(rutaImgs == null || urlImgs == null){
+            String rutaDescarga = locator.getParameter("rutaDescarga");
+            if(nombreBucket == null || urlImgs == null){
                 throw new ParametroException("Los parametros de almacenamiento de imagenes no existen " );
             }
-            ruta.setUrlRoot(urlImgs+File.separator+ruta.getId());
-            ruta.setRuta(rutaImgs+File.separator+ruta.getId());
-            clasificado.setRutaImagenes(ruta);
-            clasificado.setNumImagenes(clasificado.getImagenes().size());
             int consecutivoImg = 0;
-            for(ImgClasificadoTO img : clasificado.getImagenes()){
-                FilesUtils.crearArchivo(rutaImgs+File.separator+ruta.getId(), "IMG"+consecutivoImg+"."+img.getExtension(), img.getImg());
-                if(consecutivoImg==0){
-                   ruta.setImg0("IMG"+consecutivoImg+"."+img.getExtension());
-                }
+            AmazonS3 s3client = AWSUtils.getAmazonS3();
+            for(ImgClasificado img : imagenes){
+                String rutaImagen = clasificado.getId()+File.separator+"IMG"+consecutivoImg+"."+img.getExtension();
+                String nImg = FilesUtils.crearArchivo(rutaDescarga, clasificado.getId()+(int)(Math.random()*1000)+"IMG"+consecutivoImg+"."+img.getExtension() , img.getImg());
+                File archivo = new File(nImg);
+                //ObjectMetadata metadata = new ObjectMetadata();
+                //metadata.setContentLength(IOUtils.toByteArray(img.getImg()).length);
+                s3client.putObject(new PutObjectRequest(nombreBucket, rutaImagen, archivo));
                 img.getImg().close();
+                archivo.deleteOnExit();
+                img.setUrl(urlImgs+File.separator+nombreBucket+File.separator+rutaImagen);
+                if(consecutivoImg == 0){
+                    clasificado.setUrlImg0(urlImgs+File.separator+nombreBucket+File.separator+rutaImagen);
+                }
                 consecutivoImg++;
+                img.setClasificado(clasificado);
+                em.merge(img);
             }
         }
     }
