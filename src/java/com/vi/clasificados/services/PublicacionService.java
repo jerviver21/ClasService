@@ -8,6 +8,7 @@ import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.Currencies;
 import com.vi.clasificados.dominio.DetallePrecioClasificado;
 import com.vi.clasificados.dominio.DiasPrecios;
+import com.vi.clasificados.dominio.SubtipoPublicacion;
 import com.vi.clasificados.dominio.TipoPublicacion;
 import com.vi.clasificados.utils.SelectorRangos;
 import com.vi.comun.locator.ParameterLocator;
@@ -19,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
@@ -36,9 +36,6 @@ public class PublicacionService {
     @PersistenceContext(unitName = "ClasificadosPU")
     private EntityManager em;
     
-    @EJB
-    TiposPublicacionService tipoPubService;
-    
     Map<Integer, TipoPublicacion> tiposPublicacion;
     
     ParameterLocator locator;
@@ -46,14 +43,12 @@ public class PublicacionService {
     @PostConstruct
     public void init(){
         locator = ParameterLocator.getInstance();
-        tiposPublicacion = tipoPubService.findAllTiposMapa();
     }
 
     //Métodos de procesamiento de la lógica del negocio
-    public void procesarweb(Clasificado clasificado, int tipopubweb){
-        clasificado.setTipoPublicacion(tiposPublicacion.get(tipopubweb));
-        clasificado.setPrecio(new BigDecimal(clasificado.getTipoPublicacion().getPrecio()));
-        clasificado.setFechaFin(FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), clasificado.getTipoPublicacion().getDuracion(), Calendar.DATE));
+    public void procesarweb(Clasificado clasificado){
+        clasificado.setPrecio(new BigDecimal(clasificado.getSubtipoPublicacion().getPrecio()));
+        clasificado.setFechaFin(FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), clasificado.getSubtipoPublicacion().getDuracion(), Calendar.DATE));
         Currencies moneda = (Currencies)em.find(Currencies.class, clasificado.getMoneda().getId());
         new SelectorRangos().setRangoValores(clasificado, moneda);  
     }
@@ -64,8 +59,7 @@ public class PublicacionService {
         clasificado.setNumPalabras(0);
         clasificado.setPrecio(BigDecimal.ZERO);
         clasificado.setDetallePrecio(new ArrayList<DetallePrecioClasificado>());
-        clasificado.setTipoPublicacion(tiposPublicacion.get(clasificado.getTipoPublicacion().getId()));
-        Map preciosXDia = clasificado.getTipoPublicacion().getMapaPrecios();
+        Map preciosXDia = clasificado.getSubtipoPublicacion().getMapaPrecios();
         calcularValores(clasificado, preciosXDia);
     }
     

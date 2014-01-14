@@ -3,6 +3,14 @@
   <persistence-unit name="ClasificadosPU" transaction-type="JTA">
     <jta-data-source>java:/jboss/datasources/PostgreSQLDS1</jta-data-source>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties/>
+    <provider>org.hibernate.ejb.HibernatePersistence</provider>
+    <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
+    <properties>
+        <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+        <property name="hibernate.show_sql" value="true"/>
+
+        <property name="hibernate.cache.use_second_level_cache" value="true"/>
+        <property name="hibernate.cache.use_query_cache" value="true"/>
+    </properties>
   </persistence-unit>
 </persistence>
