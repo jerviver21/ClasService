@@ -136,7 +136,7 @@ public class PedidoService {
             pedido.setEntidad(EntidadesDePago.PERIODICO);
             pedido.setEstado(PedidoEstados.PAGO);
             pedido = em.merge(pedido);
-            pedido.setMensajePago("Pedido realizado con exito.");
+            pedido.setMensajePago("Pedido realizado con exito. (mensaje configurable)");
         }else{
             pedido.setFechaVencimiento(fechaLimitePago);
             Users usr = usuarioService.findByUser(pedido.getUsuario());
@@ -145,7 +145,7 @@ public class PedidoService {
             pedido = em.merge(pedido);
             if(pedido.getValorTotal().equals(BigDecimal.ZERO)){
                 pedido.setEstado(PedidoEstados.PAGO);
-                pedido.setMensajePago("Su pedido ha sido enviado, su contenido será revisado y se publicará en las próximas 24 horas");
+                pedido.setMensajePago("Su pedido ha sido enviado. (mensaje configurable)");
             }else{
                 //Aqui habra que decidir la cuestion de acuerdo a la entidad de pago
                 pedido.setCodPago(String.format("%012d", pedido.getId()));
