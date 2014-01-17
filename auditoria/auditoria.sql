@@ -36,12 +36,12 @@ DROP TRIGGER IF EXISTS trg_aud_clasificado on clasificado;
 create or replace function aud_clasificado_func() returns trigger as $$
 	begin
 		IF TG_OP = 'DELETE' THEN
-			INSERT INTO aud_clasificado (id_tipo, id_subtipo1, id_subtipo2, id_subtipo3, id_subtipo4, id_subtipo5, clasificado, fecha_ini, fecha_fin, precio, id_tipo_publicacion, num_dias, num_palabras, id_pedido, id_estado, valor_oferta, id_subtipo6, id_currency_oferta, id_subtipo_publicacion, url_img0, operacion, usuario)
-			VALUES (OLD.id_tipo, OLD.id_subtipo1, OLD.id_subtipo2, OLD.id_subtipo3, OLD.id_subtipo4, OLD.id_subtipo5, OLD.clasificado, OLD.fecha_ini, OLD.fecha_fin, OLD.precio, OLD.id_tipo_publicacion, OLD.num_dias, OLD.num_palabras, OLD.id_pedido, OLD.id_estado, OLD.valor_oferta, OLD.id_subtipo6, OLD.id_currency_oferta, OLD.id_subtipo_publicacion, OLD.url_img0, TG_OP, current_user);
+			INSERT INTO aud_clasificado (id_tipo, id_subtipo1, id_subtipo2, id_subtipo3, id_subtipo4, id_subtipo5, clasificado, fecha_ini, fecha_fin, precio, num_dias, num_palabras, id_pedido, id_estado, valor_oferta, id_subtipo6, id_currency_oferta, id_subtipo_publicacion, url_img0, operacion, usuario)
+			VALUES (OLD.id_tipo, OLD.id_subtipo1, OLD.id_subtipo2, OLD.id_subtipo3, OLD.id_subtipo4, OLD.id_subtipo5, OLD.clasificado, OLD.fecha_ini, OLD.fecha_fin, OLD.precio, OLD.num_dias, OLD.num_palabras, OLD.id_pedido, OLD.id_estado, OLD.valor_oferta, OLD.id_subtipo6, OLD.id_currency_oferta, OLD.id_subtipo_publicacion, OLD.url_img0, TG_OP, current_user);
 		END IF; 
 		IF (TG_OP = 'INSERT' OR  TG_OP = 'UPDATE') THEN
-			INSERT INTO aud_clasificado (id_tipo, id_subtipo1, id_subtipo2, id_subtipo3, id_subtipo4, id_subtipo5, clasificado, fecha_ini, fecha_fin, precio, id_tipo_publicacion, num_dias, num_palabras, id_pedido, id_estado, valor_oferta, id_subtipo6, id_currency_oferta, id_subtipo_publicacion, url_img0, operacion, usuario)
-			VALUES (NEW.id_tipo, NEW.id_subtipo1, NEW.id_subtipo2, NEW.id_subtipo3, NEW.id_subtipo4, NEW.id_subtipo5, NEW.clasificado, NEW.fecha_ini, NEW.fecha_fin, NEW.precio, NEW.id_tipo_publicacion, NEW.num_dias, NEW.num_palabras, NEW.id_pedido, NEW.id_estado, NEW.valor_oferta, NEW.id_subtipo6, NEW.id_currency_oferta, NEW.id_subtipo_publicacion, NEW.url_img0, TG_OP, current_user);
+			INSERT INTO aud_clasificado (id_tipo, id_subtipo1, id_subtipo2, id_subtipo3, id_subtipo4, id_subtipo5, clasificado, fecha_ini, fecha_fin, precio, num_dias, num_palabras, id_pedido, id_estado, valor_oferta, id_subtipo6, id_currency_oferta, id_subtipo_publicacion, url_img0, operacion, usuario)
+			VALUES (NEW.id_tipo, NEW.id_subtipo1, NEW.id_subtipo2, NEW.id_subtipo3, NEW.id_subtipo4, NEW.id_subtipo5, NEW.clasificado, NEW.fecha_ini, NEW.fecha_fin, NEW.precio, NEW.num_dias, NEW.num_palabras, NEW.id_pedido, NEW.id_estado, NEW.valor_oferta, NEW.id_subtipo6, NEW.id_currency_oferta, NEW.id_subtipo_publicacion, NEW.url_img0, TG_OP, current_user);
 		END IF;	
 	return null;
 end; $$ language plpgsql;

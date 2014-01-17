@@ -45,6 +45,8 @@ import javax.persistence.Transient;
     @NamedQuery(name = "Clasificado.consultaCrit12", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
     @NamedQuery(name = "Clasificado.consultaCrit13", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo3 =:criterio3", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
     @NamedQuery(name = "Clasificado.consultaCrit123", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2 AND c.subtipo3 =:criterio3", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+    @NamedQuery(name = "Clasificado.consultaCrit125", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2  AND c.subtipo5 =:criterio5 ", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+    @NamedQuery(name = "Clasificado.consultaCrit1235", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2 AND c.subtipo3 =:criterio3 AND c.subtipo5 =:criterio5 ", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
     @NamedQuery(name = "Clasificado.consultaCrit1245", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2 AND c.subtipo4 =:criterio4 AND c.subtipo5 =:criterio5 ", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
     @NamedQuery(name = "Clasificado.consultaCrit12345", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2 AND c.subtipo3 =:criterio3  AND c.subtipo4 =:criterio4 AND c.subtipo5 =:criterio5", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")})
 })
@@ -66,6 +68,10 @@ public class Clasificado implements Serializable {
     private String clasificado;
     @Column(name = "url_img0")
     private String urlImg0;
+    @Column(name = "nombre_ofertante")
+    private String nombreOfertante;
+    @Column(name = "titulo_oferta")
+    private String tituloOferta;
     @Column(name = "fecha_ini")
     @Temporal(TemporalType.DATE)
     private Date fechaIni;
@@ -495,6 +501,34 @@ public class Clasificado implements Serializable {
      */
     public void setSubtipoPublicacion(SubtipoPublicacion subtipoPublicacion) {
         this.subtipoPublicacion = subtipoPublicacion;
+    }
+
+    /**
+     * @return the nombreOfertante
+     */
+    public String getNombreOfertante() {
+        return nombreOfertante;
+    }
+
+    /**
+     * @param nombreOfertante the nombreOfertante to set
+     */
+    public void setNombreOfertante(String nombreOfertante) {
+        this.nombreOfertante = nombreOfertante;
+    }
+
+    /**
+     * @return the tituloOferta
+     */
+    public String getTituloOferta() {
+        return tituloOferta;
+    }
+
+    /**
+     * @param tituloOferta the tituloOferta to set
+     */
+    public void setTituloOferta(String tituloOferta) {
+        this.tituloOferta = tituloOferta;
     }
 
     

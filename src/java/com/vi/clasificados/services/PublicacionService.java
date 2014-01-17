@@ -47,6 +47,8 @@ public class PublicacionService {
 
     //Métodos de procesamiento de la lógica del negocio
     public void procesarweb(Clasificado clasificado){
+        System.out.println("---> "+clasificado.getSubtipoPublicacion());
+        clasificado.setSubtipoPublicacion(em.find(SubtipoPublicacion.class, clasificado.getSubtipoPublicacion().getId()));
         clasificado.setPrecio(new BigDecimal(clasificado.getSubtipoPublicacion().getPrecio()));
         clasificado.setFechaFin(FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), clasificado.getSubtipoPublicacion().getDuracion(), Calendar.DATE));
         Currencies moneda = (Currencies)em.find(Currencies.class, clasificado.getMoneda().getId());

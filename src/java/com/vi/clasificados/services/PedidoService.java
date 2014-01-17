@@ -164,7 +164,7 @@ public class PedidoService {
             //Sacamos las imagenes dado que estan en un transient, y requerimos hacer merge, para el id que nos dara la ruta de la imagen
             List<ImgClasificado> imagenes = clasificado.getImgs();
             clasificado.setImgs(null);
-            clasificado.setUrlImg0("s3.amazonaws.com/clasificadosp1/F1/logo1.png");
+            clasificado.setUrlImg0("http://s3.amazonaws.com/clasificadosp1/F1/logo1.png");
             clasificado = em.merge(clasificado);
             cargarImagenes(clasificado, imagenes);
          }

@@ -59,9 +59,9 @@
             <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="fb726dc7-32d0-4425-9306-b2a81b4202fe" name="subtipo3" nullable="false" scale="10" size=""/>
             <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="9b02f0e2-cf52-4247-8a0a-02db384ba4bd" name="subtipo4" nullable="false" scale="10" size=""/>
             <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="8fee091f-da7b-4d7e-8f91-9d81ad1ebad2" name="subtipo5" nullable="false" scale="10" size=""/>
-            <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="d28684dc-7443-457a-b76a-1041f3223032" name="valor" nullable="false" scale="10" size=""/>
-            <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="17b75bc5-74d2-49f4-8a52-2b7b25e2c910" name="nombre_ofertante" nullable="false" scale="10" size=""/>
-            <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="e53d549f-6fc6-4b70-a06c-1a79bbd79f3c" name="titulo_oferta" nullable="false" scale="10" size=""/>
+            <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="d28684dc-7443-457a-b76a-1041f3223032" name="precio" nullable="false" scale="10" size=""/>
+            <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="74312ff2-e37a-4760-98a8-14fd954027bc" name="area" nullable="false" scale="10" size=""/>
+            <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="7d896b78-78dc-497b-ac72-309257fb6403" name="salario" nullable="false" scale="10" size=""/>
             <Index id="664caa63-c20e-4f40-9b28-517788508f54" indextype="PRIMARYKEY" name="campos_tipo_pk">
                 <Indexattribute attributerefid="c0a4edff-99d3-4126-9142-8efa5b42f77f" id="214731f6-f270-46cf-8590-4b59c3da7fbb"/>
             </Index>

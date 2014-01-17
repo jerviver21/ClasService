@@ -43,7 +43,7 @@ public class DiasPrecios implements Serializable {
     private String nombreDia;
     
     
-    @JoinColumn(name = "id_tipo_publicacion", referencedColumnName = "id")
+    @JoinColumn(name = "id_subtipo_publicacion", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private SubtipoPublicacion subtipoPublicacion;
     

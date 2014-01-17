@@ -42,7 +42,28 @@ public class ConsultasService {
         //Criterio 4: Área (m2)
         //Criterio 5: rango de precios
         
-        if(ubicacion == 0){
+        if(ubicacion == 0 && area == 0){
+            clasificados = em.createNamedQuery("Clasificado.consultaCrit125")
+                .setParameter("estado", ClasificadoEstados.PUBLICADO)
+                .setParameter("tipopub", PublicacionTipos.WEB)
+                .setParameter("tipo", ClasificadosTipo.INMOBILIARIO)
+                .setParameter("criterio1", new TipoClasificado(tipoOferta))
+                .setParameter("criterio2", new TipoClasificado(tipoInmueble))
+                .setParameter("criterio5", new TipoClasificado(precio))
+                .getResultList(); 
+            
+        }else if(ubicacion != 0 && area == 0){
+            clasificados = em.createNamedQuery("Clasificado.consultaCrit1235")
+                .setParameter("estado", ClasificadoEstados.PUBLICADO)
+                .setParameter("tipopub", PublicacionTipos.WEB)
+                .setParameter("tipo", ClasificadosTipo.INMOBILIARIO)
+                .setParameter("criterio1", new TipoClasificado(tipoOferta))
+                .setParameter("criterio2", new TipoClasificado(tipoInmueble))
+                .setParameter("criterio3", new TipoClasificado(ubicacion))
+                .setParameter("criterio5", new TipoClasificado(precio))
+                .getResultList(); 
+            
+        }else if(ubicacion == 0 && area != 0){
             clasificados = em.createNamedQuery("Clasificado.consultaCrit1245")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
                 .setParameter("tipopub", PublicacionTipos.WEB)
@@ -53,7 +74,7 @@ public class ConsultasService {
                 .setParameter("criterio5", new TipoClasificado(precio))
                 .getResultList(); 
             
-        }else{
+        }else if(ubicacion != 0 && area != 0){
             clasificados = em.createNamedQuery("Clasificado.consultaCrit12345")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
                 .setParameter("tipopub", PublicacionTipos.WEB)
@@ -80,7 +101,7 @@ public class ConsultasService {
             clasificados = em.createNamedQuery("Clasificado.consultaCrit12")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
                 .setParameter("tipopub", PublicacionTipos.WEB)
-                .setParameter("tipo", ClasificadosTipo.VEHICULO)
+                .setParameter("tipo", ClasificadosTipo.EMPLEO)
                 .setParameter("criterio1", new TipoClasificado(tipo))
                 .setParameter("criterio2", new TipoClasificado(area))
                 .getResultList();
@@ -89,7 +110,7 @@ public class ConsultasService {
             clasificados = em.createNamedQuery("Clasificado.consultaCrit123")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
                 .setParameter("tipopub", PublicacionTipos.WEB)                
-                .setParameter("tipo", ClasificadosTipo.VEHICULO)
+                .setParameter("tipo", ClasificadosTipo.EMPLEO)
                 .setParameter("criterio1", new TipoClasificado(tipo))
                 .setParameter("criterio2", new TipoClasificado(area))
                 .setParameter("criterio3", new TipoClasificado(rango))  

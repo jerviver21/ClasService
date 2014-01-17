@@ -33,8 +33,6 @@
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="e6c384d0-2fb7-4fbb-a314-ceab487f50ef" name="id_subtipo6" nullable="true" scale="10" size=""/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="c9bd5e89-9439-461c-9720-3ca119ba4baf" name="id_currency_oferta" nullable="true" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="20421d9f-b998-4815-ad50-994b61590fad" name="url_img0" nullable="true" scale="10" size="1000"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="1876e30c-6f98-42f9-b44e-8aac1877c55e" name="nombre_ofertante" nullable="true" scale="10" size="1000"/>
-            <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="2d8d4b1f-6905-4ad1-b891-3dc249a33470" name="titulo_oferta" nullable="true" scale="10" size="1000"/>
             <Index id="c1a8c652-e408-4a36-960e-a0043baf5595" indextype="PRIMARYKEY" name="clasificado_pk">
                 <Indexattribute attributerefid="635c3f79-fe2c-4245-91a5-bd0f42fc3782" id="72925edc-0729-47db-b999-ddaa51be9656"/>
             </Index>
@@ -59,9 +57,9 @@
             <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="fb726dc7-32d0-4425-9306-b2a81b4202fe" name="subtipo3" nullable="false" scale="10" size=""/>
             <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="9b02f0e2-cf52-4247-8a0a-02db384ba4bd" name="subtipo4" nullable="false" scale="10" size=""/>
             <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="8fee091f-da7b-4d7e-8f91-9d81ad1ebad2" name="subtipo5" nullable="false" scale="10" size=""/>
-            <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="d28684dc-7443-457a-b76a-1041f3223032" name="valor" nullable="false" scale="10" size=""/>
-            <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="17b75bc5-74d2-49f4-8a52-2b7b25e2c910" name="nombre_ofertante" nullable="false" scale="10" size=""/>
-            <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="e53d549f-6fc6-4b70-a06c-1a79bbd79f3c" name="titulo_oferta" nullable="false" scale="10" size=""/>
+            <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="d28684dc-7443-457a-b76a-1041f3223032" name="precio" nullable="false" scale="10" size=""/>
+            <Attribute datatype="boolean" defaultvalue="" extra="" fraction="null" id="74312ff2-e37a-4760-98a8-14fd954027bc" name="area" nullable="false" scale="10" size=""/>
+            <Attribute datatype="boolean" defaultvalue="false" extra="" fraction="null" id="7d896b78-78dc-497b-ac72-309257fb6403" name="salario" nullable="false" scale="10" size=""/>
             <Index id="664caa63-c20e-4f40-9b28-517788508f54" indextype="PRIMARYKEY" name="campos_tipo_pk">
                 <Indexattribute attributerefid="c0a4edff-99d3-4126-9142-8efa5b42f77f" id="214731f6-f270-46cf-8590-4b59c3da7fbb"/>
             </Index>
@@ -143,7 +141,7 @@
             </Index>
         </Table>
         <Table id="55d0853a-219f-4bb5-8fa6-cff8c99ad139" name="estados_pedido" schema="">
-            <Property name="LOCATION" value="0:94"/>
+            <Property name="LOCATION" value="74:229"/>
             <Attribute datatype="int4" defaultvalue="" extra="" fraction="null" id="05e08f5f-6d7c-4863-85a4-cfc4d83cc318" name="id" nullable="false" scale="10" size=""/>
             <Attribute datatype="varchar" defaultvalue="" extra="" fraction="null" id="ee657442-ade0-4939-ace8-7bad07af6678" name="nombre" nullable="false" scale="10" size="25"/>
             <Index id="6ab5c8c7-6333-442d-820d-87d00a7cac0e" indextype="PRIMARYKEY" name="estados_pedido_pk">
