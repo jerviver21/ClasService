@@ -8,6 +8,7 @@ import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.Currencies;
 import com.vi.clasificados.dominio.DetallePrecioClasificado;
 import com.vi.clasificados.dominio.DiasPrecios;
+import com.vi.clasificados.dominio.SubtipoPublicacion;
 import com.vi.clasificados.dominio.TipoPublicacion;
 import com.vi.clasificados.utils.SelectorRangos;
 import com.vi.comun.locator.ParameterLocator;
@@ -19,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
 import javax.persistence.EntityManager;
@@ -36,41 +36,33 @@ public class PublicacionService {
     @PersistenceContext(unitName = "ClasificadosPU")
     private EntityManager em;
     
-    @EJB
-    TiposPublicacionService tipoPubService;
-    
-    Map<String, TipoPublicacion> tiposPublicacion;
+    Map<Integer, TipoPublicacion> tiposPublicacion;
     
     ParameterLocator locator;
     
     @PostConstruct
     public void init(){
         locator = ParameterLocator.getInstance();
-        tiposPublicacion = tipoPubService.findAllTiposMapa();
     }
 
     //Métodos de procesamiento de la lógica del negocio
-    public List<Clasificado> procesarClasificado(Clasificado clasificado){
-        List<Clasificado> clasificados = new ArrayList<Clasificado>();
-        for(String tipo : clasificado.getOpcionesPublicacion()){
-            Clasificado nuevoClas = new Clasificado(clasificado);
-            System.out.println("---> "+clasificado.getExtImg1()+" - "+clasificado.getImg1());
-            nuevoClas.setTipoPublicacion(tiposPublicacion.get(tipo));
-            Map preciosXDia = tiposPublicacion.get(tipo).getMapaPrecios();
-            calcularValores(nuevoClas, preciosXDia);
-            clasificados.add(nuevoClas);
-        }
-        return clasificados;
+    public void procesarweb(Clasificado clasificado){
+        System.out.println("---> "+clasificado.getSubtipoPublicacion());
+        clasificado.setSubtipoPublicacion(em.find(SubtipoPublicacion.class, clasificado.getSubtipoPublicacion().getId()));
+        clasificado.setPrecio(new BigDecimal(clasificado.getSubtipoPublicacion().getPrecio()));
+        clasificado.setFechaFin(FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), clasificado.getSubtipoPublicacion().getDuracion(), Calendar.DATE));
+        Currencies moneda = (Currencies)em.find(Currencies.class, clasificado.getMoneda().getId());
+        new SelectorRangos().setRangoValores(clasificado, moneda);  
     }
     
-    public Clasificado procesarEdicion(Clasificado clasificado){
+  
+    public void procesarImpreso(Clasificado clasificado){
         clasificado.setNumDias(0);
         clasificado.setNumPalabras(0);
         clasificado.setPrecio(BigDecimal.ZERO);
         clasificado.setDetallePrecio(new ArrayList<DetallePrecioClasificado>());
-        Map preciosXDia = clasificado.getTipoPublicacion().getMapaPrecios();
+        Map preciosXDia = clasificado.getSubtipoPublicacion().getMapaPrecios();
         calcularValores(clasificado, preciosXDia);
-        return clasificado;
     }
     
     public void calcularValores(Clasificado clasificado, Map preciosXDia){

@@ -51,6 +51,15 @@ public class CamposTipo implements Serializable {
     @Basic(optional = false)
     @Column(name = "valor")
     private boolean valor;
+    
+    @Basic(optional = false)
+    @Column(name = "nombre_ofertante")
+    private boolean nombreOfertante;
+    
+    @Basic(optional = false)
+    @Column(name = "titulo_oferta")
+    private boolean tituloOferta;
+    
     @JoinColumn(name = "id_tipoclasificado", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TipoClasificado tipoClasificado;
@@ -169,6 +178,34 @@ public class CamposTipo implements Serializable {
      */
     public void setValor(boolean valor) {
         this.valor = valor;
+    }
+
+    /**
+     * @return the nombreOfertante
+     */
+    public boolean isNombreOfertante() {
+        return nombreOfertante;
+    }
+
+    /**
+     * @param nombreOfertante the nombreOfertante to set
+     */
+    public void setNombreOfertante(boolean nombreOfertante) {
+        this.nombreOfertante = nombreOfertante;
+    }
+
+    /**
+     * @return the tituloOferta
+     */
+    public boolean isTituloOferta() {
+        return tituloOferta;
+    }
+
+    /**
+     * @param tituloOferta the tituloOferta to set
+     */
+    public void setTituloOferta(boolean tituloOferta) {
+        this.tituloOferta = tituloOferta;
     }
     
 }

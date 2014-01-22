@@ -4,23 +4,22 @@
  */
 package com.vi.clasificados.dominio;
 
-import com.vi.comun.util.Log;
-import java.io.File;
-import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.Serializable;
-import java.util.logging.Level;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 /**
@@ -39,12 +38,18 @@ public class ImgClasificado implements Serializable {
     @Column(name = "id")
     private Long id;
     @Size(max = 1000)
-    @Column(name = "ruta_imagenes")
-    private String rutaImagenes;
+    @Column(name = "url")
+    private String url;
+    @Size(max = 25)
+    @Column(name = "extension")
+    private String extension;
+    @JoinColumn(name = "id_clasificado", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Clasificado clasificado;
+
     
     @Transient
-    private StreamedContent imagen;
-
+    private InputStream img;
 
     public ImgClasificado() {
     }
@@ -61,14 +66,29 @@ public class ImgClasificado implements Serializable {
         this.id = id;
     }
 
-    public String getRutaImagenes() {
-        return rutaImagenes;
+    public String getUrl() {
+        return url;
     }
 
-    public void setRutaImagenes(String rutaImagenes) {
-        this.rutaImagenes = rutaImagenes;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public Clasificado getClasificado() {
+        return clasificado;
+    }
+
+    public void setClasificado(Clasificado idClasificado) {
+        this.clasificado = idClasificado;
+    }
 
     @Override
     public int hashCode() {
@@ -95,27 +115,19 @@ public class ImgClasificado implements Serializable {
         return "com.vi.clasificados.dominio.ImgClasificado[ id=" + id + " ]";
     }
 
+
     /**
-     * @return the imagen
+     * @return the img
      */
-    public StreamedContent getImagen() {
-        try {
-            File inFile = new File(rutaImagenes);
-            System.out.println("Clasificado: Imagen que se está cargando: "+rutaImagenes+" - extension: "+rutaImagenes.replaceAll(".*\\.(\\w{3,4})$", "$1"));
-            FileInputStream in = new FileInputStream(inFile);
-            imagen = new DefaultStreamedContent(in, "image/"+rutaImagenes.replaceAll(".*\\.(\\w{3,4})$", "$1"));
-        } catch (Exception e) {
-            System.out.println("OJO Estallon de origen");
-            Log.getLogger().log(Level.SEVERE, e.getMessage(), e);
-        }
-        return imagen;
+    public InputStream getImg() {
+        return img;
     }
 
     /**
-     * @param imagen the imagen to set
+     * @param img the img to set
      */
-    public void setImagen(StreamedContent imagen) {
-        this.imagen = imagen;
+    public void setImg(InputStream img) {
+        this.img = img;
     }
     
 }

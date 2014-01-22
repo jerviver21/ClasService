@@ -66,7 +66,7 @@ public class TiposCachingLocator {
     
     public Map getMapa(int TIPO){
         Object mapa = cache.get(TIPO);
-        System.out.println(mapa);
+        //System.out.println(mapa);
         if(mapa == null){
             return null;
         }

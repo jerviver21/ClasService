@@ -4,31 +4,27 @@
  */
 package com.vi.clasificados.services;
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.EstadosPedido;
 import com.vi.clasificados.dominio.ImgClasificado;
 import com.vi.clasificados.dominio.Pedido;
+import com.vi.clasificados.utils.AWSUtils;
 import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.clasificados.utils.EntidadesDePago;
 import com.vi.clasificados.utils.PedidoEstados;
 import com.vi.comun.exceptions.ParametroException;
-import com.vi.comun.exceptions.ValidacionException;
 import com.vi.comun.locator.ParameterLocator;
 import com.vi.comun.util.FechaUtils;
 import com.vi.comun.util.FilesUtils;
 import com.vi.comun.util.Log;
 import com.vi.usuarios.dominio.Users;
 import com.vi.usuarios.services.UsuariosServicesLocal;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.RandomAccessFile;
 import java.math.BigDecimal;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -53,6 +49,9 @@ public class PedidoService {
     @EJB
     UsuariosServicesLocal usuarioService;
     
+    @EJB
+    PagoService pagoService;
+    
     
     public PedidoService(){
         locator = ParameterLocator.getInstance();
@@ -66,52 +65,6 @@ public class PedidoService {
         return pedido.get(0);
     }
     
-    public Pedido habilitarPago(Pedido pedido)throws ParametroException, FileNotFoundException, IOException{
-        Date fechaLimitePago = null;
-        for(Clasificado clasificado : pedido.getClasificados()){
-            if(fechaLimitePago == null){
-                fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), -1, Calendar.DATE);
-            }else{
-               if(clasificado.getFechaIni().before(fechaLimitePago)){
-                   fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), -1, Calendar.DATE);
-               } 
-            }
-            clasificado.setPedido(pedido);
-            if(clasificado.getImg1() != null){
-                ImgClasificado imagenes = new ImgClasificado();
-                imagenes= em.merge(imagenes);//Guarda el id, que nos permite crear la ruta para guardar las imagenes del clasificado.
-                imagenes.setRutaImagenes(cargarImg("IMG1."+clasificado.getExtImg1(), imagenes.getId(), clasificado.getImg1()));
-                clasificado.setImagenes(imagenes);
-                clasificado.setNumImagenes(1);
-                clasificado.setPrioridad(1);
-            }
-            System.out.println("Habilitando Pago pedidos... "+clasificado.getExtImg1()+" - "+clasificado.getImg1());
-        }
-        pedido.setFechaVencimiento(fechaLimitePago);
-        Users usr = usuarioService.findByUser(pedido.getUsuario());
-        pedido.setNombreCliente(usr.getNombre());
-        pedido.setDniCliente(usr.getNumId());
-        pedido = em.merge(pedido);
-        //Aqui habra que decidir la cuestion de acuerdo a la entidad de pago
-        pedido.setCodPago(String.format("%012d", pedido.getId()));
-        pedido = em.merge(pedido);
-        pedido.setMensajePago(pedido.getEntidad().getMensajePago().replace("COD_PAGO", pedido.getCodPago()));
-        generarSolicitudPago(pedido.getCodPago(), pedido.getValorTotal(), fechaLimitePago);
-        return pedido;
-    }
-    
-    public Pedido guardarPedido(Pedido pedido)throws ParametroException, FileNotFoundException, IOException{
-        pedido.setEntidad(EntidadesDePago.PERIODICO);
-        pedido.setEstado(PedidoEstados.PAGO);
-        for(Clasificado clasificado : pedido.getClasificados()){
-            clasificado.setEstado(ClasificadoEstados.PUBLICADO);
-            clasificado.setPedido(pedido);
-        }
-        pedido = em.merge(pedido);
-        pedido.setMensajePago("Pedido realizado con exito.");
-        return pedido;
-    }
-    
     public List<Pedido> getPedidos(String usuario, EstadosPedido estado) {
         List<Pedido> pedidos = em.createNamedQuery("Pedido.findByUsrAndEstado")
                 .setParameter("usr", usuario)
@@ -123,78 +76,6 @@ public class PedidoService {
         pedido = em.merge(pedido);
         pedido.getClasificados().size();
         return pedido.getClasificados();
-    }
-    
-    public void generarSolicitudPago(String nroPago, BigDecimal valor, Date fechaLimite)throws FileNotFoundException, IOException{
-        String ruta = locator.getParameter("rutaPago");
-        File dirSolicitud = new File(ruta+File.separator+"solicitudes");
-        if(!dirSolicitud.exists()){
-            dirSolicitud.mkdirs();
-        }
-        RandomAccessFile archivo = new RandomAccessFile(dirSolicitud+File.separator+nroPago, "rw");
-        archivo.writeBytes(nroPago+","+valor+","+fechaLimite);
-    }
-    
-    public void recibirPago()throws FileNotFoundException, IOException, ParseException{
-        SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String ruta = locator.getParameter("rutaPago");
-        File dirPagos = new File(ruta+File.separator+"recibidos");
-        if(!dirPagos.exists()){
-            dirPagos.mkdirs();
-        }
-        File dirArchivados = new File(ruta+File.separator+"archivados");
-        if(!dirArchivados.exists()){
-            dirArchivados.mkdirs();
-        }
-        String[] pagos = dirPagos.list();
-        for(String nombre : pagos){
-            File archivo = new File(dirPagos.getAbsolutePath()+File.separator+nombre);
-            BufferedReader lector = new BufferedReader(new FileReader(archivo));
-            String linea = lector.readLine();
-            String[] datos = linea.split(",");
-            String nroPago = datos[0];
-            Date fechaHoraPago = fd.parse(datos[1]);
-            Pedido pedido = findByNro(nroPago);
-            System.out.println(pedido+" - "+nroPago);
-            pedido.setEstado(PedidoEstados.PAGO);
-            pedido.setFechaHoraPago(fechaHoraPago);
-            List<Clasificado> clasificados = pedido.getClasificados();
-            for(Clasificado clasificado:clasificados){
-                clasificado.setEstado(ClasificadoEstados.PUBLICADO);
-                em.merge(clasificado);
-            }
-            em.merge(pedido);
-            FilesUtils.moverArchivo(archivo.getAbsolutePath(), dirArchivados.getAbsolutePath()+File.separator+nombre);
-        }
-    }
-
-    public void simularPago(String codPago)throws FileNotFoundException, IOException {
-        SimpleDateFormat fd = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String ruta = locator.getParameter("rutaPago");
-        File dirSolicitud = new File(ruta+File.separator+"recibidos");
-        if(!dirSolicitud.exists()){
-            dirSolicitud.mkdirs();
-        }
-        RandomAccessFile archivo = new RandomAccessFile(dirSolicitud+File.separator+codPago, "rw");
-        archivo.writeBytes(codPago+","+fd.format(new Date()));
-    }
-    
-    public void realizarPago(String codPago)throws ValidacionException {
-        Pedido pedido = findByNro(codPago);
-        
-        if(FechaUtils.getFechaHoy().after(pedido.getFechaVencimiento())){
-            throw new ValidacionException("El pedido se encuentra vencido");
-        }
-
-        pedido.setEntidad(EntidadesDePago.PERIODICO);
-        pedido.setEstado(PedidoEstados.PAGO);
-        pedido.setFechaHoraPago(new Date());
-        List<Clasificado> clasificados = pedido.getClasificados();
-        for(Clasificado clasificado:clasificados){
-            clasificado.setEstado(ClasificadoEstados.PUBLICADO);
-            em.merge(clasificado);
-        } 
-        em.merge(pedido);
     }
     
     public void actualizarEstados()throws ParametroException{
@@ -235,16 +116,91 @@ public class PedidoService {
     }
     
     
-    public String cargarImg(String nombre, long id, InputStream input)throws ParametroException, IOException{
-        String rutaImgs = locator.getParameter("rutaImagenes");
-        if(rutaImgs == null){
-            throw new ParametroException("El parámetro dirCertificados no existe " );
+    //Métodos de publicación
+    public Pedido guardarPedido(Pedido pedido)throws ParametroException, FileNotFoundException, IOException{
+        //Primero definimos la fecha límite de pago:
+        Date fechaLimitePago = null;
+        for(Clasificado clasificado : pedido.getClasificados()){
+            if(fechaLimitePago == null){
+                fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), 0, Calendar.DATE);
+            }else{
+               if(clasificado.getFechaIni().before(fechaLimitePago)){
+                   fechaLimitePago = FechaUtils.getFechaMasPeriodo(clasificado.getFechaIni(), 0, Calendar.DATE);
+               } 
+            }
         }
-        return new FilesUtils().crearArchivo(rutaImgs+File.separator+id, nombre, input);
+        //Segundo: guardamos el pedido, Le quitamos los clasificados, para obtener el id, si borrar datos transient
+        List<Clasificado> clasificados = pedido.getClasificados();
+        pedido.setClasificados(null);
+        if(usuarioService.findRolesUser(pedido.getUsuario()).contains("ASESOR PAGOS")){
+            pedido.setEntidad(EntidadesDePago.PERIODICO);
+            pedido.setEstado(PedidoEstados.PAGO);
+            pedido = em.merge(pedido);
+            pedido.setMensajePago("Pedido realizado con exito. (mensaje configurable)");
+        }else{
+            pedido.setFechaVencimiento(fechaLimitePago);
+            Users usr = usuarioService.findByUser(pedido.getUsuario());
+            pedido.setNombreCliente(usr.getNombre());
+            pedido.setDniCliente(usr.getNumId());
+            pedido = em.merge(pedido);
+            if(pedido.getValorTotal().equals(BigDecimal.ZERO)){
+                pedido.setEstado(PedidoEstados.PAGO);
+                pedido.setMensajePago("Su pedido ha sido enviado. (mensaje configurable)");
+            }else{
+                //Aqui habra que decidir la cuestion de acuerdo a la entidad de pago
+                pedido.setCodPago(String.format("%012d", pedido.getId()));
+                pagoService.generarSolicitudPago(pedido.getCodPago(), pedido.getValorTotal(), fechaLimitePago);
+                pedido.setMensajePago(pedido.getEntidad().getMensajePago().replace("COD_PAGO", pedido.getCodPago()));
+            }
+            pedido = em.merge(pedido);
+        }
+        
+        //Tercero guardamos los clasificados, no sin antes subir las imagenes a AWS S3.
+        for(Clasificado clasificado : clasificados){
+            clasificado.setPedido(pedido);
+            if(pedido.getEstado().equals(PedidoEstados.PAGO)){
+                clasificado.setEstado(ClasificadoEstados.PUBLICADO);
+            }
+            //Sacamos las imagenes dado que estan en un transient, y requerimos hacer merge, para el id que nos dara la ruta de la imagen
+            List<ImgClasificado> imagenes = clasificado.getImgs();
+            clasificado.setImgs(null);
+            clasificado.setUrlImg0("http://s3.amazonaws.com/clasificadosp1/F1/logo1.png");
+            clasificado = em.merge(clasificado);
+            cargarImagenes(clasificado, imagenes);
+         }
+        return pedido;
     }
-
     
     
-    
+    public void cargarImagenes(Clasificado clasificado, List<ImgClasificado> imagenes)throws ParametroException, FileNotFoundException, IOException{
+        if(!imagenes.isEmpty()){
+            String nombreBucket = locator.getParameter("nombre_bucket");
+            String urlImgs = locator.getParameter("url_imagenes");
+            String rutaDescarga = locator.getParameter("rutaDescarga");
+            if(nombreBucket == null || urlImgs == null){
+                throw new ParametroException("Los parametros de almacenamiento de imagenes no existen " );
+            }
+            int consecutivoImg = 0;
+            AmazonS3 s3client = AWSUtils.getAmazonS3();
+            for(ImgClasificado img : imagenes){
+                String rutaImagen = clasificado.getId()+File.separator+"IMG"+consecutivoImg+"."+img.getExtension();
+                String nImg = FilesUtils.crearArchivo(rutaDescarga, clasificado.getId()+(int)(Math.random()*1000)+"IMG"+consecutivoImg+"."+img.getExtension() , img.getImg());
+                File archivo = new File(nImg);
+                //ObjectMetadata metadata = new ObjectMetadata();
+                //metadata.setContentLength(IOUtils.toByteArray(img.getImg()).length);
+                s3client.putObject(new PutObjectRequest(nombreBucket, rutaImagen, archivo));
+                img.getImg().close();
+                archivo.deleteOnExit();
+                img.setUrl(urlImgs+File.separator+nombreBucket+File.separator+rutaImagen);
+                if(consecutivoImg == 0){
+                    clasificado.setUrlImg0(urlImgs+File.separator+nombreBucket+File.separator+rutaImagen);
+                }
+                consecutivoImg++;
+                img.setClasificado(clasificado);
+                em.merge(img);
+            }
+        }
+    }
+   
 
 }

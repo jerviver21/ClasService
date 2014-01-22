@@ -43,9 +43,9 @@ public class DiasPrecios implements Serializable {
     private String nombreDia;
     
     
-    @JoinColumn(name = "id_tipo_publicacion", referencedColumnName = "id")
+    @JoinColumn(name = "id_subtipo_publicacion", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private TipoPublicacion tipoPublicacion;
+    private SubtipoPublicacion subtipoPublicacion;
     
     @JoinColumn(name = "id_precio", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -89,12 +89,12 @@ public class DiasPrecios implements Serializable {
     }
 
 
-    public TipoPublicacion getTipoPublicacion() {
-        return tipoPublicacion;
+    public SubtipoPublicacion getTipoPublicacion() {
+        return subtipoPublicacion;
     }
 
-    public void setTipoPublicacion(TipoPublicacion idTipoPublicacion) {
-        this.tipoPublicacion = idTipoPublicacion;
+    public void setTipoPublicacion(SubtipoPublicacion idTipoPublicacion) {
+        this.subtipoPublicacion = idTipoPublicacion;
     }
 
     @Override

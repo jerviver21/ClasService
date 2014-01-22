@@ -5,21 +5,15 @@
 package com.vi.clasificados.dominio;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -30,29 +24,21 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "TipoPublicacion.findAll", query = "SELECT t FROM TipoPublicacion t")})
 public class TipoPublicacion implements Serializable {
-  
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @NotNull
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
+    @Size(max = 255)
     @Column(name = "nombre")
     private String nombre;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipoPublicacion", fetch = FetchType.EAGER)
-    private List<DiasPrecios> precios;
 
     public TipoPublicacion() {
     }
 
     public TipoPublicacion(Integer id) {
         this.id = id;
-    }
-
-    public TipoPublicacion(Integer id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
     }
 
     public Integer getId() {
@@ -69,23 +55,6 @@ public class TipoPublicacion implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public List<DiasPrecios> getPrecios() {
-        return precios;
-    }
-    
-
-    public void setPrecios(List<DiasPrecios> preciosClasificadosList) {
-        this.precios = preciosClasificadosList;
-    }
-    
-    public Map getMapaPrecios(){
-        Map mapaPrecios = new HashMap();
-        for(DiasPrecios precio : precios){
-            mapaPrecios.put(precio.getIddia(), precio);
-        }
-        return mapaPrecios;
     }
 
     @Override
@@ -110,9 +79,7 @@ public class TipoPublicacion implements Serializable {
 
     @Override
     public String toString() {
-        return nombre;
+        return "com.vi.clasificados.dominio.TipoPublicacion[ id=" + id + " ]";
     }
-
-
     
 }

@@ -1,9 +1,8 @@
 package com.vi.clasificados.services;
 
-import com.vi.clasificados.dominio.Precios;
+import com.vi.clasificados.dominio.SubtipoPublicacion;
 import com.vi.clasificados.dominio.TipoPublicacion;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,27 +20,19 @@ public class TiposPublicacionService {
     @PersistenceContext(unitName = "ClasificadosPU")
     private EntityManager em;
 
-    public List<TipoPublicacion> findAllTipos(){
-        List<TipoPublicacion> tipos = em.createNamedQuery("TipoPublicacion.findAll").getResultList();
-        return tipos;
+    public List<SubtipoPublicacion> findAllSubtipos(){
+        List<SubtipoPublicacion> s = em.createNamedQuery("SubtipoPublicacion.findAll").getResultList();
+        return s;
     }
     
-    public Map<String, TipoPublicacion> findAllTiposMapa(){
-        Map<String, TipoPublicacion> mapa = new LinkedHashMap<String, TipoPublicacion>();
-        List<TipoPublicacion> tipos = em.createNamedQuery("TipoPublicacion.findAll").getResultList();
-        for(TipoPublicacion tipo : tipos){
-            mapa.put(tipo.getNombre(), tipo);
-        }
-        return mapa;
+    public List<SubtipoPublicacion> findImpresos(){
+        List<SubtipoPublicacion> s = em.createNamedQuery("SubtipoPublicacion.findImpresos").getResultList();
+        return s;
     }
-
-    public List<String> findAll(){
-        List<TipoPublicacion> tipos = em.createNamedQuery("TipoPublicacion.findAll").getResultList();
-        List<String> nombresTipos = new ArrayList<String>();
-        for(TipoPublicacion tipo : tipos){
-            nombresTipos.add(tipo.getNombre());
-        }
-        return nombresTipos;
+    
+    public List<SubtipoPublicacion> findWeb(){
+        List<SubtipoPublicacion> s = em.createNamedQuery("SubtipoPublicacion.findWeb").getResultList();
+        return s;
     }
 
 

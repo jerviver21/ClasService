@@ -3,9 +3,9 @@ package com.vi.clasificados.services;
 
 import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.EstadosClasificado;
-import com.vi.clasificados.locator.ClasificadosCachingLocator;
+import com.vi.clasificados.dominio.ImgClasificado;
 import com.vi.clasificados.utils.ClasificadoEstados;
-import com.vi.clasificados.utils.PublicacionesTipos;
+import com.vi.clasificados.utils.PublicacionTipos;
 import com.vi.comun.exceptions.ParametroException;
 import com.vi.comun.locator.ParameterLocator;
 import com.vi.comun.util.FechaUtils;
@@ -34,12 +34,10 @@ public class ClasificadosService {
     ConsultasService consultaService;
 
     ParameterLocator locator;
-    ClasificadosCachingLocator caching;
     
     @PostConstruct
     public void init(){
         locator = ParameterLocator.getInstance();
-        caching = ClasificadosCachingLocator.getInstance(getClasificadosActivos());
     }
     
     public ClasificadosService(){
@@ -49,6 +47,18 @@ public class ClasificadosService {
     //Métodos básicos del EJB
     public void edit(Clasificado clasificado) {
         em.merge(clasificado);
+    }
+    
+    public Clasificado find(Long id){
+        return em.find(Clasificado.class, id);
+    }
+    
+    public Clasificado findWithImgs(Long id){
+        Clasificado clasificado = em.find(Clasificado.class, id);
+        for(ImgClasificado img : clasificado.getImgs()){
+            img.getExtension();
+        }
+        return clasificado;
     }
     
 
@@ -65,46 +75,36 @@ public class ClasificadosService {
     }
     
     public List<Clasificado> getClasificadosActivos() {
-        List<Clasificado> clasificados = em.createNamedQuery("Clasificado.findForFiltroCache")
+        List<Clasificado> clasificados = em.createNamedQuery("Clasificado.findActWeb")
                 .setParameter("estado", ClasificadoEstados.PUBLICADO)
-                .setParameter("tipop", PublicacionesTipos.INTERNET).getResultList();
+                .setParameter("tipopub", PublicacionTipos.WEB)
+                .getResultList();
         return clasificados;
     }
     
     
-    //Métodos de consulta de filtros
-    public List<Clasificado> getFiltro(int TIPO, int... parametros){
-        boolean utilizarCache = Boolean.parseBoolean(locator.getParameter("consultas_x_cache"));
-        
+    //Métodos de consulta de filtros seleccionados por el usuario
+    public List<Clasificado> consultar(int TIPO, int... parametros){
         List<Clasificado> clasificados = new ArrayList<Clasificado>();
         switch(TIPO){
-            case ClasificadosCachingLocator.INMOBILIARIO:
-                clasificados = utilizarCache ? caching.getInmobiliarioFiltro(parametros[0], parametros[1], parametros[2], parametros[3], parametros[4])
-                        :consultaService.consultarInmobiliarios(parametros[0], parametros[1], parametros[2], parametros[3], parametros[4]);
+            case ConsultasService.INMOBILIARIO:
+                clasificados = consultaService.consultarInmobiliarios(parametros[0], parametros[1], parametros[2], parametros[3], parametros[4]);
                 break;
-            case ClasificadosCachingLocator.EMPLEO:
-                clasificados = utilizarCache ?  caching.getEmpleoFiltro(parametros[0], parametros[1], parametros[2])
-                        :consultaService.consultarEmpleos(parametros[0], parametros[1], parametros[2]);
+            case ConsultasService.EMPLEO:
+                clasificados = consultaService.consultarEmpleos(parametros[0], parametros[1], parametros[2]);
                 break;
-            case ClasificadosCachingLocator.VEHICULOS:
-                clasificados = utilizarCache ?  caching.getVehiculosFiltro(parametros[0], parametros[1], parametros[2])
-                        :consultaService.consultarVehiculos(parametros[0], parametros[1], parametros[2]);
+            case ConsultasService.VEHICULOS:
+                clasificados = consultaService.consultarVehiculos(parametros[0], parametros[1], parametros[2]);
                 break;
-            case ClasificadosCachingLocator.VARIOS:
-                clasificados = utilizarCache ?  caching.getVariosFiltro(parametros[0])
-                        :consultaService.consultarVarios(parametros[0]);
+            case ConsultasService.VARIOS:
+                clasificados = consultaService.consultarVarios(parametros[0]);
                 break;
         }
-        
         return clasificados;
     }
     
-    public void recargarCache(){
-        caching.setCacheClasificados(getClasificadosActivos());
-    }
     
-    public void actualizarEstados()throws ParametroException{
-        
+    public void actualizarEstados()throws ParametroException{   
         Boolean depurar = Boolean.parseBoolean(locator.getParameter("depurar"));
         if(depurar == null){
             throw  new ParametroException("No existe el parámetro depurar");

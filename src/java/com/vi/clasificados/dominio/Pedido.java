@@ -64,6 +64,8 @@ public class Pedido implements Serializable {
     
     @Column(name = "dni_cliente")
     private String dniCliente;
+    @Column(name = "tipo_pedido")
+    private String tipoPedido;
     @Column(name = "nombre_cliente")
     private String nombreCliente;
     
@@ -263,6 +265,20 @@ public class Pedido implements Serializable {
      */
     public void setNombreCliente(String nombreCliente) {
         this.nombreCliente = nombreCliente;
+    }
+
+    /**
+     * @return the tipoPedido
+     */
+    public String getTipoPedido() {
+        return tipoPedido;
+    }
+
+    /**
+     * @param tipoPedido the tipoPedido to set
+     */
+    public void setTipoPedido(String tipoPedido) {
+        this.tipoPedido = tipoPedido;
     }
     
 }

@@ -73,11 +73,7 @@ public class ClasificadosTimer {
         
         try {
             clasificadosService.actualizarEstados();
-
             pedidoService.actualizarEstados();
-            
-            //Recarga de cache para las consultas de clasificados online
-            clasificadosService.recargarCache();
         } catch (Exception e) {
             Log.getLogger().log(Level.SEVERE, " Error: {0}", e.getMessage());
         }

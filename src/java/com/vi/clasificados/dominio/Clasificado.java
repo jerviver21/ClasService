@@ -2,14 +2,15 @@
 package com.vi.clasificados.dominio;
 
 import com.vi.clasificados.utils.ClasificadoEstados;
-import com.vi.clasificados.utils.PublicacionesTipos;
-import java.io.InputStream;
+import com.vi.clasificados.utils.PublicacionTipos;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.Cacheable;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -20,7 +21,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.QueryHint;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,15 +33,25 @@ import javax.persistence.Transient;
  * @author jerviver21
  */
 @Entity
+@Cacheable(true) 
 @Table(name = "clasificado")
 @NamedQueries({
     @NamedQuery(name = "Clasificado.findAll", query = "SELECT c FROM Clasificado c"),
     @NamedQuery(name = "Clasificado.findByUsr", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr"),
     @NamedQuery(name = "Clasificado.findByUsrEstado", query = "SELECT c FROM Clasificado c WHERE c.pedido.usuario =:usr AND c.estado =:estado"),
     @NamedQuery(name = "Clasificado.findByEstado", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado"),
-    @NamedQuery(name = "Clasificado.findForFiltroCache", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipoPublicacion =:tipop")
+    @NamedQuery(name = "Clasificado.findActWeb", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.subtipoPublicacion.tipoPublicacion =:tipopub"),
+    @NamedQuery(name = "Clasificado.consultaCrit1", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+    @NamedQuery(name = "Clasificado.consultaCrit12", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+    @NamedQuery(name = "Clasificado.consultaCrit13", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo3 =:criterio3", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+    @NamedQuery(name = "Clasificado.consultaCrit123", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2 AND c.subtipo3 =:criterio3", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+    @NamedQuery(name = "Clasificado.consultaCrit125", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2  AND c.subtipo5 =:criterio5 ", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+    @NamedQuery(name = "Clasificado.consultaCrit1235", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2 AND c.subtipo3 =:criterio3 AND c.subtipo5 =:criterio5 ", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+    @NamedQuery(name = "Clasificado.consultaCrit1245", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2 AND c.subtipo4 =:criterio4 AND c.subtipo5 =:criterio5 ", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")}),
+    @NamedQuery(name = "Clasificado.consultaCrit12345", query = "SELECT c FROM Clasificado c WHERE c.estado =:estado AND c.tipo =:tipo AND c.subtipoPublicacion.tipoPublicacion =:tipopub AND c.subtipo1 =:criterio1 AND c.subtipo2 =:criterio2 AND c.subtipo3 =:criterio3  AND c.subtipo4 =:criterio4 AND c.subtipo5 =:criterio5", hints = {@QueryHint(name = "org.hibernate.cacheable", value = "true")})
 })
 public class Clasificado implements Serializable {
+
 
     @Column(name = "num_dias")
     private Integer numDias;
@@ -54,10 +66,12 @@ public class Clasificado implements Serializable {
     @Basic(optional = false)
     @Column(name = "clasificado")
     private String clasificado;
-    @Column(name = "num_imagenes")
-    private Integer numImagenes;
-    @Column(name = "prioridad")
-    private Integer prioridad;
+    @Column(name = "url_img0")
+    private String urlImg0;
+    @Column(name = "nombre_ofertante")
+    private String nombreOfertante;
+    @Column(name = "titulo_oferta")
+    private String tituloOferta;
     @Column(name = "fecha_ini")
     @Temporal(TemporalType.DATE)
     private Date fechaIni;
@@ -68,10 +82,6 @@ public class Clasificado implements Serializable {
     private BigDecimal precio;
     @Column(name = "valor_oferta")
     private BigDecimal valorOferta;
-
-    @JoinColumn(name = "id_imagenes", referencedColumnName = "id")
-    @OneToOne(fetch = FetchType.EAGER)
-    private ImgClasificado imagenes;
 
 
     @JoinColumn(name = "id_subtipo5", referencedColumnName = "id")
@@ -96,12 +106,14 @@ public class Clasificado implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private TipoClasificado tipo;
     
-    @JoinColumn(name = "id_tipo_publicacion", referencedColumnName = "id")
+    @JoinColumn(name = "id_subtipo_publicacion", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.EAGER)
-    private TipoPublicacion tipoPublicacion;
+    private SubtipoPublicacion subtipoPublicacion;
+    
+    
     
     @JoinColumn(name = "id_pedido", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Pedido pedido;
     
     @JoinColumn(name = "id_estado", referencedColumnName = "id")
@@ -112,12 +124,8 @@ public class Clasificado implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Currencies moneda;
     
-    
-    
-    
-    
-    @Transient
-    private List<String> opcionesPublicacion;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "clasificado", fetch = FetchType.LAZY)
+    private List<ImgClasificado> imgs;
     
     @Transient
     private String clasificadoFrac;
@@ -131,15 +139,6 @@ public class Clasificado implements Serializable {
     @Transient
     private boolean agregarAPedido;
     
-    @Transient
-    private InputStream img1;
-    
-    @Transient
-    private String extImg1;
-    
-    @Transient
-    private boolean imgCargada;
-    
 
     public Clasificado() {
         tipo = new TipoClasificado(1);// 1 - Es el tipo: FINCA RAIZ 
@@ -149,15 +148,16 @@ public class Clasificado implements Serializable {
         subtipo4 = null;
         subtipo5 = null;
         subtipo6 = null;
-        tipoPublicacion = new TipoPublicacion();
-        opcionesPublicacion = new ArrayList<String>();
+        subtipoPublicacion = new SubtipoPublicacion();
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
+        imgs = new ArrayList<ImgClasificado>();
         numDias = 0;
         numPalabras = 0;
         moneda = new Currencies(2);///Por defecto queda en 2 = soles
         precio = BigDecimal.ZERO;
         estado = ClasificadoEstados.PEDIDOXPAGAR;
         valorOferta = BigDecimal.ZERO;
+        fechaIni = new Date();
     }
 
     public Clasificado(Long id) {
@@ -187,10 +187,9 @@ public class Clasificado implements Serializable {
         this.estado = clasificado.getEstado() == null?null :new EstadosClasificado(clasificado.getEstado().getId());
         this.valorOferta = clasificado.getValorOferta();
         this.moneda = clasificado.getMoneda() == null?null :new Currencies(clasificado.getMoneda().getId());
-        this.tipoPublicacion = clasificado.getTipoPublicacion() == null?null :new TipoPublicacion(clasificado.getTipoPublicacion().getId());
-        this.img1 = clasificado.getImg1();
-        this.extImg1 = clasificado.getExtImg1();
-        this.imgCargada = clasificado.isImgCargada();
+        this.subtipoPublicacion = clasificado.getSubtipoPublicacion() == null?null :new SubtipoPublicacion(clasificado.getSubtipoPublicacion().getId());
+        this.imgs = clasificado.getImgs();
+        
         detallePrecio = new ArrayList<DetallePrecioClasificado>();
     }
 
@@ -327,19 +326,6 @@ public class Clasificado implements Serializable {
         this.fechaFin = fechaFin;
     }
 
-    /**
-     * @return the tipoPublicacion
-     */
-    public TipoPublicacion getTipoPublicacion() {
-        return tipoPublicacion;
-    }
-
-    /**
-     * @param tipoPublicacion the tipoPublicacion to set
-     */
-    public void setTipoPublicacion(TipoPublicacion tipoPublicacion) {
-        this.tipoPublicacion = tipoPublicacion;
-    }
 
 
     public Integer getNumDias() {
@@ -357,22 +343,6 @@ public class Clasificado implements Serializable {
     public void setNumPalabras(Integer numPalabras) {
         this.numPalabras = numPalabras;
     }
-
-    /**
-     * @return the opcionesPublicacion
-     */
-    public List<String> getOpcionesPublicacion() {
-        return opcionesPublicacion;
-    }
-
-    /**
-     * @param opcionesPublicacion the opcionesPublicacion to set
-     */
-    public void setOpcionesPublicacion(List<String> opcionesPublicacion) {
-        this.opcionesPublicacion = opcionesPublicacion;
-    }
-
-
 
     /**
      * @return the clasificadoFrac
@@ -436,7 +406,7 @@ public class Clasificado implements Serializable {
      * @return the editarEstado
      */
     public boolean isEditarEstado() {
-        editarEstado = tipoPublicacion.equals(PublicacionesTipos.INTERNET) && (estado.equals(ClasificadoEstados.PUBLICADO) || estado.equals(ClasificadoEstados.CANCELADO) || estado.equals(ClasificadoEstados.VENDIDO));
+        editarEstado = getSubtipoPublicacion().getTipoPublicacion().equals(PublicacionTipos.WEB) && (estado.equals(ClasificadoEstados.PUBLICADO) || estado.equals(ClasificadoEstados.CANCELADO) || estado.equals(ClasificadoEstados.VENDIDO));
         return editarEstado;
     }
 
@@ -492,89 +462,74 @@ public class Clasificado implements Serializable {
 
 
     /**
-     * @return the numImagenes
+     * @return the imgs
      */
-    public Integer getNumImagenes() {
-        return numImagenes;
+    public List<ImgClasificado> getImgs() {
+        return imgs;
     }
 
     /**
-     * @param numImagenes the numImagenes to set
+     * @param imgs the imgs to set
      */
-    public void setNumImagenes(Integer numImagenes) {
-        this.numImagenes = numImagenes;
+    public void setImgs(List<ImgClasificado> imgs) {
+        this.imgs = imgs;
     }
 
     /**
-     * @return the prioridad
+     * @return the urlImg0
      */
-    public Integer getPrioridad() {
-        return prioridad;
+    public String getUrlImg0() {
+        return urlImg0;
     }
 
     /**
-     * @param prioridad the prioridad to set
+     * @param urlImg0 the urlImg0 to set
      */
-    public void setPrioridad(Integer prioridad) {
-        this.prioridad = prioridad;
+    public void setUrlImg0(String urlImg0) {
+        this.urlImg0 = urlImg0;
     }
 
     /**
-     * @return the img1
+     * @return the subtipoPublicacion
      */
-    public InputStream getImg1() {
-        return img1;
+    public SubtipoPublicacion getSubtipoPublicacion() {
+        return subtipoPublicacion;
     }
 
     /**
-     * @param img1 the img1 to set
+     * @param subtipoPublicacion the subtipoPublicacion to set
      */
-    public void setImg1(InputStream img1) {
-        this.img1 = img1;
+    public void setSubtipoPublicacion(SubtipoPublicacion subtipoPublicacion) {
+        this.subtipoPublicacion = subtipoPublicacion;
     }
 
     /**
-     * @return the extImg1
+     * @return the nombreOfertante
      */
-    public String getExtImg1() {
-        return extImg1;
+    public String getNombreOfertante() {
+        return nombreOfertante;
     }
 
     /**
-     * @param extImg1 the extImg1 to set
+     * @param nombreOfertante the nombreOfertante to set
      */
-    public void setExtImg1(String extImg1) {
-        this.extImg1 = extImg1;
+    public void setNombreOfertante(String nombreOfertante) {
+        this.nombreOfertante = nombreOfertante;
     }
 
     /**
-     * @return the imgCargada
+     * @return the tituloOferta
      */
-    public boolean isImgCargada() {
-        return imgCargada;
+    public String getTituloOferta() {
+        return tituloOferta;
     }
 
     /**
-     * @param imgCargada the imgCargada to set
+     * @param tituloOferta the tituloOferta to set
      */
-    public void setImgCargada(boolean imgCargada) {
-        this.imgCargada = imgCargada;
+    public void setTituloOferta(String tituloOferta) {
+        this.tituloOferta = tituloOferta;
     }
-
-    /**
-     * @return the imagenes
-     */
-    public ImgClasificado getImagenes() {
-        return imagenes;
-    }
-
-    /**
-     * @param imagenes the imagenes to set
-     */
-    public void setImagenes(ImgClasificado imagenes) {
-        this.imagenes = imagenes;
-    }
-
 
     
 }
