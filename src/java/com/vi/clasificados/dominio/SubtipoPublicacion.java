@@ -123,8 +123,8 @@ public class SubtipoPublicacion implements Serializable {
     
     public Map getMapaPrecios(){
         Map mapaPrecios = new HashMap();
-        for(DiasPrecios precio : precios){
-            mapaPrecios.put(precio.getIddia(), precio);
+        for(DiasPrecios precio1 : precios){
+            mapaPrecios.put(precio1.getIddia(), precio1);
         }
         return mapaPrecios;
     }

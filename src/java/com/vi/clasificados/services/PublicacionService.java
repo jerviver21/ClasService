@@ -61,6 +61,7 @@ public class PublicacionService {
         clasificado.setNumPalabras(0);
         clasificado.setPrecio(BigDecimal.ZERO);
         clasificado.setDetallePrecio(new ArrayList<DetallePrecioClasificado>());
+        clasificado.setSubtipoPublicacion(em.find(SubtipoPublicacion.class, clasificado.getSubtipoPublicacion().getId()));
         Map preciosXDia = clasificado.getSubtipoPublicacion().getMapaPrecios();
         calcularValores(clasificado, preciosXDia);
     }
