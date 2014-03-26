@@ -151,7 +151,7 @@ public class SubtipoPublicacion implements Serializable {
 
     @Override
     public String toString() {
-        return "com.vi.clasificados.dominio.SubtipoPublicacion[ id=" + id + " ]";
+        return nombre;
     }
 
     /**

@@ -10,7 +10,7 @@ import com.vi.clasificados.dominio.Clasificado;
 import com.vi.clasificados.dominio.EstadosPedido;
 import com.vi.clasificados.dominio.ImgClasificado;
 import com.vi.clasificados.dominio.Pedido;
-import com.vi.clasificados.utils.AWSUtils;
+import com.vi.comun.util.AWSUtils;
 import com.vi.clasificados.utils.ClasificadoEstados;
 import com.vi.clasificados.utils.EntidadesDePago;
 import com.vi.clasificados.utils.PedidoEstados;
